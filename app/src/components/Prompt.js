@@ -41,7 +41,7 @@ const Prompt = () => {
             <Input colorScheme="purple"
                 placeholder="Write a complex prompt..."
                 className="inp"
-                maxLength={2000}
+                maxLength={maxChars}
                 onChange={(e) => {
                     const len = e.target.value.length
                     document.getElementById("charlimit").innerHTML = len + `/${maxChars}`    
