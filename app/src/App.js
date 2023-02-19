@@ -4,14 +4,19 @@ import './App.css';
 
 // Chakra components
 import { 
-  ChakraProvider
+  ChakraProvider,
+
+  Box, 
+  Text
 } from "@chakra-ui/react"
 
 
 function App() {
   return (
     <ChakraProvider>
-      <p>fawoeifjaowief</p>
+      <Box>
+        <Text>Harrisonbburg</Text>
+      </Box>
     </ChakraProvider>
   );
 }
