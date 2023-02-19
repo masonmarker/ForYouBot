@@ -5,25 +5,26 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 
 
-// Chakra UI
-import { ChakraProvider } from '@chakra-ui/react';
-
-
 // Routing
-import { 
-  BrowserRouter as Router,
+import {
+  HashRouter,
   Routes,
   Route
-  
 } from 'react-router-dom';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <ChakraProvider>
-    <Router>
+
+// Initialize Application
+const Init = () => {
+  return (
+    <HashRouter>
       <Routes>
         <Route path="/" element={<App />} />
       </Routes>
-    </Router>
-  </ChakraProvider>
+    </HashRouter>
+  )
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <App />
 );

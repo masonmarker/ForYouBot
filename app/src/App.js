@@ -1,18 +1,19 @@
 
 
-// Chakra component
+// Chakra components
 import {
   Box,
-  Text 
+  Text,
+
+  ChakraProvider
 } from '@chakra-ui/react';
 
 
+
 // App component
-function App() {
+const App = () => {
   return (
-    <Box>
-      <Text>Sup goof</Text>
-    </Box>
+     <p>aefijaoweifjoi</p>
   );
 }
 
