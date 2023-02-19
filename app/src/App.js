@@ -1,19 +1,18 @@
+import logo from './logo.svg';
+import './App.css';
 
 
 // Chakra components
-import {
-  Box,
-  Text,
-
+import { 
   ChakraProvider
-} from '@chakra-ui/react';
+} from "@chakra-ui/react"
 
 
-
-// App component
-const App = () => {
+function App() {
   return (
-     <p>aefijaoweifjoi</p>
+    <ChakraProvider>
+      <p>fawoeifjaowief</p>
+    </ChakraProvider>
   );
 }
 
