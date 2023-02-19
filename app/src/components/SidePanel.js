@@ -42,13 +42,12 @@ const SidePanelStyled = styled.div`
 // SidePanel component
 const SidePanel = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [placement, setPlacement] = React.useState('left')
     return (
         <SidePanelStyled>
             <Button colorScheme='purple' onClick={onOpen}>
-                Bot Specifics
+                Edit Bot
             </Button>
-            <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
+            <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader
