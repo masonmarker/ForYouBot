@@ -1,0 +1,9 @@
+# syncs all github changes
+
+
+
+# syncs all changes
+console('git pull')
+console('git add --all')
+console('git commit -m "Bot Website Update"')
+console('git push')
