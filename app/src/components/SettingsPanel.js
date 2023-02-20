@@ -27,27 +27,14 @@ import styled from 'styled-components'
 
 // styled SettingsPanel
 const SettingsPanelStyled = styled.div`
-
-
-    /* bottom left corner, directly above ColorButton */
+    /* bottom right corner, directly to the left of ColorButton */
     .button {
         position: fixed;
         bottom: 0;
-        left: 0;
+        right: 0;
         margin: 1rem;
-        margin-bottom: 4rem;
+        margin-right: 7rem;
     }
-
-    /* button should move to bottom middle when width below 1000px*/
-    @media (max-width: 1300px) {
-        .button {
-            left: 50%;
-            transform: translateX(-50%);
-            margin-bottom: 1rem;
-        }
-    }
-
-
 `
 
 // SettingsPanel component

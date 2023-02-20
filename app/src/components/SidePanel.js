@@ -39,18 +39,13 @@ const SidePanelStyled = styled.div`
     flex-direction: column;
     align-items: flex-end;
 
-    .button {}
-
-    /* button should move to bottom middle when width below 1000px*/
-    @media (max-width: 1300px) {
-        .button {
-            left: 50%;
-            transform: translateX(-50%);
-            margin-bottom: 1rem;
-        }
+    /* bottom right corner */
+    .button {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: 1rem;
     }
-
-
 `
 
 // SidePanel component
