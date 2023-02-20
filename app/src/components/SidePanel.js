@@ -47,7 +47,7 @@ const SidePanel = () => {
             <Button colorScheme='purple' onClick={onOpen}>
                 Edit Bot
             </Button>
-            <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+            <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerHeader
