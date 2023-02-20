@@ -8,10 +8,15 @@
 
 // Chakra components
 import {
+    Button,
     Input,
     Text,
+    HStack,
     useColorMode
 } from "@chakra-ui/react"
+
+// Chakra icons
+import { ArrowForwardIcon } from '@chakra-ui/icons'
 
 // styled components
 import styled from 'styled-components'
@@ -43,28 +48,33 @@ const Prompt = () => {
 
     return (
         <PromptStyled>
-            <Input colorScheme="purple"
-                placeholder="Write a complex prompt..."
-                className="inp"
-                maxLength={maxChars}
-                onChange={(e) => {
-                    const len = e.target.value.length
-                    document.getElementById("charlimit").innerHTML = len + `/${maxChars}`
-                    {
+            <HStack className="inp">
+                <Input colorScheme="purple"
+                    placeholder="Write a complex prompt..."
+                    maxLength={maxChars}
+                    onChange={(e) => {
+                        const len = e.target.value.length
+                        document.getElementById("charlimit").innerHTML = len + `/${maxChars}`
+                        {
 
-                        // character limit component
-                        const comp = document.getElementById("charlimit")
+                            // character limit component
+                            const comp = document.getElementById("charlimit")
 
-                        if (len >= maxChars) {
-                            comp.style.color = "red"
-                        } 
-                        // if the color is red and the length is less than the max
-                        else if (comp.style.color === "red") {
-                            comp.style.color = colorMode === "light" ? "black" : "white"
-                        }    
-                    }
-                }}
-            />
+                            if (len >= maxChars) {
+                                comp.style.color = "red"
+                            }
+                            // if the color is red and the length is less than the max
+                            else if (comp.style.color === "red") {
+                                comp.style.color = colorMode === "light" ? "black" : "white"
+                            }
+                        }
+                    }}
+                />
+                <Button>
+                    <ArrowForwardIcon />
+                </Button>
+            </HStack>
+
             <Text
                 color={colorMode === "light" ? "black" : "white"}
                 id="charlimit"
