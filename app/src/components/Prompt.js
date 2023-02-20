@@ -50,32 +50,25 @@ const Prompt = () => {
                 onChange={(e) => {
                     const len = e.target.value.length
                     document.getElementById("charlimit").innerHTML = len + `/${maxChars}`
-<<<<<<< HEAD
                     {
-                        len >= maxChars ?
-                        document.getElementById("charlimit").style.color = "maroon" :
-                        document.getElementById("charlimit").style.color = "black"
+
+                        // character limit component
+                        const comp = document.getElementById("charlimit")
+
+                        if (len >= maxChars) {
+                            comp.style.color = "red"
+                        } 
+                        // if the color is red and the length is less than the max
+                        else if (comp.style.color === "red") {
+                            comp.style.color = colorMode === "light" ? "black" : "white"
+                        }    
                     }
                 }}
             />
             <Text
+                color={colorMode === "light" ? "black" : "white"}
                 id="charlimit"
                 className="limtext"
-=======
-                    
-                    
-
-                    {len >= maxChars ? 
-                        document.getElementById("charlimit").style.color = "red" : 
-                            document.getElementById("charlimit").style.color = colorMode === "light" ? "black" : "white"
-                    }
-                }}
-            />
-            <Text 
-            color={colorMode === "light" ? "black" : "white"}
-            id="charlimit"
-            className="limtext"
->>>>>>> cb81b26dbfefa5c0f0540bdb1883f680cae38cbc
             >0/{maxChars}</Text>
         </PromptStyled>
     )
