@@ -10,6 +10,7 @@
 // components
 import SidePanel from '../components/SidePanel'
 import Prompt from '../components/Prompt'
+import ColorButton from '../components/ColorButton'
 
 // Chakra components
 import {
@@ -25,7 +26,6 @@ import styled from 'styled-components'
 
 // styled App
 const AppStyled = styled.div`
-
 
   /* put input on the bottom center of the screen */
   .inp {
@@ -45,7 +45,7 @@ function App() {
     <ChakraProvider>
       <AppStyled>
         <SidePanel />
-
+        <ColorButton />
         <Prompt />
       </AppStyled>
     </ChakraProvider>
