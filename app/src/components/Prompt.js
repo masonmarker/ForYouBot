@@ -44,16 +44,17 @@ const Prompt = () => {
                 maxLength={maxChars}
                 onChange={(e) => {
                     const len = e.target.value.length
-                    document.getElementById("charlimit").innerHTML = len + `/${maxChars}`    
-                    {len >= maxChars ? 
-                        document.getElementById("charlimit").style.color = "maroon" : 
+                    document.getElementById("charlimit").innerHTML = len + `/${maxChars}`
+                    {
+                        len >= maxChars ?
+                        document.getElementById("charlimit").style.color = "maroon" :
                         document.getElementById("charlimit").style.color = "black"
                     }
                 }}
             />
-            <Text 
-            id="charlimit"
-            className="limtext"
+            <Text
+                id="charlimit"
+                className="limtext"
             >0/{maxChars}</Text>
         </PromptStyled>
     )
