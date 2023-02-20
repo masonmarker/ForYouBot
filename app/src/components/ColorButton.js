@@ -29,7 +29,10 @@ const ColorButtonStyled = styled.div`
 
 // ColorButton component
 const ColorButton = () => {
+
+    // accessing current color mode
     const { colorMode, toggleColorMode } = useColorMode()
+
     return (
         <ColorButtonStyled>
             <Button onClick={toggleColorMode} >

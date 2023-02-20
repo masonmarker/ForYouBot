@@ -11,6 +11,7 @@
 import SidePanel from '../components/SidePanel'
 import Prompt from '../components/Prompt'
 import ColorButton from '../components/ColorButton'
+import SettingsPanel from '../components/SettingsPanel'
 
 // Chakra components
 import {
@@ -47,6 +48,7 @@ function App() {
         <SidePanel />
         <ColorButton />
         <Prompt />
+        <SettingsPanel />
       </AppStyled>
     </ChakraProvider>
   );
