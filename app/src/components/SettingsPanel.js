@@ -16,7 +16,8 @@ import {
     DrawerOverlay,
     DrawerContent,
     DrawerCloseButton,
-    useDisclosure
+    useDisclosure,
+    useColorMode
 } from "@chakra-ui/react"
 
 // Chakra settings icon
@@ -27,7 +28,6 @@ import styled from 'styled-components'
 
 // styled SettingsPanel
 const SettingsPanelStyled = styled.div`
-    /* bottom right corner, directly to the left of ColorButton */
     .button {
         position: fixed;
         bottom: 0;
@@ -48,8 +48,8 @@ const SettingsPanel = () => {
             <Button className="button" onClick={onOpen} colorScheme='purple'>
                 <SettingsIcon />
             </Button>
-            
-            <Drawer 
+
+            <Drawer
                 isOpen={isOpen}
                 placement="right"
                 onClose={onClose}
@@ -63,7 +63,7 @@ const SettingsPanel = () => {
                     <DrawerBody>
                         <Text>stuff</Text>
                     </DrawerBody>
-                    
+
                 </DrawerContent>
             </Drawer>
         </SettingsPanelStyled>
