@@ -11,13 +11,26 @@ import { useState } from 'react'
 
 // Chakra components
 import {
+
+    // general
     useColorMode,
     useToast,
     Text,
     Box,
     HStack,
     VStack,
-    Button
+    Button,
+
+    // modal for viewing more information about the message
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    useDisclosure,
+    
 } from "@chakra-ui/react"
 
 // Chakra icons
@@ -64,6 +77,9 @@ const Message = (props) => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
+    // modal for editing a message
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
     // if something is copied, show toast
     const toast = useToast()
 
@@ -74,12 +90,32 @@ const Message = (props) => {
                 backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
                 cursor: "pointer",
             }}
-            onMouseDown={() => {
-                document.getElementById(props.messageID).style.backgroundColor = colorMode === "light" ? colors.darkGray : colors.lightGray
-            }}
 
-            
+            // open modal on click
+            onClick={onOpen}
         >
+
+            {/* modal for editing a message */}
+            <Modal
+                isOpen={isOpen}
+                onClose={onClose}
+                size="xl"
+            >
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Message</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Text>{props.message}</Text>
+                    </ModalBody>
+                    
+                    <ModalFooter>
+                        <CopyButton message={props.message} />
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+
             <HStack
                 className="msg"
             >
@@ -92,26 +128,38 @@ const Message = (props) => {
                 </VStack>
 
                 {/* Copy Button */}
-                <Button
-                    size="sm"
-                    className="copy"
-                    backgroundColor="transparent"
-                    onClick={() => {
-                        navigator.clipboard.writeText(props.message)
-                        toast({
-                            title: "Copied",
-                            description: "Message copied to clipboard",
-                            status: "success",
-                            duration: 2000,
-                            isClosable: true,
-                        })
-                    }}
-                >
-                    <CopyIcon />
-                </Button>
+                <CopyButton message={props.message} />
 
             </HStack>
         </MessageStyled>
+    )
+}
+
+// copy button
+const CopyButton = (props) => {
+
+    // if something is copied, show toast
+    const toast = useToast()
+
+    return (
+        <Button
+            size="sm"
+            zIndex={`100`}
+            backgroundColor="transparent"
+            onClick={() => {
+                navigator.clipboard.writeText(props.message)
+                toast({
+                    title: "Copied",
+                    description: "Message copied to clipboard",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                })
+            }}
+        >
+            <CopyIcon />
+        </Button>
+
     )
 }
 
