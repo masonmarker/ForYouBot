@@ -62,10 +62,9 @@ const SidePanel = () => {
                     <DrawerHeader
                         borderBottomWidth='1px'
                         fontSize="3xl"
-                    >Bot Specifics</DrawerHeader>
+                    >Edit Bot</DrawerHeader>
                     <DrawerBody>
                         <Text>stuff</Text>
-
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>

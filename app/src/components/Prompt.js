@@ -70,7 +70,7 @@ const Prompt = () => {
                         }
                     }}
                 />
-                <Button>
+                <Button id="submit">
                     <ArrowForwardIcon />
                 </Button>
             </HStack>

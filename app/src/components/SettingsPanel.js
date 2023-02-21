@@ -59,11 +59,9 @@ const SettingsPanel = () => {
                     <DrawerHeader borderBottomWidth="1px">
                         Settings
                     </DrawerHeader>
-
                     <DrawerBody>
                         <Text>stuff</Text>
                     </DrawerBody>
-
                 </DrawerContent>
             </Drawer>
         </SettingsPanelStyled>
