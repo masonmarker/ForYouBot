@@ -5,6 +5,9 @@
  *  Mason Marker
  */
 
+// React
+import React from 'react'
+
 // Chakra components
 import {
     Text,
@@ -17,7 +20,15 @@ import {
     DrawerContent,
     DrawerCloseButton,
     useDisclosure,
-    useColorMode
+    useColorMode,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+
 } from "@chakra-ui/react"
 
 // styled components
@@ -37,6 +48,9 @@ const SettingsPanelStyled = styled.div`
 // SettingsPanel component
 const SettingsPanel = () => {
 
+    const finalRef = React.useRef(null)
+
+
     // drawer state
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -46,21 +60,23 @@ const SettingsPanel = () => {
                 Settings
             </Button>
 
-            <Drawer
-                isOpen={isOpen}
-                placement="right"
-                onClose={onClose}
-            >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerHeader borderBottomWidth="1px">
-                        Settings
-                    </DrawerHeader>
-                    <DrawerBody>
-                        <Text>stuff</Text>
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
+            <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Settings</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        Hello
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme='purple' mr={3} onClick={onClose}>
+                            Close
+                        </Button>
+                        <Button variant='ghost'>Secondary Action</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </SettingsPanelStyled>
     )
 }

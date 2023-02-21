@@ -10,6 +10,7 @@
 import {
     Button,
     Input,
+    Textarea,
     Text,
     HStack,
     useColorMode
@@ -29,7 +30,8 @@ const PromptStyled = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    z-index: 1;
+         
     .limtext {
         position: fixed;
         bottom: 0;
@@ -38,6 +40,12 @@ const PromptStyled = styled.div`
         width: 80%;
         margin-bottom: 3rem;
     }
+
+    .area {
+        z-index: 2;
+        height: 6.5rem;
+    }
+
 `
 
 // Prompt component
@@ -49,7 +57,8 @@ const Prompt = () => {
     return (
         <PromptStyled>
             <HStack className="inp">
-                <Input colorScheme="purple"
+                <Textarea colorScheme="purple"
+                    className="area"
                     placeholder="Write a complex prompt..."
                     maxLength={maxChars}
                     onChange={(e) => {

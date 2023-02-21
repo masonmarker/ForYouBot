@@ -25,7 +25,15 @@ import {
     DrawerBody,
     DrawerCloseButton,
     Text,
-    useDisclosure
+    useDisclosure,
+    useColorMode,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
 } from "@chakra-ui/react"
 
 // styled SidePanel
@@ -51,23 +59,32 @@ const SidePanelStyled = styled.div`
 // SidePanel component
 const SidePanel = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const finalRef = React.useRef(null)
+
+
     return (
         <SidePanelStyled>
             <Button className="button" colorScheme='purple' onClick={onOpen}>
                 Edit Bot
             </Button>
-            <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerHeader
-                        borderBottomWidth='1px'
-                        fontSize="3xl"
-                    >Edit Bot</DrawerHeader>
-                    <DrawerBody>
-                        <Text>stuff</Text>
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
+            <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Settings</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        Hello
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme='purple' mr={3} onClick={onClose}>
+                            Close
+                        </Button>
+                        <Button variant='ghost'>Secondary Action</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </SidePanelStyled>
     )
 }
