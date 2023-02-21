@@ -26,11 +26,12 @@ const ChatPanelStyled = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -65%);
+    transform: translate(-50%, -70%);
     width: 95vw;
-    height: 75vh;
+    height: 65vh;
     background-color: ${props => props.backgroundColor};
     border-radius: 1rem;
+
 
 
 `
