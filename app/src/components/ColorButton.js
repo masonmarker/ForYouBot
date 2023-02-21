@@ -35,7 +35,7 @@ const ColorButton = () => {
 
     return (
         <ColorButtonStyled>
-            <Button onClick={toggleColorMode} >
+            <Button colorScheme="purple" onClick={toggleColorMode} >
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
         </ColorButtonStyled>
