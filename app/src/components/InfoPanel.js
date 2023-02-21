@@ -24,7 +24,8 @@ import {
     AccordionPanel,
     AccordionIcon,
     Text,
-    HStack
+    HStack,
+    useColorMode
 } from "@chakra-ui/react"
 
 // Chakra icons
@@ -47,6 +48,8 @@ const InfoPanelStyled = styled.div`
     transform: translateX(-50%);
     width: 85%;
     margin-top: 1rem;
+    zindex: 1;
+    
 
     /* below width 1000px, shorten width */
     @media (max-width: 950px) {
@@ -58,19 +61,22 @@ const InfoPanelStyled = styled.div`
         width: 60%;
     }
 
-
-
 `
 
 
 // Information Panel
 const InfoPanel = () => {
+
+    // grab current color mode
+    const { colorMode } = useColorMode()
+
     return (
         <InfoPanelStyled>
             <Accordion allowToggle>
-
                 <AccordionItem>
                     <AccordionButton>
+                        <AccordionIcon />
+                        <pre> </pre>
                         <HStack>
                             <ChatIcon />
                             <Text>Conversations</Text>
@@ -81,13 +87,15 @@ const InfoPanel = () => {
 
                 <AccordionItem>
                     <AccordionButton>
-                        <HStack>
+                        <AccordionIcon />
+                        <pre> </pre>
+                        <HStack  >
                             <InfoIcon />
                             <Text>Narrow recent response</Text>
                         </HStack>
                     </AccordionButton>
                     <AccordionPanel pb={4}>
-                        <Box>
+                        <Box backgroundColor={colorMode === "light" ? "gray.100" : "gray.700"}>
                             <Text>
                                 Narrow down the most recent response:
                                 __RESPONSE__
