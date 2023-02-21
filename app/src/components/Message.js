@@ -75,7 +75,7 @@ const Message = (props) => {
                     <Button
                         size="sm"
                         className="copy" 
-                        backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}  
+                        backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray} 
                     >
                         <CopyIcon />
                     </Button>
