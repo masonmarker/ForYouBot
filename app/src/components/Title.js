@@ -10,22 +10,38 @@
 
 // Chakra components
 import {
-    useColorMode
+    useColorMode,
+    Text
 } from "@chakra-ui/react"
 
 // styled components
 import styled from 'styled-components'
 
-// styled Title
-const TitleStyled = styled.div`
+// common
+import { colors } from '../common/common'
 
+
+// styled Title
+// centered horizontally
+const TitleStyled = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    width: 100%;
+    background-color: ${colors.purple};
+    border-radius: 1rem 1rem 0 0;
 `
 
 // Title component
 const Title = () => {
+
+    // grab current color mode
+    const { colorMode } = useColorMode()
+
     return (
         <TitleStyled>
-            
+            <Text>Conversation</Text>
         </TitleStyled>
     )
 }

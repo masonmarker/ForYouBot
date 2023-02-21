@@ -6,6 +6,9 @@
  *  Harris Chaudhry
  */
 
+// components
+import Title from './Title'
+
 // Chakra components
 import {
     useColorMode
@@ -43,8 +46,8 @@ const ChatPanel = () => {
     const { colorMode } = useColorMode()
 
     return (
-        <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : "#171923"}>
-
+        <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
+            <Title />
         </ChatPanelStyled>
     )
 }
