@@ -26,7 +26,7 @@ const ChatPanelStyled = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -52%);
     width: 90vw;
     height: 65vh;
     zindex: -1;
@@ -40,10 +40,8 @@ const ChatPanel = () => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
-
-
     return (
-        <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : "black"}>
+        <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : "#171923"}>
 
         </ChatPanelStyled>
     )

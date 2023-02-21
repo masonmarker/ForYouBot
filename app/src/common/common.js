@@ -9,12 +9,8 @@
 
 // colors
 export const colors = {
-    lightGray: "#E2E8F0"
-}
-
-export const fonts = {
-    body: "system-ui, sans-serif",
-    heading: "Georgia, serif",
+    lightGray: "#E2E8F0",
+    darkgray: "#171923"
 }
 
 
