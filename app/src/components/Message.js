@@ -108,7 +108,6 @@ const Message = (props) => {
                     <ModalBody>
                         <Text>{props.message}</Text>
                     </ModalBody>
-                    
                     <ModalFooter>
                         <CopyButton message={props.message} />
                     </ModalFooter>
