@@ -15,6 +15,10 @@ export const colors = {
     lightPurple: "#9f7aea"
 }
 
-
+// fonts
+export const fonts = {
+    main: "Inter, sans-serif",
+    message: "monospace"
+}
 
 

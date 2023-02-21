@@ -20,8 +20,13 @@ import {
 
   Box,
   Text,
-  Input
+  Input,
+  Fade,
+
 } from "@chakra-ui/react"
+
+// intersection observer
+import { useInView } from 'react-intersection-observer';
 
 // styled components
 import styled from 'styled-components'
@@ -43,15 +48,23 @@ const AppStyled = styled.div`
 
 // App component
 function App() {
+
+  // fading
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+
   return (
     <ChakraProvider>
-      <AppStyled>
-        <SidePanel />
-        <ColorButton />
-        <Prompt />
-        <SettingsPanel />
-        <Chat />
-      </AppStyled>
+      <Fade in={inView} ref={ref}>
+        <AppStyled>
+          <SidePanel />
+          <ColorButton />
+          <Prompt />
+          <SettingsPanel />
+          <Chat />
+        </AppStyled>
+      </Fade>
     </ChakraProvider>
   );
 }

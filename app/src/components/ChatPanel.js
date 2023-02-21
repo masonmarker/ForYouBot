@@ -8,10 +8,13 @@
 
 // components
 import Title from './Title'
+import Message from './Message'
 
 // Chakra components
 import {
-    useColorMode
+    useColorMode,
+    Text,
+    Box
 } from "@chakra-ui/react"
 
 // styled components
@@ -35,8 +38,11 @@ const ChatPanelStyled = styled.div`
     background-color: ${props => props.backgroundColor};
     border-radius: 1rem;
 
-
-
+    .chat {
+        height: 90%;
+        width: 100%;
+        overflow-y: scroll;
+    }
 `
 
 // ChatPanel component
@@ -45,9 +51,22 @@ const ChatPanel = () => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
+    function date() {
+        return new Date().toLocaleTimeString()
+    }
+
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
             <Title />
+
+            {/* Chat History */}
+            <Box className="chat">
+                <div id="chat">
+                    <Message date={date()} from="user" message="Hello World" />
+                </div>
+            </Box>
+
+
         </ChatPanelStyled>
     )
 }

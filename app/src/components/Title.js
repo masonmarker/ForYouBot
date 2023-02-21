@@ -41,7 +41,7 @@ const Title = () => {
 
     return (
         <TitleStyled backgroundColor={colorMode === "light" ? colors.purple : colors.lightPurple}>
-            <Text color="white">Conversation</Text>
+            <Text color="white">New Conversation</Text>
         </TitleStyled>
     )
 }
