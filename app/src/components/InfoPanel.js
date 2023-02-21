@@ -72,40 +72,8 @@ const InfoPanel = () => {
 
     return (
         <InfoPanelStyled>
-            <Accordion allowToggle>
-                <AccordionItem>
-                    <AccordionButton>
-                        <AccordionIcon />
-                        <pre> </pre>
-                        <HStack>
-                            <ChatIcon />
-                            <Text>Conversations</Text>
-                        </HStack>
+           
 
-                    </AccordionButton>
-                </AccordionItem>
-
-                <AccordionItem>
-                    <AccordionButton>
-                        <AccordionIcon />
-                        <pre> </pre>
-                        <HStack  >
-                            <InfoIcon />
-                            <Text>Narrow recent response</Text>
-                        </HStack>
-                    </AccordionButton>
-                    <AccordionPanel pb={4}>
-                        <Box backgroundColor={colorMode === "light" ? "gray.100" : "gray.700"}>
-                            <Text>
-                                Narrow down the most recent response:
-                                __RESPONSE__
-                            </Text>
-                        </Box>
-                    </AccordionPanel>
-                </AccordionItem>
-
-
-            </Accordion>
         </InfoPanelStyled>
     )
 }

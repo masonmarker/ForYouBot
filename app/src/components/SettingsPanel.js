@@ -20,9 +20,6 @@ import {
     useColorMode
 } from "@chakra-ui/react"
 
-// Chakra settings icon
-import { SettingsIcon } from '@chakra-ui/icons'
-
 // styled components
 import styled from 'styled-components'
 
@@ -46,7 +43,7 @@ const SettingsPanel = () => {
     return (
         <SettingsPanelStyled>
             <Button className="button" onClick={onOpen} colorScheme='purple'>
-                <SettingsIcon />
+                Settings
             </Button>
 
             <Drawer

@@ -19,12 +19,14 @@ import { SunIcon, MoonIcon } from '@chakra-ui/icons'
 import styled from 'styled-components'
 
 // styled ColorButton
-// top left corner
+// bottom right corner
 const ColorButtonStyled = styled.div`
     position: fixed;
-    top: 0;
-    left: 0;
+    bottom: 0;
+    right: 0;
     margin: 1rem;
+    margin-right: 13.2rem;
+    
 `
 
 // ColorButton component
