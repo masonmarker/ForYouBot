@@ -6,9 +6,13 @@
  *  Harris Chaudhry
  */
 
+// states
+import { useState } from 'react'
+
 // Chakra components
 import {
     useColorMode,
+    useToast,
     Text,
     Box,
     HStack,
@@ -27,10 +31,10 @@ import {
 import styled from 'styled-components'
 
 // import common
-import { colors, fonts } from '../common/common'
+import { colors, fonts, css } from '../common/common'
 
 // styled Message
-const MessageStyled = styled.div`
+const MessageStyled = styled(Box)`
 
     font-family: ${fonts.message};
 
@@ -40,13 +44,14 @@ const MessageStyled = styled.div`
     width: 100%;
     padding: 1rem;
     border-top: 1px solid ${props => props.borderColor};
+    transition: ${css.transition};
 
     /* message box */
     .msg {
         width: 100%;
+        height: 100%;
         justify-content: space-between;
     }
-
 `
 
 // Message component
@@ -59,9 +64,25 @@ const Message = (props) => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
+    // if something is copied, show toast
+    const toast = useToast()
+
     return (
-        <MessageStyled borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}>
-            <HStack className="msg">
+        <MessageStyled
+            borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
+            _hover={{
+                backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
+                cursor: "pointer",
+            }}
+            onMouseDown={() => {
+                document.getElementById(props.messageID).style.backgroundColor = colorMode === "light" ? colors.darkGray : colors.lightGray
+            }}
+
+            
+        >
+            <HStack
+                className="msg"
+            >
                 <VStack>
                     <HStack>
                         {props.from === "user" ? <ArrowRightIcon /> : <ArrowLeftIcon />}
@@ -71,18 +92,23 @@ const Message = (props) => {
                 </VStack>
 
                 {/* Copy Button */}
-                <HStack>
-                    <Button
-                        size="sm"
-                        className="copy" 
-                        backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray} 
-                    >
-                        <CopyIcon />
-                    </Button>
-                    <Button size="sm" colorScheme="purple">
-                        Edit
-                    </Button>
-                </HStack>
+                <Button
+                    size="sm"
+                    className="copy"
+                    backgroundColor="transparent"
+                    onClick={() => {
+                        navigator.clipboard.writeText(props.message)
+                        toast({
+                            title: "Copied",
+                            description: "Message copied to clipboard",
+                            status: "success",
+                            duration: 2000,
+                            isClosable: true,
+                        })
+                    }}
+                >
+                    <CopyIcon />
+                </Button>
 
             </HStack>
         </MessageStyled>

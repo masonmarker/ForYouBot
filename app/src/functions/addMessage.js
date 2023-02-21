@@ -11,8 +11,9 @@ import Message from '../components/Message'
 
 
 
-
+// Adds a message to the ChatPanel
 export default function addMessage(message) {
+    
     // get current date
     const date = new Date().toLocaleTimeString()
 
