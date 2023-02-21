@@ -71,7 +71,7 @@ const SidePanel = () => {
             <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Settings</ModalHeader>
+                    <ModalHeader>Edit Bot</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         Hello
