@@ -29,7 +29,7 @@ const TitleStyled = styled.div`
     align-items: center;
     height: 10%;
     width: 100%;
-    background-color: ${colors.purple};
+    background-color: ${props => props.backgroundColor};
     border-radius: 1rem 1rem 0 0;
 `
 
@@ -40,8 +40,8 @@ const Title = () => {
     const { colorMode } = useColorMode()
 
     return (
-        <TitleStyled>
-            <Text>Conversation</Text>
+        <TitleStyled backgroundColor={colorMode === "light" ? colors.purple : colors.lightPurple}>
+            <Text color="white">Conversation</Text>
         </TitleStyled>
     )
 }
