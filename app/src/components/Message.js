@@ -41,13 +41,10 @@ const MessageStyled = styled.div`
     padding: 1rem;
     border-top: 1px solid ${props => props.borderColor};
 
+    /* message box */
     .msg {
         width: 100%;
         justify-content: space-between;
-    }
-
-    .copy {
-        background-color: ${colors.darkGray};
     }
 
 `
@@ -56,6 +53,7 @@ const MessageStyled = styled.div`
 // props : date
 //       : from
 //       : message
+//       : messageID
 const Message = (props) => {
 
     // grab current color mode
@@ -73,9 +71,19 @@ const Message = (props) => {
                 </VStack>
 
                 {/* Copy Button */}
-                <Button className="copy">
-                    <CopyIcon />
-                </Button>
+                <HStack>
+                    <Button
+                        size="sm"
+                        className="copy" 
+                        backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}  
+                    >
+                        <CopyIcon />
+                    </Button>
+                    <Button size="sm" colorScheme="purple">
+                        Edit
+                    </Button>
+                </HStack>
+
             </HStack>
         </MessageStyled>
     )
