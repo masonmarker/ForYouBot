@@ -17,5 +17,7 @@ ex: import ("lib/timer.msn2")
 
 Run .msn2 programs from this directory with the following syntax:
 "python msn2.py *****.msn2"
+OR
+"python msn2.py *****"
 
 Good luck!

@@ -48,11 +48,15 @@ const SettingsPanelStyled = styled.div`
 // SettingsPanel component
 const SettingsPanel = () => {
 
+    // modal ref
     const finalRef = React.useRef(null)
 
 
     // drawer state
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    // help drawer state
+    const { isOpen: isOpenHelp, onOpen: onOpenHelp, onClose: onCloseHelp } = useDisclosure()
 
     return (
         <SettingsPanelStyled>
@@ -66,14 +70,38 @@ const SettingsPanel = () => {
                     <ModalHeader>Settings</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        Hello
+                        <Text>Settings go here</Text>
                     </ModalBody>
 
                     <ModalFooter>
                         <Button colorScheme='purple' mr={3} onClick={onClose}>
                             Close
                         </Button>
-                        <Button variant='ghost'>Secondary Action</Button>
+                        <Button variant='ghost' onClick={onOpenHelp}>
+                            Help
+                        </Button>
+
+                        <Drawer isOpen={isOpenHelp} placement='bottom' onClose={onCloseHelp}>
+                            <DrawerOverlay />
+                            <DrawerContent>
+                                <DrawerCloseButton />
+                                <DrawerHeader>Help</DrawerHeader>
+
+                                <DrawerBody>
+                                    <Text>Help goes here</Text>
+                                </DrawerBody>
+
+                                <DrawerFooter>
+                                    <Button variant='ghost' onClick={onCloseHelp}>
+                                        Close
+                                    </Button>
+
+                                </DrawerFooter>
+                            </DrawerContent>
+                        </Drawer>
+                        
+
+                                    
                     </ModalFooter>
                 </ModalContent>
             </Modal>
