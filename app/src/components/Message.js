@@ -6,9 +6,6 @@
  *  Harris Chaudhry
  */
 
-// states
-import { useState } from 'react'
-
 // Chakra components
 import {
 
@@ -71,8 +68,6 @@ const MessageStyled = styled(Box)`
         flex-direction: row;
         justify-content: space-between;
     }
-
-
 `
 
 // Message component

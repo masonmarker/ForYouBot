@@ -13,12 +13,11 @@ import React from 'react'
 import Message from '../components/Message'
 
 
-
 // Adds a message to the ChatPanel
-export default function addMessage(message) {
+export default function addMessage(chatpanel, date, from, message) {
     
     // create a new message
-    const newMessage = <Message date={message.date} from={message.from} message={message.message} />
+    const newMessage = <Message date="helllo" from="me" message="this is a thing" />
 
     // add the message to the chat
     document.getElementById("chat").appendChild(newMessage)

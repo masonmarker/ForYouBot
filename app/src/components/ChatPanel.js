@@ -46,10 +46,7 @@ const ChatPanel = () => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
-    function date() {
-        return new Date().toLocaleTimeString()
-    }
-
+    // current time
     const now = new Date().toLocaleTimeString()
 
     return (

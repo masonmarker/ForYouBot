@@ -85,7 +85,7 @@ const Title = () => {
         >
             <HStack>
                 <Text color="white" id="current-convo">New Conversation</Text>
-                {hover && <ViewIcon className="change" />}
+                {hover && <ViewIcon color="white" />}
             </HStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">

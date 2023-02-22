@@ -84,7 +84,7 @@ const Prompt = () => {
                 <Button id="submit" onClick={() => {
                     const prompt = document.getElementsByClassName("area")[0].value
                     if (prompt.length > 0) {
-                        addMessage(prompt)
+                        addMessage(document.getElementById("chat"), new Date().toLocaleTimeString(), "user", prompt)
                         document.getElementsByClassName("area")[0].value = ""
                         document.getElementById("charlimit").innerHTML = "0/" + maxChars
                     }
