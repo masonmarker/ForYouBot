@@ -56,7 +56,7 @@ const MessageStyled = styled(Box)`
     align-items: flex-start;
     width: 100%;
     padding: 1rem;
-    border-top: 1px solid ${props => props.borderColor};
+    /*border-top: 1px solid ${props => props.borderColor};*/
     transition: ${css.transition};
 
     /* message box */
@@ -87,10 +87,6 @@ const Message = (props) => {
 
     // modal for editing a message
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    // if something is copied, show toast
-    const toast = useToast()
-
 
     return (
         <MessageStyled
