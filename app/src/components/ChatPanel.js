@@ -55,6 +55,8 @@ const ChatPanel = () => {
         return new Date().toLocaleTimeString()
     }
 
+    const now = new Date().toLocaleTimeString()
+
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
             <Title />
@@ -62,7 +64,7 @@ const ChatPanel = () => {
             {/* Chat History */}
             <Box className="chat">
                 <div id="chat">
-                    <Message date={date()} from="user" message="Hello World" />
+                    <Message date={now} from="user" message="Hello World" />
                 </div>
             </Box>
 
