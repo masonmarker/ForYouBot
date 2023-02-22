@@ -16,6 +16,7 @@ import {
     useColorMode,
     Text,
     Button,
+    HStack,
 
     // modal for changing conversation
     Modal,
@@ -30,12 +31,14 @@ import {
 
 } from "@chakra-ui/react"
 
+// Chakra more icon
+import { ViewIcon } from '@chakra-ui/icons'
+
 // styled components
 import styled from 'styled-components'
 
 // common
 import { colors, css } from '../common/common'
-
 
 // styled Title
 // centered horizontally
@@ -47,13 +50,6 @@ const TitleStyled = styled.div`
     width: 100%;
     background-color: ${props => props.backgroundColor};
     transition: ${css.transition};
-
-    /* should be on the far right */
-    .change {
-        position: fixed;
-        right: 1rem;
-        color: white;
-    }
 
     &:hover {
         cursor: pointer;
@@ -81,14 +77,16 @@ const Title = () => {
             onMouseLeave={() => setHover(false)}
 
             // on click, open modal for changing conversation
-            onClick={() => onOpen()}
+            onClick={onOpen}
 
             backgroundColor={colorMode === "light" ? colors.purple : colors.lightPurple}
             backgroundColorHover={colorMode === "light" ? colors.lightPurple : colors.purple}
 
         >
-            <Text color="white">New Conversation</Text>
-            {hover && <Text className="change" fontSize="sm">Change Conversation</Text>}
+            <HStack>
+                <Text color="white" id="current-convo">New Conversation</Text>
+                {hover && <ViewIcon className="change" />}
+            </HStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
                 <ModalOverlay />

@@ -6,6 +6,9 @@
  *  Harris Chaudhry
  */
 
+// React
+import React from 'react'
+
 // components
 import Message from '../components/Message'
 
@@ -14,14 +17,9 @@ import Message from '../components/Message'
 // Adds a message to the ChatPanel
 export default function addMessage(message) {
     
-    // get current date
-    const date = new Date().toLocaleTimeString()
+    // create a new message
+    const newMessage = <Message date={message.date} from={message.from} message={message.message} />
 
-    // create new message
-    const newMessage = <Message date={date} from="user" message={message} />
-
-    console.log(document.getElementById("chat"))
-
-    // add message to chat
+    // add the message to the chat
     document.getElementById("chat").appendChild(newMessage)
 }
