@@ -57,6 +57,7 @@ const ChatPanel = () => {
             <Box className="chat">
                 <div id="chat">
                     <Message date={now} from="user" message="Hello World" />
+                    <Message date={now} from="bot" message="Hello!" />
                 </div>
             </Box>
 

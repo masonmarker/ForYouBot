@@ -91,6 +91,8 @@ const Message = (props) => {
                 cursor: "pointer",
             }}
 
+            backgroundColor={props.from !== "user" ? colorMode === "light" ? colors.gray : "gray.700" : "transparent"}
+
             // open modal on click
             onClick={onOpen}
         >
