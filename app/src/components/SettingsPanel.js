@@ -90,18 +90,16 @@ const SettingsPanel = () => {
                                 <DrawerBody>
                                     <Text>Help goes here</Text>
                                 </DrawerBody>
-
                                 <DrawerFooter>
                                     <Button variant='ghost' onClick={onCloseHelp}>
                                         Close
                                     </Button>
-
                                 </DrawerFooter>
                             </DrawerContent>
                         </Drawer>
-                        
 
-                                    
+
+
                     </ModalFooter>
                 </ModalContent>
             </Modal>

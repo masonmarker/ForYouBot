@@ -30,7 +30,6 @@ const TitleStyled = styled.div`
     height: 10%;
     width: 100%;
     background-color: ${props => props.backgroundColor};
-    border-radius: 1rem 1rem 0 0;
 `
 
 // Title component

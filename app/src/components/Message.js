@@ -30,7 +30,7 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-    
+
 } from "@chakra-ui/react"
 
 // Chakra icons
@@ -65,6 +65,14 @@ const MessageStyled = styled(Box)`
         height: 100%;
         justify-content: space-between;
     }
+
+    .msg-footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+
 `
 
 // Message component
@@ -82,6 +90,7 @@ const Message = (props) => {
 
     // if something is copied, show toast
     const toast = useToast()
+
 
     return (
         <MessageStyled
@@ -103,13 +112,22 @@ const Message = (props) => {
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Message</ModalHeader>
                     <ModalCloseButton />
+                    <ModalHeader>Message</ModalHeader>
                     <ModalBody>
                         <Text>{props.message}</Text>
                     </ModalBody>
                     <ModalFooter>
-                        <CopyButton message={props.message} />
+                        <HStack className="msg-footer">
+                            <CopyButton message={props.message} />
+                            <Button colorScheme='purple' mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                            <Button variant='ghost' onClick={onOpen}>
+                                Help
+                            </Button>
+                        </HStack>
+
                     </ModalFooter>
                 </ModalContent>
             </Modal>

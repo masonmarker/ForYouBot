@@ -1,4 +1,4 @@
-# fixes broken references
+# fixes broken git references
 
 # remove origin head
-console('rm ')
+console('rm ../.gits/refs/heads/main')
