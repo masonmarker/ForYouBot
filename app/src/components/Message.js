@@ -34,7 +34,8 @@ import {
 import {
     ArrowRightIcon,
     ArrowLeftIcon,
-    CopyIcon
+    CopyIcon,
+    InfoIcon
 } from '@chakra-ui/icons'
 
 // styled components
@@ -68,6 +69,22 @@ const MessageStyled = styled(Box)`
         flex-direction: row;
         justify-content: space-between;
     }
+
+    .msg-text {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .icon-text {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
 `
 
 // Message component
@@ -108,6 +125,7 @@ const Message = (props) => {
                     <ModalCloseButton />
                     <ModalHeader>Message</ModalHeader>
                     <ModalBody>
+                        <Text>{props.date}</Text>
                         <Text>{props.message}</Text>
                     </ModalBody>
                     <ModalFooter>
@@ -120,22 +138,22 @@ const Message = (props) => {
                                 Help
                             </Button>
                         </HStack>
-
                     </ModalFooter>
                 </ModalContent>
             </Modal>
 
 
-            <HStack
-                className="msg"
-            >
-                <VStack>
-                    <HStack>
-                        {props.from === "user" ? <ArrowRightIcon /> : <ArrowLeftIcon />}
-                        <Text>{props.date}</Text>
+            <HStack className="msg">
+                <HStack gap="1.3rem">
+                    <HStack className="icon-text">
+                        {props.from === "user" ? <ArrowRightIcon /> : <>
+                            <ArrowLeftIcon />
+                            <InfoIcon />
+                        </>}
                     </HStack>
-                    <Text>{props.message}</Text>
-                </VStack>
+                    <Text className="msg-text">{props.message}</Text>
+                </HStack>
+
 
                 {/* Copy Button */}
                 <CopyButton message={props.message} />
