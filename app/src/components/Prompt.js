@@ -11,7 +11,6 @@ import addMessage from '../functions/addMessage'
 // Chakra components
 import {
     Button,
-    Input,
     Textarea,
     Text,
     HStack,
@@ -84,7 +83,7 @@ const Prompt = () => {
                 <Button id="submit" onClick={() => {
                     const prompt = document.getElementsByClassName("area")[0].value
                     if (prompt.length > 0) {
-                        addMessage(document.getElementById("chat"), new Date().toLocaleTimeString(), "user", prompt)
+                        addMessage(new Date().toLocaleTimeString(), "user", prompt)
                         document.getElementsByClassName("area")[0].value = ""
                         document.getElementById("charlimit").innerHTML = "0/" + maxChars
                     }

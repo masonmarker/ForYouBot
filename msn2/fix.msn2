@@ -2,3 +2,7 @@
 
 # remove origin head
 console('rm ../.gits/refs/heads/main')
+
+
+# synchronize this repo
+import('sync.msn2')
