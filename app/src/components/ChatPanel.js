@@ -6,6 +6,9 @@
  *  Harris Chaudhry
  */
 
+// React
+import React, { useState, useEffect } from 'react'
+
 // components
 import Title from './Title'
 import Message from './Message'
@@ -23,6 +26,8 @@ import styled from 'styled-components'
 // common 
 import { colors } from '../common/common'
 
+// importing all messages
+import messages from '../messages/messages'
 
 // styled ChatPanel
 // should exist in the center of the screen
@@ -41,13 +46,24 @@ const ChatPanelStyled = styled.div`
 `
 
 // ChatPanel component
+// should re-render each time a message is pushed to messages
 const ChatPanel = () => {
 
     // grab current color mode
     const { colorMode } = useColorMode()
-
+    
     // current time
     const now = new Date().toLocaleTimeString()
+
+    // state for messages
+    const [messages, setMessages] = useState([])
+
+    // useEffect to update messages
+    useEffect(() => {
+        setMessages(messages)
+    }, [messages])
+
+    // return
 
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
@@ -56,14 +72,18 @@ const ChatPanel = () => {
             {/* Chat History */}
             <Box className="chat">
                 <div id="chat">
-                    <Message date={now} from="user" message="Hello World" />
-                    <Message date={now} from="bot" message="
-                        Hello! This is a response from the bot!
-                    " />
+                    {messages.map((message, i) => {
+                        return (
+                            <Message
+                                key={i}
+                                date={message.date}
+                                from={message.from}
+                                message={message.message}
+                            />
+                        )
+                    })}
                 </div>
             </Box>
-
-
         </ChatPanelStyled>
     )
 }
