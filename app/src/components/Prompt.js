@@ -5,8 +5,11 @@
  *  Mason Marker
  */
 
-// functions
-import addMessage from '../functions/addMessage'
+// React
+import React, { useState, useEffect } from 'react'
+
+// for updating messages
+import { useMessages } from '../messages/messages'
 
 // Chakra components
 import {
@@ -49,108 +52,52 @@ const PromptStyled = styled.div`
 
 `
 
-// ChatPanel component:
-/**
- * ChatPanel: Displays the chat history of the current thread.
- * 
- * authors : 
- *  Mason Marker
- *  Harris Chaudhry
- */
-
-// // components
-// import Title from './Title'
-// import Message from './Message'
-
-// // Chakra components
-// import {
-//     useColorMode,
-//     Text,
-//     Box
-// } from "@chakra-ui/react"
-
-// // styled components
-// import styled from 'styled-components'
-
-// // common 
-// import { colors } from '../common/common'
-
-// // importing all messages
-// import messages from '../messages/messages'
-
-// // styled ChatPanel
-// // should exist in the center of the screen
-// // vertically and horizontally
-// // include all props
-// const ChatPanelStyled = styled.div`
-//     width: 100vw;
-//     height: 72vh;
-//     background-color: ${props => props.backgroundColor};
-
-//     .chat {
-//         height: 90%;
-//         width: 100%;
-//         overflow-y: scroll;
-//     }
-// `
-
-// // ChatPanel component
-// // should re-render each time a message is pushed to messages
-// const ChatPanel = () => {
-
-//     // grab current color mode
-//     const { colorMode } = useColorMode()
-
-//     // current time
-//     const now = new Date().toLocaleTimeString()
-
-//     // add message to messages
-//     const addMessage = (message) => {
-//         messages.push({
-//             date: now,
-//             from: "user",
-//             message: message
-//         })
-//     }
-
-//     return (
-//         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
-//             <Title />
-
-//             {/* Chat History */}
-//             <Box className="chat">
-//                 <div id="chat">
-//                     {messages.map((message, i) => {
-//                         return (
-//                             <Message
-//                                 key={i}
-//                                 date={message.date}
-//                                 from={message.from}
-//                                 message={message.message}
-//                             />
-//                         )
-//                     })}
-//                 </div>
-//             </Box>
-
-
-//         </ChatPanelStyled>
-//     )
-// }
-
-// export default ChatPanel
-
-
-
-
 
 // Prompt component
+// should update messages array
+// message props : date
+//               : from
+//               : message
+//               : messageID
+// when the enter key is pressed (without shift being held)
+// or when the submit button is pressed should the request go through
 const Prompt = () => {
 
     // get color mode
     const { colorMode } = useColorMode()
 
-    
+    // for updating messages
+    const [messages, setMessages] = useMessages()
+
+    // adds a message to the message board
+    function addMessage(date, from, message) {
+
+        // create a new message object
+        const newMessage = {
+            date: date,
+            from: from,
+            message: message,
+            messageID: messages.length
+        }
+
+        // add the new message to the messages array
+        setMessages((prevMessages) => [...prevMessages, newMessage])
+
+        // clear the prompt
+        document.getElementsByClassName("area")[0].value = ""
+        document.getElementById("charlimit").innerHTML = `0/${maxChars}`
+    }
+
+    // handle enter press
+    // should not execute if shift is also being held
+    function handleEnterPress(e) {
+        if (e.key === "Enter") {
+            if (!e.shiftKey) {
+                e.preventDefault()
+                document.getElementById("submit").click()
+            }
+        }
+    }
 
     return (
         <PromptStyled>
@@ -159,6 +106,7 @@ const Prompt = () => {
                     className="area"
                     placeholder="Write a complex prompt..."
                     maxLength={maxChars}
+                    onKeyPress={handleEnterPress}
                     onChange={(e) => {
                         const len = e.target.value.length
                         document.getElementById("charlimit").innerHTML = len + `/${maxChars}`
@@ -179,10 +127,11 @@ const Prompt = () => {
                 />
                 <Button id="submit" onClick={() => {
                     const prompt = document.getElementsByClassName("area")[0].value
+
+                    // if prompt exists, add it to messages
                     if (prompt.length > 0) {
+
                         addMessage(new Date().toLocaleTimeString(), "user", prompt)
-                        document.getElementsByClassName("area")[0].value = ""
-                        document.getElementById("charlimit").innerHTML = "0/" + maxChars
                     }
                 }}>
 
@@ -198,6 +147,5 @@ const Prompt = () => {
         </PromptStyled>
     )
 }
-
 
 export default Prompt

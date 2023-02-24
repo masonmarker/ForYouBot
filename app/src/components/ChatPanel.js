@@ -26,8 +26,8 @@ import styled from 'styled-components'
 // common 
 import { colors } from '../common/common'
 
-// importing all messages
-import messages from '../messages/messages'
+// useMessages
+import { useMessages } from '../messages/messages'
 
 // styled ChatPanel
 // should exist in the center of the screen
@@ -56,15 +56,9 @@ const ChatPanel = () => {
     const now = new Date().toLocaleTimeString()
 
     // state for messages
-    const [messages, setMessages] = useState([])
-
-    // useEffect to update messages
-    useEffect(() => {
-        setMessages(messages)
-    }, [messages])
+    const [messages, setMessages] = useMessages()
 
     // return
-
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
             <Title />
@@ -72,12 +66,12 @@ const ChatPanel = () => {
             {/* Chat History */}
             <Box className="chat">
                 <div id="chat">
-                    {messages.map((message, i) => {
+                    {messages.map((message, index) => {
                         return (
                             <Message
-                                key={i}
-                                date={message.date}
+                                key={index}
                                 from={message.from}
+                                date={message.date}
                                 message={message.message}
                             />
                         )
