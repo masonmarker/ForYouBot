@@ -60,7 +60,6 @@ const MessageStyled = styled(Box)`
     width: 100%;
     padding: 1rem;
     /*border-top: 1px solid ${props => props.borderColor};*/
-    transition: ${css.transition};
 
     /* message box */
     .msg {
