@@ -14,9 +14,6 @@ import SidePanel from './SidePanel'
 // Settings Panel
 import SettingsPanel from './SettingsPanel'
 
-// ColorButton
-import ColorButton from './ColorButton'
-
 // React
 import React from 'react'
 
