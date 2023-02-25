@@ -6,6 +6,9 @@
  *  Harris Chaudhry
  */
 
+// states
+import { useState } from 'react'
+
 // Chakra components
 import {
 
@@ -89,7 +92,6 @@ const MessageStyled = styled(Box)`
         justify-content: space-between;
         gap: 1rem;
     }
-
 `
 
 // Message component
@@ -105,6 +107,9 @@ const Message = (props) => {
     // modal for editing a message
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    // state for displaying the copy button
+    const [showCopy, setShowCopy] = useState(false)
+
     // fading
     const { ref, inView } = useInView({
         threshold: 0,
@@ -119,8 +124,12 @@ const Message = (props) => {
                     cursor: "pointer",
                 }}
 
+                // states for displaying the copy button
+                onMouseOver={() => setShowCopy(true)}
+                onMouseLeave={() => setShowCopy(false)}
+
                 backgroundColor={props.from !== "user" ? colorMode === "light" ? colors.gray : "gray.700" : "transparent"}
-                
+
                 // open message information on click, but don't
                 // open if text is highlighted
                 onClick={() => {
@@ -158,11 +167,25 @@ const Message = (props) => {
                     </ModalContent>
                 </Modal>
 
-
                 {/* message box */}
+                {showCopy && <HStack marginBottom="0.5rem">
+                    <CopyButton message={props.message}/>
+                    
+                    {/* edit message button */}
+                    <Button 
+                        size="sm"
+                        zIndex={100}
+                        backgroundColor="transparent"
+                        onClick={(e) => {
+                            onOpen()
+                            e.stopPropagation()
+                        }}
+                    >
+                        Edit
+                    </Button>
+
+                </HStack>}        
                 <Text className="msg-text">{props.message}</Text>
-
-
             </MessageStyled>
         </ScaleFade>
     )
@@ -174,25 +197,32 @@ const CopyButton = (props) => {
     // if something is copied, show toast
     const toast = useToast()
 
+    // ScaleFade
+    const { ref, inView } = useInView({
+        threshold: 0,
+    })
+
     return (
-        <Button
-            size="sm"
-            zIndex={100}
-            backgroundColor="transparent"
-            onClick={(e) => {
-                navigator.clipboard.writeText(props.message)
-                toast({
-                    title: "Copied",
-                    description: "Message copied to clipboard",
-                    status: "success",
-                    duration: 2000,
-                    isClosable: true,
-                })
-                e.stopPropagation()
-            }}
-        >
-            <CopyIcon />
-        </Button>
+        <ScaleFade ref={ref} in={inView}>
+            <Button
+                size="sm"
+                zIndex={100}
+                backgroundColor="transparent"
+                onClick={(e) => {
+                    navigator.clipboard.writeText(props.message)
+                    toast({
+                        title: "Copied",
+                        description: "Message copied to clipboard",
+                        status: "success",
+                        duration: 2000,
+                        isClosable: true,
+                    })
+                    e.stopPropagation()
+                }}
+            >
+                <CopyIcon />
+            </Button>
+        </ScaleFade>
 
     )
 }
