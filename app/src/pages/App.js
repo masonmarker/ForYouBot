@@ -46,7 +46,6 @@ const AppStyled = styled.div`
     width: 80%;
     margin-bottom: 5rem;
   }
-
 `
 
 // App component

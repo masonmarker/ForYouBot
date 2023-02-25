@@ -42,7 +42,7 @@ import {
 } from "@chakra-ui/react"
 
 // Chakra more icon
-import { ViewIcon } from '@chakra-ui/icons'
+import { ViewIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
 
 // styled components
 import styled from 'styled-components'
@@ -66,8 +66,13 @@ const TitleStyled = styled.div`
         flex-direction: row;
         justify-content: space-between;
         position: fixed;
-        right: 2rem;
+        right: 0.8rem;
         gap: 8px;        
+    }
+
+    .color {
+        position: fixed;
+        left: 0.8rem;
     }
 
     &:hover {
@@ -75,13 +80,14 @@ const TitleStyled = styled.div`
         background-color: ${props => props.backgroundColorHover};
     }
 
+
 `
 
 // Title component
 const Title = () => {
 
     // grab current color mode
-    const { colorMode } = useColorMode()
+    const { colorMode, toggleColorMode } = useColorMode()
 
     // hover state
     const [hover, setHover] = React.useState(false)
@@ -102,6 +108,13 @@ const Title = () => {
             backgroundColorHover={colorMode === "light" ? colors.lightPurple : colors.purple}
 
         >
+            <Button 
+                className="color"
+                colorScheme="purple" 
+                onClick={toggleColorMode} 
+            >
+                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            </Button>
             <HStack>
                 <Text color="white" id="current-convo">New Conversation</Text>
                 {hover && <ViewIcon color="white" />}
@@ -125,11 +138,8 @@ const Title = () => {
 
             <Box className="buttons">
                 <SidePanel />
-                <ColorButton />
                 <SettingsPanel />
             </Box>
-
-
         </TitleStyled>
     )
 }
