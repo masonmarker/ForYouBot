@@ -82,13 +82,13 @@ const Prompt = ({messages, stateAddMessage}) => {
         // if prompt exists, add it to messages
         if (prompt.length > 0) {
             console.log("adding message:", prompt)
-            
+
             // add message to messages
-            stateAddMessage([...messages, {
+            stateAddMessage({
                 date: date,
                 from: from,
                 message: prompt,
-            }])
+            })
 
             // clear prompt
             document.getElementsByClassName("area")[0].value = ""
