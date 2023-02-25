@@ -17,7 +17,9 @@ import Message from './Message'
 import {
     useColorMode,
     Text,
-    Box
+    Box,
+    ScaleFade,
+    useDisclosure
 } from "@chakra-ui/react"
 
 // styled components
@@ -28,6 +30,9 @@ import { colors } from '../common/common'
 
 // useMessages
 import { useMessages } from '../messages/messages'
+
+// intersection observer
+import { useInView } from 'react-intersection-observer';
 
 // styled ChatPanel
 // should exist in the center of the screen
@@ -52,6 +57,13 @@ const ChatPanel = ({ messages }) => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
+    // intersection observer
+    const { ref, inView } = useInView({
+        threshold: 0,
+    });
+    
+
+
     // return
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
@@ -64,12 +76,13 @@ const ChatPanel = ({ messages }) => {
                 <div id="chat">
                     {messages.map((message, index) => {
                         return (
-                            <Message
-                                key={index}
-                                date={message.date}
-                                from={message.from}
-                                message={message.message}
-                            />
+                            <ScaleFade ref={ref} in={inView}>
+                                <Message
+                                    message={message.message}
+                                    from={message.from}
+                                    date={message.date}
+                                />
+                            </ScaleFade>
                         )
                     })}
                 </div>

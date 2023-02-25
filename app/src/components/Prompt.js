@@ -81,7 +81,6 @@ const Prompt = ({messages, stateAddMessage}) => {
       
         // if prompt exists, add it to messages
         if (prompt.length > 0) {
-            console.log("adding message:", prompt)
 
             // add message to messages
             stateAddMessage({
@@ -95,6 +94,19 @@ const Prompt = ({messages, stateAddMessage}) => {
 
             // reset character limit
             document.getElementById("charlimit").innerHTML = "0/" + maxChars
+
+            // reset character limit color
+            document.getElementById("charlimit").style.color = colorMode === "light" ? "black" : "white"
+
+            // scroll to bottom of ChatPanel
+            const chat = document.getElementById("chat")
+
+            // if the chat exists
+            if (chat) {
+                chat.scrollTop = chat.scrollHeight
+            }
+            
+            
         }
       }
 
