@@ -92,6 +92,11 @@ const MessageStyled = styled(Box)`
         justify-content: space-between;
         gap: 1rem;
     }
+
+    .msg-pre-text {
+        font-family: ${fonts.message};
+    }
+
 `
 
 // Message component
@@ -184,7 +189,9 @@ const Message = (props) => {
                     <CopyButton message={props.message} />
 
                 </HStack>}
-                <Text className="msg-text">{props.message}</Text>
+                <Text className="msg-text"><pre
+                    className="msg-pre-text"
+                >{props.message}</pre></Text>
             </MessageStyled>
         </ScaleFade>
     )
