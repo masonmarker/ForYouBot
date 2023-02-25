@@ -24,7 +24,7 @@ const ChatStyled = styled.div`
 const Chat = ({ messages }) => {
     return (
         <ChatStyled>
-            <ChatPanel messages={messages} />
+            <ChatPanel messages={messages}/>
             <InfoPanel />
         </ChatStyled>
     )

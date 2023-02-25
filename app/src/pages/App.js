@@ -13,6 +13,7 @@ import Chat from '../components/Chat'
 
 // states
 import { useMessages } from '../messages/messages'
+import { useRef } from 'react'
 
 // Chakra components
 import {
@@ -62,11 +63,10 @@ function App() {
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
-
-          {/* Things */}
-
-
-          <Prompt messages={messages} stateAddMessage={stateAddMessage} />
+          <Prompt
+            messages={messages} 
+            stateAddMessage={stateAddMessage}
+          />
           <Chat messages={messages} />
         </AppStyled>
       </Fade>

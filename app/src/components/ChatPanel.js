@@ -57,12 +57,12 @@ const ChatPanel = ({ messages }) => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
-    // bottom Ref
-    const bottomRef = useRef(null)
+    // ref for scrolling to bottom
+    const bottomRef = useRef()
 
     // scroll to bottom
     useEffect(() => {
-        bottomRef.current.scrollIntoView({ behavior: "smooth" })
+        bottomRef.current.scrollIntoView()
     }, [messages])
 
     // return
@@ -86,7 +86,7 @@ const ChatPanel = ({ messages }) => {
                             />
                         )
                     })}
-                    <div ref={bottomRef} />
+                    <div ref={bottomRef}/>
                 </div>
             </Box>
         </ChatPanelStyled>
