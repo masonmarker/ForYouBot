@@ -77,7 +77,7 @@ const ChatPanel = ({ messages }) => {
                 <div id="chat">
                     {messages.map((message, index) => {
                         return (
-                            <ScaleMessage
+                            <Message
                                 key={index}
                                 message={message.message}
                                 from={message.from}
@@ -89,26 +89,6 @@ const ChatPanel = ({ messages }) => {
                 </div>
             </Box>
         </ChatPanelStyled>
-    )
-}
-
-// Fading in Message
-const ScaleMessage = ({ message, from, date}) => {
-
-    // intersection observer
-    const { ref, inView } = useInView({
-        threshold: 0,
-    });
-
-    // return
-    return (
-        <ScaleFade ref={ref} in={inView}>
-            <Message
-                message={message}
-                from={from}
-                date={date}
-            />
-        </ScaleFade>
     )
 }
 

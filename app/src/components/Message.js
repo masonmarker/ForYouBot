@@ -28,7 +28,13 @@ import {
     ModalCloseButton,
     useDisclosure,
 
+    // Fading
+    ScaleFade,
+
 } from "@chakra-ui/react"
+
+// intersection observer
+import { useInView } from 'react-intersection-observer';
 
 // Chakra icons
 import {
@@ -100,63 +106,70 @@ const Message = (props) => {
     // modal for editing a message
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    // fading
+    const { ref, inView } = useInView({
+        threshold: 0,
+    })
+
     return (
-        <MessageStyled
-            borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
-            _hover={{
-                backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
-                cursor: "pointer",
-            }}
-            backgroundColor={props.from !== "user" ? colorMode === "light" ? colors.gray : "gray.700" : "transparent"}
-            onClick={onOpen}
-        >
-
-            {/* modal for editing a message */}
-            <Modal
-                isOpen={isOpen}
-                onClose={onClose}
-                size="xl"
+        <ScaleFade ref={ref} in={inView}>
+            <MessageStyled
+                borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
+                _hover={{
+                    backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
+                    cursor: "pointer",
+                }}
+                backgroundColor={props.from !== "user" ? colorMode === "light" ? colors.gray : "gray.700" : "transparent"}
+                onClick={onOpen}
             >
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalCloseButton />
-                    <ModalHeader>Message</ModalHeader>
-                    <ModalBody>
-                        <Text>{props.date}</Text>
-                        <Text>{props.message}</Text>
-                    </ModalBody>
-                    <ModalFooter>
-                        <HStack className="msg-footer">
-                            <CopyButton message={props.message} />
-                            <Button colorScheme='purple' mr={3} onClick={onClose}>
-                                Close
-                            </Button>
-                            <Button variant='ghost' onClick={onOpen}>
-                                Help
-                            </Button>
+
+                {/* modal for editing a message */}
+                <Modal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    size="xl"
+                >
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalCloseButton />
+                        <ModalHeader>Message</ModalHeader>
+                        <ModalBody>
+                            <Text>{props.date}</Text>
+                            <Text>{props.message}</Text>
+                        </ModalBody>
+                        <ModalFooter>
+                            <HStack className="msg-footer">
+                                <CopyButton message={props.message} />
+                                <Button colorScheme='purple' mr={3} onClick={onClose}>
+                                    Close
+                                </Button>
+                                <Button variant='ghost' onClick={onOpen}>
+                                    Help
+                                </Button>
+                            </HStack>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+
+
+                <HStack className="msg">
+                    <HStack gap="1.3rem">
+                        <HStack className="icon-text">
+                            {props.from === "user" ? <ArrowRightIcon /> : <>
+                                <ArrowLeftIcon />
+                                <InfoIcon />
+                            </>}
                         </HStack>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-
-
-            <HStack className="msg">
-                <HStack gap="1.3rem">
-                    <HStack className="icon-text">
-                        {props.from === "user" ? <ArrowRightIcon /> : <>
-                            <ArrowLeftIcon />
-                            <InfoIcon />
-                        </>}
+                        <Text className="msg-text">{props.message}</Text>
                     </HStack>
-                    <Text className="msg-text">{props.message}</Text>
+
+
+                    {/* Copy Button */}
+                    <CopyButton message={props.message} />
+
                 </HStack>
-
-
-                {/* Copy Button */}
-                <CopyButton message={props.message} />
-
-            </HStack>
-        </MessageStyled>
+            </MessageStyled>
+        </ScaleFade>
     )
 }
 
