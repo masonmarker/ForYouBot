@@ -118,8 +118,16 @@ const Message = (props) => {
                     backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
                     cursor: "pointer",
                 }}
+
                 backgroundColor={props.from !== "user" ? colorMode === "light" ? colors.gray : "gray.700" : "transparent"}
-                onClick={onOpen}
+                
+                // open message information on click, but don't
+                // open if text is highlighted
+                onClick={() => {
+                    if (window.getSelection().toString() === "") {
+                        onOpen()
+                    }
+                }}
             >
 
                 {/* modal for editing a message */}
