@@ -8,11 +8,21 @@
  *  Harris Chaudhry
  */
 
+// SidePanel
+import SidePanel from './SidePanel'
+
+// Settings Panel
+import SettingsPanel from './SettingsPanel'
+
+// ColorButton
+import ColorButton from './ColorButton'
+
 // React
 import React from 'react'
 
 // Chakra components
 import {
+    Box,
     useColorMode,
     Text,
     Button,
@@ -32,7 +42,7 @@ import {
 } from "@chakra-ui/react"
 
 // Chakra more icon
-import { ViewIcon } from '@chakra-ui/icons'
+import { ViewIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
 
 // styled components
 import styled from 'styled-components'
@@ -51,10 +61,25 @@ const TitleStyled = styled.div`
     background-color: ${props => props.backgroundColor};
     transition: ${css.transition};
 
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        position: fixed;
+        right: 0.8rem;
+        gap: 8px;        
+    }
+
+    .color {
+        position: fixed;
+        left: 0.8rem;
+    }
+
     &:hover {
         cursor: pointer;
         background-color: ${props => props.backgroundColorHover};
     }
+
 
 `
 
@@ -62,7 +87,7 @@ const TitleStyled = styled.div`
 const Title = () => {
 
     // grab current color mode
-    const { colorMode } = useColorMode()
+    const { colorMode, toggleColorMode } = useColorMode()
 
     // hover state
     const [hover, setHover] = React.useState(false)
@@ -83,6 +108,13 @@ const Title = () => {
             backgroundColorHover={colorMode === "light" ? colors.lightPurple : colors.purple}
 
         >
+            <Button 
+                className="color"
+                colorScheme="purple" 
+                onClick={toggleColorMode} 
+            >
+                {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            </Button>
             <HStack>
                 <Text color="white" id="current-convo">New Conversation</Text>
                 {hover && <ViewIcon color="white" />}
@@ -104,7 +136,10 @@ const Title = () => {
                 </ModalContent>
             </Modal>
 
-
+            <Box className="buttons">
+                <SidePanel />
+                <SettingsPanel />
+            </Box>
         </TitleStyled>
     )
 }

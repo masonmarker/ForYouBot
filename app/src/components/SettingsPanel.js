@@ -36,13 +36,7 @@ import styled from 'styled-components'
 
 // styled SettingsPanel
 const SettingsPanelStyled = styled.div`
-    .button {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        margin: 1rem;
-        margin-right: 7rem;
-    }
+
 `
 
 // SettingsPanel component
