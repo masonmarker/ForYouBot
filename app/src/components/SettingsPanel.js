@@ -20,7 +20,6 @@ import {
     DrawerContent,
     DrawerCloseButton,
     useDisclosure,
-    useColorMode,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -98,9 +97,6 @@ const SettingsPanel = () => {
                                 </DrawerFooter>
                             </DrawerContent>
                         </Drawer>
-
-
-
                     </ModalFooter>
                 </ModalContent>
             </Modal>

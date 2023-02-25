@@ -67,7 +67,8 @@ const ChatPanel = ({ messages }) => {
 
     // return
     return (
-        <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
+        <ChatPanelStyled 
+            backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
 
             {/* Title for switching conversations */}
             <Title />

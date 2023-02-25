@@ -15,7 +15,6 @@ import {
     Text,
     Box,
     HStack,
-    VStack,
     Button,
 
     // modal for viewing more information about the message
@@ -38,10 +37,7 @@ import { useInView } from 'react-intersection-observer';
 
 // Chakra icons
 import {
-    ArrowRightIcon,
-    ArrowLeftIcon,
     CopyIcon,
-    InfoIcon
 } from '@chakra-ui/icons'
 
 // styled components
@@ -65,9 +61,10 @@ const MessageStyled = styled(Box)`
 
     /* message box */
     .msg {
-        width: 100%;
-        height: 100%;
+        display: flex;
+        flex-direction: column;
         justify-content: space-between;
+        width: 100vw;
     }
 
     .msg-footer {
@@ -76,12 +73,14 @@ const MessageStyled = styled(Box)`
         justify-content: space-between;
     }
 
+    /* message text style, should wrap on overflow*/
     .msg-text {
-        width: 100%;
-        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        width: 100%;
+        word-wrap: break-word;
+        
     }
 
     .icon-text {
@@ -152,22 +151,10 @@ const Message = (props) => {
                 </Modal>
 
 
-                <HStack className="msg">
-                    <HStack gap="1.3rem">
-                        <HStack className="icon-text">
-                            {props.from === "user" ? <ArrowRightIcon /> : <>
-                                <ArrowLeftIcon />
-                                <InfoIcon />
-                            </>}
-                        </HStack>
-                        <Text className="msg-text">{props.message}</Text>
-                    </HStack>
+                {/* message box */}
+                <Text className="msg-text">{props.message}</Text>
 
 
-                    {/* Copy Button */}
-                    <CopyButton message={props.message} />
-
-                </HStack>
             </MessageStyled>
         </ScaleFade>
     )
