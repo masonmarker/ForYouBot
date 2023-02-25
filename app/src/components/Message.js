@@ -172,9 +172,9 @@ const CopyButton = (props) => {
     return (
         <Button
             size="sm"
-            zIndex={`100`}
+            zIndex={100}
             backgroundColor="transparent"
-            onClick={() => {
+            onClick={(e) => {
                 navigator.clipboard.writeText(props.message)
                 toast({
                     title: "Copied",
@@ -183,6 +183,7 @@ const CopyButton = (props) => {
                     duration: 2000,
                     isClosable: true,
                 })
+                e.stopPropagation()
             }}
         >
             <CopyIcon />

@@ -111,8 +111,7 @@ const Prompt = ({messages, stateAddMessage}) => {
                     onChange={(e) => {
                         const len = e.target.value.length
                         document.getElementById("charlimit").innerHTML = len + `/${maxChars}`
-                        {
-
+                
                             // character limit component
                             const comp = document.getElementById("charlimit")
 
@@ -123,7 +122,7 @@ const Prompt = ({messages, stateAddMessage}) => {
                             else if (comp.style.color === "red") {
                                 comp.style.color = colorMode === "light" ? "black" : "white"
                             } 
-                        }
+                        
                     }}
                 />
                 <Button id="submit" onClick={() => {
