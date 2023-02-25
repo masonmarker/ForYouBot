@@ -61,7 +61,7 @@ const PromptStyled = styled.div`
 //               : messageID
 // when the enter key is pressed (without shift being held)
 // or when the submit button is pressed should the request go through
-const Prompt = ({messages, stateAddMessage}) => {
+const Prompt = ({ messages, stateAddMessage }) => {
 
     // get color mode
     const { colorMode } = useColorMode()
@@ -78,7 +78,7 @@ const Prompt = ({messages, stateAddMessage}) => {
     // add message to messages
     function addMessage(date, from) {
         const prompt = document.getElementsByClassName("area")[0].value
-      
+
         // if prompt exists, add it to messages
         if (prompt.length > 0) {
 
@@ -98,7 +98,7 @@ const Prompt = ({messages, stateAddMessage}) => {
             // reset character limit color
             document.getElementById("charlimit").style.color = colorMode === "light" ? "black" : "white"
         }
-      }
+    }
 
     return (
         <PromptStyled>
@@ -111,23 +111,28 @@ const Prompt = ({messages, stateAddMessage}) => {
                     onChange={(e) => {
                         const len = e.target.value.length
                         document.getElementById("charlimit").innerHTML = len + `/${maxChars}`
-                
-                            // character limit component
-                            const comp = document.getElementById("charlimit")
 
-                            if (len >= maxChars) {
-                                comp.style.color = "red"
-                            }
-                            // if the color is red and the length is less than the max
-                            else if (comp.style.color === "red") {
-                                comp.style.color = colorMode === "light" ? "black" : "white"
-                            } 
+                        // character limit component
+                        const comp = document.getElementById("charlimit")
+
+                        // if the length is greater than the max
+                        if (len >= maxChars) {
+                            comp.style.color = "red"
+                        }
                         
+                        // if the color is red and the length is less than the max
+                        else if (comp.style.color === "red") {
+                            comp.style.color = colorMode === "light" ? "black" : "white"
+                        }
+                        else {
+                            comp.style.color = colorMode === "light" ? "black" : "white"
+                        }
+
                     }}
                 />
                 <Button id="submit" onClick={() => {
                     addMessage(
-                        new Date().toLocaleTimeString(), 
+                        new Date().toLocaleTimeString(),
                         "user"
                     )
                 }}>

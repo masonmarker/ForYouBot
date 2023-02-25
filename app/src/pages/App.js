@@ -64,10 +64,11 @@ function App() {
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
-          <SidePanel />
-          <ColorButton />
+
+          {/* Things */}
+
+
           <Prompt messages={messages} stateAddMessage={stateAddMessage} />
-          <SettingsPanel />
           <Chat messages={messages} />
         </AppStyled>
       </Fade>

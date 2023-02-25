@@ -8,11 +8,21 @@
  *  Harris Chaudhry
  */
 
+// SidePanel
+import SidePanel from './SidePanel'
+
+// Settings Panel
+import SettingsPanel from './SettingsPanel'
+
+// ColorButton
+import ColorButton from './ColorButton'
+
 // React
 import React from 'react'
 
 // Chakra components
 import {
+    Box,
     useColorMode,
     Text,
     Button,
@@ -50,6 +60,15 @@ const TitleStyled = styled.div`
     width: 100%;
     background-color: ${props => props.backgroundColor};
     transition: ${css.transition};
+
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        position: fixed;
+        right: 2rem;
+        gap: 8px;        
+    }
 
     &:hover {
         cursor: pointer;
@@ -103,6 +122,12 @@ const Title = () => {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+
+            <Box className="buttons">
+                <SidePanel />
+                <ColorButton />
+                <SettingsPanel />
+            </Box>
 
 
         </TitleStyled>

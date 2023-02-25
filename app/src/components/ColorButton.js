@@ -21,12 +21,7 @@ import styled from 'styled-components'
 // styled ColorButton
 // bottom right corner
 const ColorButtonStyled = styled.div`
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin: 1rem;
-    margin-right: 13.2rem;
-    
+
 `
 
 // ColorButton component
