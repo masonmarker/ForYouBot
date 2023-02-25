@@ -61,43 +61,42 @@ const PromptStyled = styled.div`
 //               : messageID
 // when the enter key is pressed (without shift being held)
 // or when the submit button is pressed should the request go through
-const Prompt = () => {
+const Prompt = ({messages, stateAddMessage}) => {
 
     // get color mode
     const { colorMode } = useColorMode()
 
-    // for updating messages
-    const [messages, setMessages] = useMessages()
-
-    // adds a message to the message board
-    function addMessage(date, from, message) {
-
-        // create a new message object
-        const newMessage = {
-            date: date,
-            from: from,
-            message: message,
-            messageID: messages.length
-        }
-
-        // add the new message to the messages array
-        setMessages((prevMessages) => [...prevMessages, newMessage])
-
-        // clear the prompt
-        document.getElementsByClassName("area")[0].value = ""
-        document.getElementById("charlimit").innerHTML = `0/${maxChars}`
-    }
-
     // handle enter press
     // should not execute if shift is also being held
     function handleEnterPress(e) {
-        if (e.key === "Enter") {
-            if (!e.shiftKey) {
-                e.preventDefault()
-                document.getElementById("submit").click()
-            }
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault()
+            document.getElementById("submit").click()
         }
     }
+
+    // add message to messages
+    function addMessage(date, from) {
+        const prompt = document.getElementsByClassName("area")[0].value
+      
+        // if prompt exists, add it to messages
+        if (prompt.length > 0) {
+            console.log("adding message:", prompt)
+            
+            // add message to messages
+            stateAddMessage([...messages, {
+                date: date,
+                from: from,
+                message: prompt,
+            }])
+
+            // clear prompt
+            document.getElementsByClassName("area")[0].value = ""
+
+            // reset character limit
+            document.getElementById("charlimit").innerHTML = "0/" + maxChars
+        }
+      }
 
     return (
         <PromptStyled>
@@ -121,18 +120,15 @@ const Prompt = () => {
                             // if the color is red and the length is less than the max
                             else if (comp.style.color === "red") {
                                 comp.style.color = colorMode === "light" ? "black" : "white"
-                            }
+                            } 
                         }
                     }}
                 />
                 <Button id="submit" onClick={() => {
-                    const prompt = document.getElementsByClassName("area")[0].value
-
-                    // if prompt exists, add it to messages
-                    if (prompt.length > 0) {
-
-                        addMessage(new Date().toLocaleTimeString(), "user", prompt)
-                    }
+                    addMessage(
+                        new Date().toLocaleTimeString(), 
+                        "user"
+                    )
                 }}>
 
                     <ArrowForwardIcon />
@@ -147,5 +143,6 @@ const Prompt = () => {
         </PromptStyled>
     )
 }
+
 
 export default Prompt

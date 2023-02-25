@@ -14,6 +14,9 @@ import ColorButton from '../components/ColorButton'
 import SettingsPanel from '../components/SettingsPanel'
 import Chat from '../components/Chat'
 
+// states
+import { useMessages } from '../messages/messages'
+
 // Chakra components
 import {
   ChakraProvider,
@@ -54,15 +57,18 @@ function App() {
     threshold: 0,
   });
 
+  // messages state
+  const { messages, stateAddMessage } = useMessages()
+
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
           <SidePanel />
           <ColorButton />
-          <Prompt />
+          <Prompt messages={messages} stateAddMessage={stateAddMessage} />
           <SettingsPanel />
-          <Chat />
+          <Chat messages={messages} />
         </AppStyled>
       </Fade>
     </ChakraProvider>

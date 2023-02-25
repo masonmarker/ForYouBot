@@ -48,7 +48,7 @@ const SidePanelStyled = styled.div`
     align-items: flex-end;
 
     /* bottom right corner */
-    .button {
+    .button { 
         position: fixed;
         bottom: 0;
         right: 0;

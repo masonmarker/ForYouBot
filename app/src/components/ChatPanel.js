@@ -47,20 +47,16 @@ const ChatPanelStyled = styled.div`
 
 // ChatPanel component
 // should re-render each time a message is pushed to messages
-const ChatPanel = () => {
+const ChatPanel = ({ messages }) => {
 
     // grab current color mode
     const { colorMode } = useColorMode()
-    
-    // current time
-    const now = new Date().toLocaleTimeString()
-
-    // state for messages
-    const [messages, setMessages] = useMessages()
 
     // return
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
+
+            {/* Title for switching conversations */}
             <Title />
 
             {/* Chat History */}
@@ -70,8 +66,8 @@ const ChatPanel = () => {
                         return (
                             <Message
                                 key={index}
-                                from={message.from}
                                 date={message.date}
+                                from={message.from}
                                 message={message.message}
                             />
                         )

@@ -28,13 +28,6 @@ import {
     useColorMode
 } from "@chakra-ui/react"
 
-// Chakra icons
-import {
-    InfoIcon,
-    ChatIcon,
-} from '@chakra-ui/icons'
-
-
 // styled components
 import styled from 'styled-components'
 
