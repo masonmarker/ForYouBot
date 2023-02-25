@@ -13,7 +13,8 @@ export const colors = {
     lightGray: "#E2E8F0",
     darkGray: "#171923",
     purple: "#805AD5",
-    lightPurple: "#9f7aea"
+    lightPurple: "#9f7aea",
+    lighterPurple: "#d6bcfa"
 }
 
 // fonts

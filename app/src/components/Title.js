@@ -101,20 +101,31 @@ const Title = () => {
             // on click, open modal for changing conversation
             onClick={onOpen}
 
-            backgroundColor={colorMode === "light" ? colors.purple : colors.lightPurple}
+            backgroundColor={colorMode === "light" ? colors.purple : colors.lighterPurple}
             backgroundColorHover={colorMode === "light" ? colors.lightPurple : colors.purple}
+
+            
 
         >
             <Button 
                 className="color"
                 colorScheme="purple" 
-                onClick={toggleColorMode} 
+                onClick={(e) => {
+                    toggleColorMode()
+                    e.stopPropagation()
+                }} 
             >
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
             <HStack>
-                <Text color="white" id="current-convo">New Conversation</Text>
-                {hover && <ViewIcon color="white" />}
+                <Text 
+                    color={colorMode === "light" ? "white" : "black"}
+                    id="current-convo"
+                >
+                    New Conversation
+                </Text>
+                {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"}
+                 />}
             </HStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">

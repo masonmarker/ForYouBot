@@ -54,7 +54,14 @@ const SettingsPanel = () => {
 
     return (
         <SettingsPanelStyled>
-            <Button className="button" onClick={onOpen} colorScheme='purple'>
+            <Button
+                className="button" 
+                colorScheme='purple'
+                onClick={(e) => {
+                    onOpen()
+                    e.stopPropagation()
+                }}
+            >
                 Settings
             </Button>
 
