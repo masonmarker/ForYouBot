@@ -104,14 +104,17 @@ const Title = () => {
             // on click, open modal for changing conversation
             onClick={onOpen}
 
-            backgroundColor={colorMode === "light" ? colors.purple : colors.lightPurple}
-            backgroundColorHover={colorMode === "light" ? colors.lightPurple : colors.purple}
+            backgroundColor={colorMode === "light" ? colors.lightPurple : colors.purple}
+            backgroundColorHover={colorMode === "light" ? colors.purple : colors.lightPurple}
 
         >
             <Button 
                 className="color"
                 colorScheme="purple" 
-                onClick={toggleColorMode} 
+                onClick={(e) => {
+                    toggleColorMode()
+                    e.stopPropagation()
+                }} 
             >
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>

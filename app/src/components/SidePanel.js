@@ -39,7 +39,21 @@ import {
 // styled SidePanel
 // should be permanently in the bottom right corner
 const SidePanelStyled = styled.div`
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 
+    /* bottom right corner */
+    .button { 
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: 1rem;
+    }
 `
 
 // SidePanel component
@@ -51,7 +65,10 @@ const SidePanel = () => {
 
     return (
         <SidePanelStyled>
-            <Button className="button" colorScheme='purple' onClick={onOpen}>
+            <Button className="button" colorScheme='purple' onClick={(e) => {
+                onOpen()
+                e.stopPropagation()
+            }}>
                 Edit Bot
             </Button>
             <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
