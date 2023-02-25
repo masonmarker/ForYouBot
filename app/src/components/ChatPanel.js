@@ -57,13 +57,6 @@ const ChatPanel = ({ messages }) => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
-    // intersection observer
-    const { ref, inView } = useInView({
-        threshold: 0,
-    });
-
-
-
     // return
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
@@ -82,7 +75,6 @@ const ChatPanel = ({ messages }) => {
                                 from={message.from}
                                 date={message.date}
                             />
-                            
                         )
                     })}
                 </div>

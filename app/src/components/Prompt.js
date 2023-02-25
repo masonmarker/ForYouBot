@@ -97,16 +97,6 @@ const Prompt = ({messages, stateAddMessage}) => {
 
             // reset character limit color
             document.getElementById("charlimit").style.color = colorMode === "light" ? "black" : "white"
-
-            // scroll to bottom of ChatPanel
-            const chat = document.getElementById("chat")
-
-            // if the chat exists
-            if (chat) {
-                chat.scrollTop = chat.scrollHeight
-            }
-            
-            
         }
       }
 
@@ -142,7 +132,6 @@ const Prompt = ({messages, stateAddMessage}) => {
                         "user"
                     )
                 }}>
-
                     <ArrowForwardIcon />
                 </Button>
             </HStack>
