@@ -7,7 +7,7 @@
  */
 
 // React
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 // components
 import Title from './Title'
@@ -57,6 +57,14 @@ const ChatPanel = ({ messages }) => {
     // grab current color mode
     const { colorMode } = useColorMode()
 
+    // bottom Ref
+    const bottomRef = useRef(null)
+
+    // scroll to bottom
+    useEffect(() => {
+        bottomRef.current.scrollIntoView({ behavior: "smooth" })
+    }, [messages])
+
     // return
     return (
         <ChatPanelStyled backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
@@ -77,6 +85,7 @@ const ChatPanel = ({ messages }) => {
                             />
                         )
                     })}
+                    <div ref={bottomRef} />
                 </div>
             </Box>
         </ChatPanelStyled>
