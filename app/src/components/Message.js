@@ -18,15 +18,9 @@ import {
   Box,
   HStack,
   Button,
+  Input,
 
   // modal for viewing more information about the message
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
 
   // Fading
@@ -100,11 +94,12 @@ const Message = (props) => {
   // grab current color mode
   const { colorMode } = useColorMode();
 
-  // modal for editing a message
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   // state for displaying the copy button
   const [showCopy, setShowCopy] = useState(false);
+
+  // state for switching between the message and a textarea to alter the message
+  // and resend
+  const [edit, setEdit] = useState(false);
 
   // fading
   const { ref, inView } = useInView({
@@ -129,62 +124,30 @@ const Message = (props) => {
               : "gray.700"
             : "transparent"
         }
-        // open message information on click, but don't
-        // open if text is highlighted
+        // edit message on click
         onClick={() => {
           if (window.getSelection().toString() === "") {
-            onOpen();
+            //  setEdit(true);
+            // set the input's value to the message
+            //   document.getElementById("input").value = props.message;
           }
         }}
       >
-        {/* modal for editing a message */}
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
-          <ModalOverlay />
-          <ModalContent>
-            <ModalCloseButton />
-            <ModalHeader>Message</ModalHeader>
-            <ModalBody>
-              <Text>{props.date}</Text>
-              <Text>{props.message}</Text>
-            </ModalBody>
-            <ModalFooter>
-              <HStack className="msg-footer">
-                <CopyButton message={props.message} />
-                <Button colorScheme="purple" mr={3} onClick={onClose}>
-                  Close
-                </Button>
-                <Button variant="ghost" onClick={onOpen}>
-                  Help
-                </Button>
-              </HStack>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-
         {/* message box */}
 
-        <Text className="msg-text">
-          <pre className="msg-pre-text">{props.message}</pre>
-        </Text>
-
-        {showCopy && (
-          <HStack marginTop="1rem">
-            {/* edit message button */}
-            <Button
-              size="sm"
-              zIndex={100}
-              backgroundColor="transparent"
-              onClick={(e) => {
-                onOpen();
-                e.stopPropagation();
-              }}
-            >
-              Edit
-            </Button>
-            <CopyButton message={props.message} />
-          </HStack>
-        )}
-
+        <HStack>
+          {showCopy && (
+            <HStack>
+              <CopyButton message={props.message} />
+            </HStack>
+          )}
+          {edit ? (
+            <Input id="input" />
+          ) : (
+            <pre className="msg-pre-text">{props.message}</pre>
+          )}
+        </HStack>
+        {/* end of message box */}
       </MessageStyled>
     </ScaleFade>
   );
