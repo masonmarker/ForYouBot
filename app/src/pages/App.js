@@ -8,24 +8,17 @@
 
 
 // components
-import SidePanel from '../components/SidePanel'
 import Prompt from '../components/Prompt'
-import ColorButton from '../components/ColorButton'
-import SettingsPanel from '../components/SettingsPanel'
 import Chat from '../components/Chat'
 
 // states
 import { useMessages } from '../messages/messages'
+import { useRef } from 'react'
 
 // Chakra components
 import {
   ChakraProvider,
-
-  Box,
-  Text,
-  Input,
-  Fade,
-
+  Fade
 } from "@chakra-ui/react"
 
 // intersection observer
@@ -33,6 +26,9 @@ import { useInView } from 'react-intersection-observer';
 
 // styled components
 import styled from 'styled-components'
+
+// common
+import { css } from '../common/common'
 
 // styled App
 const AppStyled = styled.div`
@@ -45,6 +41,10 @@ const AppStyled = styled.div`
     transform: translateX(-50%);
     width: 80%;
     margin-bottom: 5rem;
+  }
+
+  * {
+    transition: ${css.transition};
   }
 `
 
@@ -63,11 +63,10 @@ function App() {
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
-
-          {/* Things */}
-
-
-          <Prompt messages={messages} stateAddMessage={stateAddMessage} />
+          <Prompt
+            messages={messages} 
+            stateAddMessage={stateAddMessage}
+          />
           <Chat messages={messages} />
         </AppStyled>
       </Fade>
