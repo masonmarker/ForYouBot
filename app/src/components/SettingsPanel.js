@@ -50,11 +50,6 @@ const SettingsPanel = () => {
     onClose: onCloseHelp,
   } = useDisclosure();
 
-  const handleHelp = () => {
-    onClose();
-    onOpenHelp();
-  };
-
   return (
     <SettingsPanelStyled>
       <Button
