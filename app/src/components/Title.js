@@ -106,9 +106,6 @@ const Title = () => {
 
             backgroundColor={colorMode === "light" ? colors.purple : colors.lighterPurple}
             backgroundColorHover={colorMode === "light" ? colors.lightPurple : colors.purple}
-
-            
-
         >
             <Button 
                 className="color"
