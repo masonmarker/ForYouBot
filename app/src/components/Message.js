@@ -172,7 +172,13 @@ const Message = (props) => {
                 </Modal>
 
                 {/* message box */}
-                {showCopy && <HStack marginBottom="0.5rem">
+                <Text className="msg-text">
+                    <pre className="msg-pre-text">
+                    {props.message}
+                    </pre>
+                </Text>
+
+                {showCopy && <HStack marginTop="1rem">
                     {/* edit message button */}
                     <Button
                         size="sm"
@@ -188,9 +194,7 @@ const Message = (props) => {
                     <CopyButton message={props.message} />
 
                 </HStack>}
-                <Text className="msg-text"><pre
-                    className="msg-pre-text"
-                >{props.message}</pre></Text>
+
             </MessageStyled>
         </ScaleFade>
     )
