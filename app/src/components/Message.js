@@ -133,8 +133,8 @@ const Message = (props) => {
           }
         }}
       >
+         
         {/* message box */}
-
         <HStack>
           {showCopy && (
             <HStack>
