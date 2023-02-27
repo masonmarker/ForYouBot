@@ -47,7 +47,7 @@ const ChatPanelStyled = styled.div`
         height: 90%;
         width: 100%;
         overflow-y: scroll;
-    }
+    } 
 `
 
 // ChatPanel component

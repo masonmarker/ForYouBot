@@ -27,37 +27,7 @@ import { ArrowForwardIcon } from '@chakra-ui/icons'
 import styled from 'styled-components'
 
 // OpenAI
-// OpenAI
-const { Configuration, OpenAIApi } = require("openai");
-
-
-// create configuration with API key
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-// create openai object
-const openai = new OpenAIApi(configuration);
-
-// function to retrieve a response based on an initial prompt
-async function ask(message) {
-    const response = await openai.createCompletion({
-        engine: "text-davinci-003",
-        prompt: message,
-        maxTokens: 100,
-        temperature: 0.9,
-        topP: 1,
-        presencePenalty: 0,
-        frequencyPenalty: 0,
-        bestOf: 1,
-        n: 1,
-        stream: false,
-    })
-
-    return response.data.choices[0].text
-}
-
-
+import ask from '../server/server'
 
 // max characters permitted in a single prompt
 const maxChars = 2000

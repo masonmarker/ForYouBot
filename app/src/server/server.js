@@ -1,11 +1,9 @@
-const express = require("express");
-require("dotenv").config();
+// const express = require("express");
+// require("dotenv").config();
 const { Configuration, OpenAIApi } = require("openai");
-const app = express();
+// const app = express();
 
-app.use(express.json());
-
-console.log(process.env.OPENAI_API_KEY)
+// app.use(express.json());
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -37,10 +35,10 @@ const openai = new OpenAIApi(configuration);
 
 
 // sends a request to the API and returns the response
-async function ask(question) {
+export default async function ask(question) {
   console.log("asking question...")
   const response = await openai.createCompletion({
-    model: "text-davinci-003",
+    model: "text-ada-001",
     prompt: question,
     max_tokens: 64,
     temperature: 0,
@@ -48,11 +46,8 @@ async function ask(question) {
     frequency_penalty: 0.0,
     presence_penalty: 0.0,
   });
-  console.log(response.data.choices[0].text.data);
+  return response.data.choices[0].text;
 }
-
-// make a request to the API
-ask("What is the meaning of life?");
 
 // const port = process.env.PORT || 5000;
 
