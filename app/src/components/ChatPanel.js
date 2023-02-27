@@ -55,7 +55,7 @@ const ChatPanelStyled = styled.div`
 const ChatPanel = ({ messages }) => {
 
     // grab current color mode
-    const { colorMode } = useColorMode()
+    const { colorMode } = useColorMode()  
 
     // ref for scrolling to bottom
     const bottomRef = useRef()

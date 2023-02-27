@@ -26,6 +26,39 @@ import { ArrowForwardIcon } from '@chakra-ui/icons'
 // styled components
 import styled from 'styled-components'
 
+// OpenAI
+// OpenAI
+const { Configuration, OpenAIApi } = require("openai");
+
+
+// create configuration with API key
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// create openai object
+const openai = new OpenAIApi(configuration);
+
+// function to retrieve a response based on an initial prompt
+async function ask(message) {
+    const response = await openai.createCompletion({
+        engine: "text-davinci-003",
+        prompt: message,
+        maxTokens: 100,
+        temperature: 0.9,
+        topP: 1,
+        presencePenalty: 0,
+        frequencyPenalty: 0,
+        bestOf: 1,
+        n: 1,
+        stream: false,
+    })
+
+    return response.data.choices[0].text
+}
+
+
+
 // max characters permitted in a single prompt
 const maxChars = 2000
 
@@ -76,8 +109,7 @@ const Prompt = ({ messages, stateAddMessage }) => {
     }
 
     // add message to messages
-    function addMessage(date, from) {
-        const prompt = document.getElementsByClassName("area")[0].value
+    function addMessage(date, from, prompt) {
 
         // if prompt exists, add it to messages
         if (prompt.length > 0) {
@@ -97,6 +129,9 @@ const Prompt = ({ messages, stateAddMessage }) => {
 
             // reset character limit color
             document.getElementById("charlimit").style.color = colorMode === "light" ? "black" : "white"
+        
+            // make request to OpenAI
+            addMessage(new Date().toLocaleTimeString(), "bot", ask(prompt))
         }
     }
 
@@ -133,7 +168,8 @@ const Prompt = ({ messages, stateAddMessage }) => {
                 <Button id="submit" onClick={() => {
                     addMessage(
                         new Date().toLocaleTimeString(),
-                        "user"
+                        "user",
+                        document.getElementsByClassName("area")[0].value
                     )
                 }}>
                     <ArrowForwardIcon />

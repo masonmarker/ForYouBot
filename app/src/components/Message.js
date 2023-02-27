@@ -133,18 +133,17 @@ const Message = (props) => {
           }
         }}
       >
-         
         {/* message box */}
         <HStack>
-          {showCopy && (
-            <HStack>
-              <CopyButton message={props.message} />
-            </HStack>
-          )}
           {edit ? (
             <Input id="input" />
           ) : (
             <pre className="msg-pre-text">{props.message}</pre>
+          )}
+          {showCopy && (
+            <HStack>
+              <CopyButton message={props.message}/>
+            </HStack>
           )}
         </HStack>
         {/* end of message box */}
@@ -166,8 +165,7 @@ const CopyButton = (props) => {
   return (
     <ScaleFade ref={ref} in={inView}>
       <Button
-        size="sm"
-        zIndex={100}
+        size="xs"
         backgroundColor="transparent"
         onClick={(e) => {
           navigator.clipboard.writeText(props.message);
