@@ -48,11 +48,10 @@ async function ask(question) {
     frequency_penalty: 0.0,
     presence_penalty: 0.0,
   });
-  console.log(response.data.choices[0].text.data);
+  console.log(response.data.choices[0].text);
 }
 
-// make a request to the API
-ask("What is the meaning of life?");
+
 
 // const port = process.env.PORT || 5000;
 
