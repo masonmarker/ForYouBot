@@ -69,8 +69,6 @@ const MessageStyled = styled(Box)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
-    word-wrap: break-word;
   }
 
   .icon-text {
@@ -86,7 +84,7 @@ const MessageStyled = styled(Box)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
+    width: 90%;
     word-wrap: break-word;
     white-space: pre-wrap;
 
@@ -143,15 +141,15 @@ const Message = (props) => {
         }}
       >
         {/* message box */}
-        <HStack>
-          {edit ? (
+        <HStack w="100%" minHeight="2rem">
+          {edit ?
             <Input id="input" />
-          ) : (
+            :
             <pre className="msg-pre-text">{props.message}</pre>
-          )}
+          }
           {showCopy && (
             <HStack>
-              <CopyButton message={props.message}/>
+              <CopyButton message={props.message} />
             </HStack>
           )}
         </HStack>

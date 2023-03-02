@@ -116,9 +116,15 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
       document.getElementById("charlimit").style.color =
         colorMode === "light" ? "black" : "white";
 
+        
+      // disable prompt
+      document.getElementsByClassName("area")[0].disabled = true;
+
+      // disable submit button
+      document.getElementById("submit").disabled = true;
 
       // add bot's response to messages
-      stateAddBotMessage(
+      await stateAddBotMessage(
         {
           date: new Date().toLocaleTimeString(),
           from: "bot",
@@ -134,6 +140,14 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
           message: await testBotResponse()
         }
       )
+
+      // enable prompt
+      document.getElementsByClassName("area")[0].disabled = false;
+
+      // enable submit button
+      document.getElementById("submit").disabled = false;
+
+
     }
   }
 

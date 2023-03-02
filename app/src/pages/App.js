@@ -64,11 +64,11 @@ function App() {
       <Fade in={inView} ref={ref}>
         <AppStyled>
           <Prompt
-            messages={userMessages} 
+            messages={userMessages}
             stateAddMessage={stateAddMessage}
             stateAddBotMessage={stateAddBotMessage}
           />
-          <Chat messages={userMessages} botmessages={botMessages}/>
+          <Chat messages={userMessages} botmessages={botMessages} />
         </AppStyled>
       </Fade>
     </ChakraProvider>
