@@ -1,21 +1,33 @@
+
+// require express
 const express = require("express");
+
 // require("dotenv").config();
+
+
+
+// require openai
 const { Configuration, OpenAIApi } = require("openai");
+
+// declare express app
 const app = express();
 
+// use express
 app.use(express.json());
 
 // use cors
 const cors = require("cors");
 app.use(cors());
 
-
+// create configuration
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// create openai api from the account configuration
 const openai = new OpenAIApi(configuration);
 
+// post to /ask a function to respond to the request
 app.post("/ask", async (req, res) => {
     const { prompt } = req.body;
     const response = await openai.complete({
