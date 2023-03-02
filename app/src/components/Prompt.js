@@ -12,7 +12,15 @@ import React, { useState, useEffect } from "react";
 import { useMessages } from "../messages/messages";
 
 // Chakra components
-import { Button, Textarea, Text, HStack, useColorMode } from "@chakra-ui/react";
+import {
+  Button,
+  Textarea,
+  Text,
+  HStack,
+  Spinner,
+  Checkbox,
+  useColorMode
+} from "@chakra-ui/react";
 
 // Chakra icons
 import { ArrowForwardIcon } from "@chakra-ui/icons";
@@ -58,6 +66,12 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
   // get color mode
   const { colorMode } = useColorMode();
 
+  // is waiting for response
+  const [waiting, setWaiting] = useState(false);
+
+  // is testing
+  const [testing, setTesting] = useState(false);
+
   // handle enter press
   // should not execute if shift is also being held
   function handleEnterPress(e) {
@@ -70,9 +84,9 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
   // wait 1 second then return the bot's response
   async function testBotResponse() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
+
     // return a large bot response to test scrolling
-    return "This is a very long response. ".repeat(100);
+    return "This is a test bot response."
   }
 
   // add message to messages
@@ -96,15 +110,13 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
     if (prompt.length > 0) {
 
       // add message to messages
-      stateAddMessage(
+      await stateAddMessage(
         {
           date: date,
           from: from,
           message: prompt,
         },
       );
-
-
 
       // clear prompt
       document.getElementsByClassName("area")[0].value = "";
@@ -116,36 +128,43 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
       document.getElementById("charlimit").style.color =
         colorMode === "light" ? "black" : "white";
 
-        
+
       // disable prompt
       document.getElementsByClassName("area")[0].disabled = true;
 
       // disable submit button
       document.getElementById("submit").disabled = true;
 
+      // set waiting to true
+      setWaiting(true);
+
       // add bot's response to messages
       await stateAddBotMessage(
         {
           date: new Date().toLocaleTimeString(),
           from: "bot",
-          // message: await fetch("http://localhost:5000", {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json"
-          //   },
-          //   body: JSON.stringify({
-          //     prompt: prompt
-          //   })
-          // }).then(response => response.json()).then(data => data.data.trim())
-          message: await testBotResponse()
+          message: testing ? await testBotResponse() : await fetch("http://localhost:5000", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              prompt: prompt
+            })
+          }).then(response => response.json()).then(data => data.data.trim())
+          // message: await testBotResponse()
         }
       )
+
+      // set waiting to false
+      setWaiting(false);
 
       // enable prompt
       document.getElementsByClassName("area")[0].disabled = false;
 
       // enable submit button
       document.getElementById("submit").disabled = false;
+
 
 
     }
@@ -190,8 +209,17 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
               document.getElementsByClassName("area")[0].value);
           }}
         >
-          <ArrowForwardIcon />
+          {waiting ? <Spinner /> : <ArrowForwardIcon />}
         </Button>
+        {/* testing checkbox */}
+        <Checkbox
+          colorScheme="purple"
+          onChange={(e) => {
+            setTesting(e.target.checked);
+          }}
+        >
+          Testing?
+        </Checkbox>
       </HStack>
 
       <Text
