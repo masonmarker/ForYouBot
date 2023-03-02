@@ -67,9 +67,23 @@ const Prompt = ({ messages, stateAddMessage }) => {
     }
   }
 
-
   // add message to messages
-  async function addMessage(date, from, prompt, bot) {
+  async function addMessage(date, from, prompt) {
+
+    //  request to /ask on port 5000
+    const response = await fetch("http://localhost:5000", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: prompt
+      })
+    });
+
+    // get response
+    // const data = await response.json();
+
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
       // add message to messages
@@ -77,7 +91,22 @@ const Prompt = ({ messages, stateAddMessage }) => {
         date: date,
         from: from,
         message: prompt,
-      });
+      },
+        {
+          date: new Date().toLocaleTimeString(),
+          from: "bot",
+          // message: await fetch("http://localhost:5000", {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json"
+          //   },
+          //   body: JSON.stringify({
+          //     prompt: prompt
+          //   })
+          // }).then(res => res.json()).then(data => data.data.trim())
+          message: "this is the bot's response"
+        }
+      );
 
       // clear prompt
       document.getElementsByClassName("area")[0].value = "";
@@ -88,28 +117,6 @@ const Prompt = ({ messages, stateAddMessage }) => {
       // reset character limit color
       document.getElementById("charlimit").style.color =
         colorMode === "light" ? "black" : "white";
-
-      // request to /ask on port 5000
-      // const response = await fetch("http://localhost:5000", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify({
-      //     prompt: prompt
-      //   })
-      // });
-
-      // // get response
-      // const data = await response.json();
-
-      // add message to messages
-      stateAddMessage({
-        date: new Date().toLocaleTimeString(),
-        from: "bot",
-        message: "This is a test response.",
-      });
-
     }
   }
 
@@ -149,7 +156,7 @@ const Prompt = ({ messages, stateAddMessage }) => {
             addMessage(
               new Date().toLocaleTimeString(),
               "user",
-              document.getElementsByClassName("area")[0].value            );
+              document.getElementsByClassName("area")[0].value);
           }}
         >
           <ArrowForwardIcon />

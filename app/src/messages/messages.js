@@ -29,12 +29,24 @@ function useMessages() {
     const [messages, setMessages] = useState(initMessages)
 
     // add message to messages
-    const stateAddMessage = (newMessage) => {
+    const stateAddMessage = (newMessage, botMessage) => {
+        const message_copy = [...messages]
+
+        // remove last element
+        message_copy.pop()
+
+        // add new message
+        message_copy.push(newMessage)
+
+        setMessages([...messages, newMessage, botMessage])
+    }
+
+    const stateAddSingle = (newMessage) => {
         setMessages([...messages, newMessage])
     }
 
     // return
-    return { messages, stateAddMessage }
+    return { messages, stateAddMessage, stateAddSingle }
 }
 
 export { useMessages };
