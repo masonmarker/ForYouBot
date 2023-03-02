@@ -19,6 +19,11 @@ app.use(express.json());
 const cors = require("cors");
 app.use(cors());
 
+// use body parser
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+
+
 // create configuration
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -28,18 +33,15 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // post to /ask a function to respond to the request
-app.post("/ask", async (req, res) => {
+app.post("/", async (req, res) => {
     const { prompt } = req.body;
-    const response = await openai.complete({
-        model: "text-davinci-003",
+    const response = await openai.createCompletion({
+        model: "text-ada-001",
         prompt:  `
             ${prompt}
         `,
         max_tokens: 64,
-        temperature: 0,
-        top_p: 1.0,
-        frequency_penalty: 0.0,
-        presence_penalty: 0.0
+        temperature: 0.5,
     });
 
     res.status(200).json({

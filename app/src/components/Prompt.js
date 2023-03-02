@@ -67,8 +67,9 @@ const Prompt = ({ messages, stateAddMessage }) => {
     }
   }
 
+
   // add message to messages
-  async function addMessage(date, from, prompt) {
+  async function addMessage(date, from, prompt, bot) {
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
       // add message to messages
@@ -88,20 +89,27 @@ const Prompt = ({ messages, stateAddMessage }) => {
       document.getElementById("charlimit").style.color =
         colorMode === "light" ? "black" : "white";
 
-      // make request to OpenAI
-      //  addMessage(new Date().toLocaleTimeString(), "bot", ask(prompt));
-
       // request to /ask on port 5000
-        const response = await fetch("/ask", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                // allow CORS
-                "Access-Control-Allow-Origin": "*",
-            },
-            body: JSON.stringify({ prompt: prompt }),
-        });
-        console.log(response);
+      // const response = await fetch("http://localhost:5000", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json"
+      //   },
+      //   body: JSON.stringify({
+      //     prompt: prompt
+      //   })
+      // });
+
+      // // get response
+      // const data = await response.json();
+
+      // add message to messages
+      stateAddMessage({
+        date: new Date().toLocaleTimeString(),
+        from: "bot",
+        message: "This is a test response.",
+      });
+
     }
   }
 
@@ -141,8 +149,7 @@ const Prompt = ({ messages, stateAddMessage }) => {
             addMessage(
               new Date().toLocaleTimeString(),
               "user",
-              document.getElementsByClassName("area")[0].value
-            );
+              document.getElementsByClassName("area")[0].value            );
           }}
         >
           <ArrowForwardIcon />
