@@ -80,8 +80,17 @@ const MessageStyled = styled(Box)`
     gap: 1rem;
   }
 
+  /* message text style, should wrap on overflow*/
   .msg-pre-text {
     font-family: ${fonts.message};
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+
+
   }
 `;
 

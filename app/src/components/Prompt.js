@@ -53,7 +53,7 @@ const PromptStyled = styled.div`
 //               : messageID
 // when the enter key is pressed (without shift being held)
 // or when the submit button is pressed should the request go through
-const Prompt = ({ messages, stateAddMessage }) => {
+const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
 
   // get color mode
   const { colorMode } = useColorMode();
@@ -67,31 +67,58 @@ const Prompt = ({ messages, stateAddMessage }) => {
     }
   }
 
+  // wait 1 second then return the bot's response
+  async function testBotResponse() {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    
+    // return a large bot response to test scrolling
+    return "This is a very long response. ".repeat(100);
+  }
+
   // add message to messages
   async function addMessage(date, from, prompt) {
 
     //  request to /ask on port 5000
-    const response = await fetch("http://localhost:5000", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        prompt: prompt
-      })
-    });
+    // const response = await fetch("http://localhost:5000", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({
+    //     prompt: prompt
+    //   })
+    // });
 
     // get response
     // const data = await response.json();
 
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
+
       // add message to messages
-      stateAddMessage({
-        date: date,
-        from: from,
-        message: prompt,
-      },
+      stateAddMessage(
+        {
+          date: date,
+          from: from,
+          message: prompt,
+        },
+      );
+
+
+
+      // clear prompt
+      document.getElementsByClassName("area")[0].value = "";
+
+      // reset character limit
+      document.getElementById("charlimit").innerHTML = "0/" + maxChars;
+
+      // reset character limit color
+      document.getElementById("charlimit").style.color =
+        colorMode === "light" ? "black" : "white";
+
+
+      // add bot's response to messages
+      stateAddBotMessage(
         {
           date: new Date().toLocaleTimeString(),
           from: "bot",
@@ -103,20 +130,10 @@ const Prompt = ({ messages, stateAddMessage }) => {
           //   body: JSON.stringify({
           //     prompt: prompt
           //   })
-          // }).then(res => res.json()).then(data => data.data.trim())
-          message: "this is the bot's response"
+          // }).then(response => response.json()).then(data => data.data.trim())
+          message: await testBotResponse()
         }
-      );
-
-      // clear prompt
-      document.getElementsByClassName("area")[0].value = "";
-
-      // reset character limit
-      document.getElementById("charlimit").innerHTML = "0/" + maxChars;
-
-      // reset character limit color
-      document.getElementById("charlimit").style.color =
-        colorMode === "light" ? "black" : "white";
+      )
     }
   }
 

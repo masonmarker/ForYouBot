@@ -52,10 +52,10 @@ const ChatPanelStyled = styled.div`
 
 // ChatPanel component
 // should re-render each time a message is pushed to messages
-const ChatPanel = ({ messages }) => {
+const ChatPanel = ({ messages, botmessages }) => {
 
     // grab current color mode
-    const { colorMode } = useColorMode()  
+    const { colorMode } = useColorMode()
 
     // ref for scrolling to bottom
     const bottomRef = useRef()
@@ -63,11 +63,11 @@ const ChatPanel = ({ messages }) => {
     // scroll to bottom
     useEffect(() => {
         bottomRef.current.scrollIntoView()
-    }, [messages])
+    }, [messages, botmessages])
 
     // return
     return (
-        <ChatPanelStyled 
+        <ChatPanelStyled
             backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
 
             {/* Title for switching conversations */}
@@ -78,15 +78,25 @@ const ChatPanel = ({ messages }) => {
                 <div id="chat">
                     {messages.map((message, index) => {
                         return (
-                            <Message
-                                key={index}
-                                message={message.message}
-                                from={message.from}
-                                date={message.date}
-                            />
-                        )
+                            <div key={`chat-div-${index}`}>
+                                <Message
+                                    key={`user-${index}`}
+                                    message={message.message}
+                                    from={message.from}
+                                    date={message.date}
+                                />
+                                {botmessages[index] && (
+                                    <Message
+                                        key={`bot-${index}`}
+                                        message={botmessages[index].message}
+                                        from="bot"
+                                        date={botmessages[index].date}
+                                    />
+                                )}
+                            </div>
+                        );
                     })}
-                    <div ref={bottomRef}/>
+                    <div ref={bottomRef} />
                 </div>
             </Box>
         </ChatPanelStyled>

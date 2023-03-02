@@ -10,43 +10,31 @@
 // React
 import { useState, useEffect } from 'react'
 
-const initMessages = [
-    {
-        date: new Date().toLocaleString(),
-        from: "user",
-        message: "hello!"
-    },
-    {
-        date: new Date().toLocaleString(),
-        from: "bot",
-        message: "hello from bot!"
-    },
-]
+const initMessages = []
+
+const initBotMessages = []
 
 // useMessages hook for altering the messages array
 function useMessages() {
     // state for messages
-    const [messages, setMessages] = useState(initMessages)
+    const [userMessages, setUserMessages] = useState(initMessages)
+    const [botMessages, setBotMessages] = useState(initBotMessages)
 
     // add message to messages
-    const stateAddMessage = (newMessage, botMessage) => {
-        const message_copy = [...messages]
-
-        // remove last element
-        message_copy.pop()
-
-        // add new message
-        message_copy.push(newMessage)
-
-        setMessages([...messages, newMessage, botMessage])
+    const stateAddMessage = (newMessage) => {
+        setUserMessages([...userMessages, newMessage])
     }
 
-    const stateAddSingle = (newMessage) => {
-        setMessages([...messages, newMessage])
+    // add bot message to messages
+    const stateAddBotMessage = (newMessage) => {
+        setBotMessages([...botMessages, newMessage])
     }
+    // const stateAddSingle = (newMessage) => {
+    //     setUserMessage([...userMessage, newMessage])
+    // }
 
     // return
-    return { messages, stateAddMessage, stateAddSingle }
+    return { userMessages, stateAddMessage, stateAddBotMessage, botMessages }
 }
 
 export { useMessages };

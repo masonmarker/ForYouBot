@@ -57,17 +57,18 @@ function App() {
   });
 
   // messages state
-  const { messages, stateAddMessage } = useMessages()
+  const { userMessages, stateAddMessage, stateAddBotMessage, botMessages } = useMessages()
 
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
           <Prompt
-            messages={messages} 
+            messages={userMessages} 
             stateAddMessage={stateAddMessage}
+            stateAddBotMessage={stateAddBotMessage}
           />
-          <Chat messages={messages} />
+          <Chat messages={userMessages} botmessages={botMessages}/>
         </AppStyled>
       </Fade>
     </ChakraProvider>
