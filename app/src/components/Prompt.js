@@ -70,7 +70,7 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
   const [waiting, setWaiting] = useState(false);
 
   // is testing
-  const [testing, setTesting] = useState(false);
+  const [testing, setTesting] = useState(true);
 
   // handle enter press
   // should not execute if shift is also being held
