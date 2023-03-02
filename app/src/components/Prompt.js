@@ -214,6 +214,7 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
         {/* testing checkbox */}
         <Checkbox
           colorScheme="purple"
+          defaultChecked
           onChange={(e) => {
             setTesting(e.target.checked);
           }}
