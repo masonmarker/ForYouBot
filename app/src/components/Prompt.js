@@ -148,8 +148,17 @@ const Prompt = ({
             headers: {
               "Content-Type": "application/json"
             },
+
+            // body of request, takes: 
+            //  prompt
+            //  max_tokens
+            //  temperature
+            //  model
             body: JSON.stringify({
-              prompt: chatLog
+              model: "text-davinci-003",
+              prompt: chatLog,
+              max_tokens: 100,
+              temperature: 0.7
             })
           }).then(response => response.json()).then(data => data.data.trim())
           // message: await testBotResponse()

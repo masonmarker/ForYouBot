@@ -37,15 +37,13 @@ const port = process.env.PORT || 5000;
 
 // post to /ask a function to respond to the request
 app.post("/", async (req, res) => {
-    const { prompt } = req.body;
+    const { model, prompt, max_tokens, temperature } = req.body;
     const response = await openai.createCompletion({
-        //model: "text-ada-001",
-        model: "text-davinci-003",
-        prompt: `
-            ${prompt}
-        `,
-        max_tokens: 64,
-        temperature: 0.5,
+        model: model,
+        //model: "text-davinci-003",
+        prompt: prompt,
+        max_tokens: max_tokens,
+        temperature: temperature,
         stop: ["\n--next--\n"],
     });
 
