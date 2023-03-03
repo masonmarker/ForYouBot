@@ -57,8 +57,8 @@ const Convos = ({ conversations }) => {
                         backgroundColor={colorMode === "light" ? "black" : "white"}
                         color={colorMode === "light" ? "white" : "black"}
                     >
-                        <Text>{conversations[0].name}</Text>
-                        <Text>{convo.user[0].message}</Text>
+                        <Text>name: {conversations[0].name}</Text>
+                        <Text>first user message: {convo.user[0].message}</Text>
                     </ConvoStyled>
 
                 )
