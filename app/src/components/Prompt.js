@@ -53,6 +53,35 @@ const PromptStyled = styled.div`
   }
 `;
 
+
+async function ask(chatLog) {
+  return await fetch("http://localhost:5000", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "text-davinci-003",
+      prompt: chatLog,
+      max_tokens: 100,
+      temperature: 0.7
+    })
+  }).then(response => response.json()).then(data => data.data.trim())
+}
+
+
+// gets a string representation of the user's chat log
+function getUserChatLog(userMessages) {
+  const sep = "\n--next--\n"
+  var chatLog = ""
+  for (let i = 0; i < userMessages.length; i++) {
+    chatLog += userMessages[i].message + sep
+  }
+  chatLog += prompt + sep
+  console.log(chatLog)
+  return chatLog
+}
+
 // Prompt component
 // should update messages array
 // message props : date
@@ -130,38 +159,15 @@ const Prompt = ({
       // set waiting to true
       setWaiting(true);
 
-      // // seperator for each bot message
-      const sep = "\n--next--\n"
-      var chatLog = ""
-      for (let i = 0; i < userMessages.length; i++) {
-        chatLog += userMessages[i].message + sep
-      }
-      chatLog += prompt + sep
-      console.log(chatLog)
-
+      // add bot response to messages
       await stateAddBotMessage(
         {
           date: new Date().toLocaleTimeString(),
           from: "bot",
-          message: testing ? await testBotResponse() : await fetch("http://localhost:5000", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            // body of request, takes: 
-            //  prompt
-            //  max_tokens
-            //  temperature
-            //  model
-            body: JSON.stringify({
-              model: "text-davinci-003",
-              prompt: chatLog,
-              max_tokens: 100,
-              temperature: 0.7
-            })
-          }).then(response => response.json()).then(data => data.data.trim())
-          // message: await testBotResponse()
+          message: testing ?
+            await testBotResponse()
+            :
+            await ask(getUserChatLog(userMessages))
         }
       )
 
@@ -241,3 +247,4 @@ const Prompt = ({
 };
 
 export default Prompt;
+export { getUserChatLog, ask }

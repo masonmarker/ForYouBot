@@ -25,9 +25,6 @@ function useMessages() {
     const stateAddBotMessage = (newMessage) => {
         setBotMessages([...botMessages, newMessage])
     }
-    // const stateAddSingle = (newMessage) => {
-    //     setUserMessage([...userMessage, newMessage])
-    // }
 
     // return
     return { userMessages, stateAddMessage, stateAddBotMessage, botMessages }
@@ -45,7 +42,7 @@ function useConversation(initial) {
     }
 
     // return
-    return { conversations, stateAddConversation }
+    return { conversations, stateAddConversation, setConversations }
 }
 
 export { useMessages, useConversation };

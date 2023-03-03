@@ -18,7 +18,7 @@ import SidePanel from './SidePanel'
 import SettingsPanel from './SettingsPanel'
 
 // React
-import React from 'react'
+import { useState } from 'react'
 
 // Chakra components
 import {
@@ -74,6 +74,11 @@ const TitleStyled = styled.div`
         left: 0.8rem;
     }
 
+    .clear-conversation {
+        position: fixed;
+        left: 4.8rem;
+    }
+
     &:hover {
         cursor: pointer;
         background-color: ${props => props.backgroundColorHover};
@@ -83,16 +88,22 @@ const TitleStyled = styled.div`
 `
 
 // Title component
-const Title = ({conversations}) => {
+const Title = ({conversations, setConversations, setUserMessages, setBotMessages}) => {
 
     // grab current color mode
     const { colorMode, toggleColorMode } = useColorMode()
 
     // hover state
-    const [hover, setHover] = React.useState(false)
+    const [hover, setHover] = useState(false)
 
     // modal for changing conversation
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const clearConversation = () => {
+        setConversations([])
+        setUserMessages([])
+        setBotMessages([])
+    }
 
     // title hovering?
     return (
@@ -116,12 +127,19 @@ const Title = ({conversations}) => {
             >
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
+            <Button className='clear-conversation' colorScheme = "purple"
+                onClick={(e) => {
+                    clearConversation()
+                    e.stopPropagation()
+                }
+            }>Clear Conversation</Button>
             <HStack>
                 <Text
                     color={colorMode === "light" ? "white" : "black"}
                     id="current-convo"
                 >
-                    New Conversation
+                    {conversations[0]['user'].length != 0 &&
+                    conversations[0]['user'][0]['message']}
                 </Text>
                 {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"}
                 />}

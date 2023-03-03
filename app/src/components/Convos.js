@@ -9,6 +9,7 @@
 // Chakra components
 import {
     Box,
+    Button,
     Text
 } from "@chakra-ui/react"
 
@@ -20,18 +21,25 @@ import {
 
 
 // Convos component
-const Convos = ({conversations}) => {
+const Convos = ({ conversations }) => {
 
-    console.log(conversations)
+    // conversations format:
+    // conversations[0]['user'][0] = {date: from: message:}
 
     return (
         <Box>
             <Text>Conversations</Text>
-            {conversations.map((convo, index) => {
+            {conversations[0]['user'].length != 0 ? conversations.map((convo, index) => {
                 return (
-                    <Text key={index}>{convo.user[0]}</Text>
+                    <Button key={index}>
+                        <Text>{convo['user'][0]['from']}</Text>
+                        <Text>{convo['user'][0]['message']}</Text>
+                        <Text>{convo['user'][0]['date']}</Text>
+                    </Button>
                 )
-            })}
+            }) :
+                <Text>No conversations</Text>
+            }
         </Box>
     )
 }
