@@ -10,15 +10,11 @@
 // React
 import { useState, useEffect } from 'react'
 
-const initMessages = []
-
-const initBotMessages = []
-
 // useMessages hook for altering the messages array
 function useMessages() {
     // state for messages
-    const [userMessages, setUserMessages] = useState(initMessages)
-    const [botMessages, setBotMessages] = useState(initBotMessages)
+    const [userMessages, setUserMessages] = useState([])
+    const [botMessages, setBotMessages] = useState([])
 
     // add message to messages
     const stateAddMessage = (newMessage) => {
@@ -37,4 +33,19 @@ function useMessages() {
     return { userMessages, stateAddMessage, stateAddBotMessage, botMessages }
 }
 
-export { useMessages };
+// useConversation hook for 
+function useConversation(initial) {
+
+    // state for messages
+    const [conversations, setConversations] = useState(initial)
+
+    // add message to messages
+    const stateAddConversation = (newConversation) => {
+        setConversations([...conversations, newConversation])
+    }
+
+    // return
+    return { conversations, stateAddConversation }
+}
+
+export { useMessages, useConversation };

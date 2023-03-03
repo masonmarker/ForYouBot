@@ -52,7 +52,7 @@ const ChatPanelStyled = styled.div`
 
 // ChatPanel component
 // should re-render each time a message is pushed to messages
-const ChatPanel = ({ messages, botmessages }) => {
+const ChatPanel = ({ messages, botmessages, conversations }) => {
 
     // grab current color mode
     const { colorMode } = useColorMode()
@@ -71,7 +71,7 @@ const ChatPanel = ({ messages, botmessages }) => {
             backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
 
             {/* Title for switching conversations */}
-            <Title />
+            <Title conversations={conversations}/>
 
             {/* Chat History */}
             <Box className="chat">

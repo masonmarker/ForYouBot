@@ -12,7 +12,7 @@ import Prompt from '../components/Prompt'
 import Chat from '../components/Chat'
 
 // states
-import { useMessages } from '../messages/messages'
+import { useMessages, useConversation } from '../messages/messages'
 import { useRef } from 'react'
 
 // Chakra components
@@ -59,6 +59,12 @@ function App() {
   // messages state
   const { userMessages, stateAddMessage, stateAddBotMessage, botMessages } = useMessages()
 
+  // conversations state with initial messages
+  const { conversations, stateAddConversation } = useConversation([{
+    user: userMessages,
+    bot: botMessages
+  }])
+
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
@@ -69,7 +75,11 @@ function App() {
             stateAddMessage={stateAddMessage}
             stateAddBotMessage={stateAddBotMessage}
           />
-          <Chat messages={userMessages} botmessages={botMessages} />
+          <Chat 
+            messages={userMessages} 
+            botmessages={botMessages} 
+            conversations={conversations} 
+          />
         </AppStyled>
       </Fade>
     </ChakraProvider>

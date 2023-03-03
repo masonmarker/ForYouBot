@@ -8,6 +8,9 @@
  *  Harris Chaudhry
  */
 
+// components
+import Convos from './Convos'
+
 // SidePanel
 import SidePanel from './SidePanel'
 
@@ -34,7 +37,6 @@ import {
     ModalBody,
     ModalCloseButton,
     useDisclosure,
-
 
 } from "@chakra-ui/react"
 
@@ -81,7 +83,7 @@ const TitleStyled = styled.div`
 `
 
 // Title component
-const Title = () => {
+const Title = ({conversations}) => {
 
     // grab current color mode
     const { colorMode, toggleColorMode } = useColorMode()
@@ -104,25 +106,25 @@ const Title = () => {
             backgroundColor={colorMode === "light" ? colors.purple : colors.lighterPurple}
             backgroundColorHover={colorMode === "light" ? colors.lightPurple : colors.purple}
         >
-            <Button 
+            <Button
                 className="color"
-                colorScheme="purple" 
+                colorScheme="purple"
                 onClick={(e) => {
                     toggleColorMode()
                     e.stopPropagation()
-                }} 
+                }}
             >
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
             <HStack>
-                <Text 
+                <Text
                     color={colorMode === "light" ? "white" : "black"}
                     id="current-convo"
                 >
                     New Conversation
                 </Text>
                 {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"}
-                 />}
+                />}
             </HStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -131,7 +133,7 @@ const Title = () => {
                     <ModalHeader>Conversations</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Text>Conversations</Text>
+                        <Convos conversations={conversations}/>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="purple" mr={3} onClick={onClose}>
