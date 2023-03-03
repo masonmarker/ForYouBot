@@ -13,7 +13,7 @@ import Chat from '../components/Chat'
 
 // states
 import { useMessages, useConversation } from '../messages/messages'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 
 // Chakra components
 import {
@@ -60,10 +60,18 @@ function App() {
   const { userMessages, stateAddMessage, stateAddBotMessage, botMessages } = useMessages()
 
   // conversations state with initial messages
-  const { conversations, stateAddConversation } = useConversation([{
+  const { conversations, setConversations, stateAddConversation } = useConversation([{
     user: userMessages,
     bot: botMessages
   }])
+
+  useEffect(() => {
+    setConversations([{
+      name: 'New Conversation',
+      user: userMessages,
+      bot: botMessages
+    }])
+  })
 
   return (
     <ChakraProvider>
@@ -78,7 +86,10 @@ function App() {
           <Chat 
             messages={userMessages} 
             botmessages={botMessages} 
+            setUserMessages={stateAddMessage}
+            setBotMessages={stateAddBotMessage}
             conversations={conversations} 
+            setConversations={setConversations}
           />
         </AppStyled>
       </Fade>

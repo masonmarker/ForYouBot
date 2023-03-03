@@ -21,13 +21,16 @@ const ChatStyled = styled.div`
 `
 
 // Chat component
-const Chat = ({ messages, botmessages, conversations}) => {
+const Chat = ({ messages, botmessages, setUserMessages, setbotMessages, conversations, setConversations}) => {
     return (
         <ChatStyled>
             <ChatPanel 
                 messages={messages} 
                 botmessages = {botmessages}
-                conversations = {conversations}    
+                conversations={conversations}   
+                setConversations={setConversations}
+                setUserMessages={setUserMessages}
+                setbotMessages={setbotMessages}
             />
             <InfoPanel />
         </ChatStyled>
