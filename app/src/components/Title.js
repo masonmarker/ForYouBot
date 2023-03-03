@@ -88,7 +88,11 @@ const TitleStyled = styled.div`
 `
 
 // Title component
-const Title = ({conversations, setConversations, setUserMessages, setBotMessages}) => {
+const Title = ({ 
+    conversations, 
+    setConversations, 
+    setUserMessages, 
+    setBotMessages }) => {
 
     // grab current color mode
     const { colorMode, toggleColorMode } = useColorMode()
@@ -127,19 +131,21 @@ const Title = ({conversations, setConversations, setUserMessages, setBotMessages
             >
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
             </Button>
-            <Button className='clear-conversation' colorScheme = "purple"
+            <Button className='clear-conversation' colorScheme="purple"
                 onClick={(e) => {
                     clearConversation()
                     e.stopPropagation()
                 }
-            }>Clear Conversation</Button>
+                }>Clear Conversation</Button>
             <HStack>
                 <Text
                     color={colorMode === "light" ? "white" : "black"}
                     id="current-convo"
                 >
-                    {conversations[0]['user'].length != 0 &&
-                    conversations[0]['user'][0]['message']}
+                    {conversations[0]['user'].length !== 0 ?
+                        conversations[0].name :
+                        "New Conversation"
+                    }
                 </Text>
                 {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"}
                 />}
@@ -151,7 +157,7 @@ const Title = ({conversations, setConversations, setUserMessages, setBotMessages
                     <ModalHeader>Conversations</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Convos conversations={conversations}/>
+                        <Convos conversations={conversations} />
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="purple" mr={3} onClick={onClose}>

@@ -30,7 +30,8 @@ function useMessages() {
     return { userMessages, stateAddMessage, stateAddBotMessage, botMessages }
 }
 
-// useConversation hook for 
+// useConversation hook
+// current conversation is at index 0
 function useConversation(initial) {
 
     // state for messages
@@ -42,7 +43,11 @@ function useConversation(initial) {
     }
 
     // return
-    return { conversations, stateAddConversation, setConversations }
+    return { 
+        conversations, 
+        stateAddConversation, 
+        setConversations
+    }
 }
 
 export { useMessages, useConversation };

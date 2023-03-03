@@ -13,9 +13,13 @@ import {
     Text
 } from "@chakra-ui/react"
 
+// styled components
+import styled from 'styled-components'
 
+// individual conversation styled
+const ConvoStyled = styled.div`
 
-
+`
 
 
 
@@ -24,18 +28,18 @@ import {
 const Convos = ({ conversations }) => {
 
     // conversations format:
-    // conversations[0]['user'][0] = {date: from: message:}
+    // conversations[0].user[0] = {date: from: message:}
 
     return (
         <Box>
             <Text>Conversations</Text>
-            {conversations[0]['user'].length != 0 ? conversations.map((convo, index) => {
+            {conversations[0]['user'].length !== 0 ? conversations.map((convo, index) => {
                 return (
-                    <Button key={index}>
-                        <Text>{convo['user'][0]['from']}</Text>
-                        <Text>{convo['user'][0]['message']}</Text>
-                        <Text>{convo['user'][0]['date']}</Text>
-                    </Button>
+                    <Box key={`convo-${index}`}>
+                        <Text>{conversations[0].name}</Text>
+                        <Text>{convo.user[0].message}</Text>
+                    </Box>
+
                 )
             }) :
                 <Text>No conversations</Text>

@@ -6,10 +6,8 @@
  */
 
 // React
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-// for updating messages
-import { useMessages } from "../messages/messages";
 
 // Chakra components
 import {
@@ -94,7 +92,9 @@ const Prompt = ({
   userMessages,
   botMessages,
   stateAddMessage,
-  stateAddBotMessage }) => {
+  stateAddBotMessage,
+  conversations,
+  setConversations }) => {
 
   // get color mode
   const { colorMode } = useColorMode();
@@ -179,6 +179,17 @@ const Prompt = ({
 
       // enable submit button
       document.getElementById("submit").disabled = false;
+
+      // check if the user has sent a single message
+      // in this conversation,
+      // if so, set the name to "test name"
+      // set the first conversations name to that name
+      // current conversation is at index 0
+      if (conversations[0].user.length === 0) {
+        var newConversations = conversations;
+        newConversations[0].name = "test name";
+        setConversations(newConversations);
+      }
     }
   }
 
