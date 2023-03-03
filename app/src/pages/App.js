@@ -64,7 +64,8 @@ function App() {
       <Fade in={inView} ref={ref}>
         <AppStyled>
           <Prompt
-            messages={userMessages}
+            userMessages={userMessages}
+            botMessages={botMessages}
             stateAddMessage={stateAddMessage}
             stateAddBotMessage={stateAddBotMessage}
           />

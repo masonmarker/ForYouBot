@@ -39,13 +39,14 @@ const port = process.env.PORT || 5000;
 app.post("/", async (req, res) => {
     const { prompt } = req.body;
     const response = await openai.createCompletion({
-        model: "text-ada-001",
-        //model: "text-davinci-003",
+        //model: "text-ada-001",
+        model: "text-davinci-003",
         prompt: `
             ${prompt}
         `,
         max_tokens: 64,
         temperature: 0.5,
+        stop: ["\n--next--\n"],
     });
 
     res.status(200).json({

@@ -61,7 +61,11 @@ const PromptStyled = styled.div`
 //               : messageID
 // when the enter key is pressed (without shift being held)
 // or when the submit button is pressed should the request go through
-const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
+const Prompt = ({
+  userMessages,
+  botMessages,
+  stateAddMessage,
+  stateAddBotMessage }) => {
 
   // get color mode
   const { colorMode } = useColorMode();
@@ -92,20 +96,6 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
   // add message to messages
   async function addMessage(date, from, prompt) {
 
-    //  request to /ask on port 5000
-    // const response = await fetch("http://localhost:5000", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     prompt: prompt
-    //   })
-    // });
-
-    // get response
-    // const data = await response.json();
-
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
 
@@ -118,8 +108,11 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
         },
       );
 
+      // area
+      const area = document.getElementsByClassName("area")[0];
+
       // clear prompt
-      document.getElementsByClassName("area")[0].value = "";
+      area.value = "";
 
       // reset character limit
       document.getElementById("charlimit").innerHTML = "0/" + maxChars;
@@ -128,9 +121,8 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
       document.getElementById("charlimit").style.color =
         colorMode === "light" ? "black" : "white";
 
-
       // disable prompt
-      document.getElementsByClassName("area")[0].disabled = true;
+      area.disabled = true;
 
       // disable submit button
       document.getElementById("submit").disabled = true;
@@ -138,7 +130,15 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
       // set waiting to true
       setWaiting(true);
 
-      // add bot's response to messages
+      // // seperator for each bot message
+      const sep = "\n--next--\n"
+      var chatLog = ""
+      for (let i = 0; i < userMessages.length; i++) {
+        chatLog += userMessages[i].message + sep
+      }
+      chatLog += prompt + sep
+      console.log(chatLog)
+
       await stateAddBotMessage(
         {
           date: new Date().toLocaleTimeString(),
@@ -149,7 +149,7 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              prompt: prompt
+              prompt: chatLog
             })
           }).then(response => response.json()).then(data => data.data.trim())
           // message: await testBotResponse()
@@ -164,9 +164,6 @@ const Prompt = ({ messages, stateAddMessage, stateAddBotMessage }) => {
 
       // enable submit button
       document.getElementById("submit").disabled = false;
-
-
-
     }
   }
 
