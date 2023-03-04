@@ -8,7 +8,6 @@
 // React
 import React, { useState } from "react";
 
-
 // Chakra components
 import {
   Button,
@@ -17,7 +16,7 @@ import {
   HStack,
   Spinner,
   Checkbox,
-  useColorMode
+  useColorMode,
 } from "@chakra-ui/react";
 
 // Chakra icons
@@ -51,33 +50,33 @@ const PromptStyled = styled.div`
   }
 `;
 
-
 async function ask(chatLog) {
   return await fetch("http://localhost:5000", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       model: "text-davinci-003",
       prompt: chatLog,
       max_tokens: 100,
-      temperature: 0.7
-    })
-  }).then(response => response.json()).then(data => data.data.trim())
+      temperature: 0.7,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => data.data.trim());
 }
-
 
 // gets a string representation of the user's chat log
 function getUserChatLog(userMessages, prompt) {
-  const sep = "\n--next--\n"
-  var chatLog = ""
+  const sep = "\n--next--\n";
+  var chatLog = "";
   for (let i = 0; i < userMessages.length; i++) {
-    chatLog += userMessages[i].message + sep
+    chatLog += userMessages[i].message + sep;
   }
-  chatLog += prompt + sep
-  console.log(chatLog)
-  return chatLog
+  chatLog += prompt + sep;
+  console.log(chatLog);
+  return chatLog;
 }
 
 // Prompt component
@@ -94,8 +93,10 @@ const Prompt = ({
   stateAddMessage,
   stateAddBotMessage,
   conversations,
-  setConversations }) => {
-
+  setConversations,
+  setIsGeneratingTitle,
+  isGeneratingTitle,
+}) => {
   // get color mode
   const { colorMode } = useColorMode();
 
@@ -119,23 +120,19 @@ const Prompt = ({
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // return a large bot response to test scrolling
-    return "This is a test bot response."
+    return "This is a test bot response.";
   }
 
   // add message to messages
   async function addMessage(date, from, prompt) {
-
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
-
       // add message to messages
-      await stateAddMessage(
-        {
-          date: date,
-          from: from,
-          message: prompt,
-        },
-      );
+      await stateAddMessage({
+        date: date,
+        from: from,
+        message: prompt,
+      });
 
       // area
       const area = document.getElementsByClassName("area")[0];
@@ -160,19 +157,14 @@ const Prompt = ({
       setWaiting(true);
 
       // get chat log
-      const chatLog = getUserChatLog(userMessages, prompt)
+      const chatLog = getUserChatLog(userMessages, prompt);
 
       // add bot response to messages
-      await stateAddBotMessage(
-        {
-          date: new Date().toLocaleTimeString(),
-          from: "bot",
-          message: testing ?
-            await testBotResponse()
-            :
-            await ask(chatLog),
-        }
-      )
+      await stateAddBotMessage({
+        date: new Date().toLocaleTimeString(),
+        from: "bot",
+        message: testing ? await testBotResponse() : await ask(chatLog),
+      });
 
       // set waiting to false
       setWaiting(false);
@@ -189,17 +181,17 @@ const Prompt = ({
       // set the first conversations name to that name
       // current conversation is at index 0
       if (conversations[0].user.length === 0) {
+        setIsGeneratingTitle(true);
         var newConversations = conversations;
-        console.log('adding title')
-        newConversations[0].name = testing ?
-          "test name"
-          :
-          await ask(`
+        console.log("adding title");
+        newConversations[0].name = testing
+          ? "test name"
+          : await ask(`
         make a detailed title for the below context in 1 sentence, 8 words or less:
         ${chatLog}
         `);
         setConversations(newConversations);
-        
+        setIsGeneratingTitle(false);
       }
     }
   }
@@ -240,7 +232,8 @@ const Prompt = ({
             addMessage(
               new Date().toLocaleTimeString(),
               "user",
-              document.getElementsByClassName("area")[0].value);
+              document.getElementsByClassName("area")[0].value
+            );
           }}
         >
           {waiting ? <Spinner /> : <ArrowForwardIcon />}
@@ -269,4 +262,4 @@ const Prompt = ({
 };
 
 export default Prompt;
-export { getUserChatLog, ask }
+export { getUserChatLog, ask };

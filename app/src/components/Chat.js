@@ -21,7 +21,16 @@ const ChatStyled = styled.div`
 `
 
 // Chat component
-const Chat = ({ messages, botmessages, setUserMessages, setBotMessages, conversations, setConversations}) => {
+const Chat = ({ 
+    messages, 
+    botmessages, 
+    setUserMessages, 
+    setBotMessages, 
+    conversations, 
+    setConversations,
+    isGeneratingTitle,
+    setIsGeneratingTitle,    
+}) => {
     return (
         <ChatStyled>
             <ChatPanel 
@@ -31,6 +40,8 @@ const Chat = ({ messages, botmessages, setUserMessages, setBotMessages, conversa
                 setConversations={setConversations}
                 setUserMessages={setUserMessages}
                 setBotMessages={setBotMessages}
+                isGeneratingTitle={isGeneratingTitle}
+                setIsGeneratingTitle={setIsGeneratingTitle}
             />
             <InfoPanel />
         </ChatStyled>
