@@ -25,9 +25,17 @@ function useMessages() {
     const stateAddBotMessage = (newMessage) => {
         setBotMessages([...botMessages, newMessage])
     }
+    
 
     // return
-    return { userMessages, stateAddMessage, stateAddBotMessage, botMessages }
+    return { 
+        userMessages, 
+        stateAddMessage, 
+        stateAddBotMessage, 
+        botMessages, 
+        setUserMessages,
+        setBotMessages
+    }
 }
 
 // useConversation hook

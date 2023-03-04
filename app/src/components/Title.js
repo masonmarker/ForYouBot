@@ -94,10 +94,12 @@ const TitleStyled = styled.div`
 
 // Title component
 const Title = ({
+    userMessages,
+    botMessages,
     conversations,
     setConversations,
     setUserMessages,
-    setBotMessages }) => {
+    setBotMessages}) => {
 
     // grab current color mode
     const { colorMode, toggleColorMode } = useColorMode()
@@ -108,16 +110,26 @@ const Title = ({
     // modal for changing conversation
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    // clears the current conversation
     const clearConversation = () => {
-        setConversations([])
+        conversations[0].name = "New Conversation"
+        setConversations(conversations)
         setUserMessages([])
         setBotMessages([])
+    }
+
+    // update and return conversations
+    function getConversations() {
+        var displayingConversations = conversations
+        displayingConversations[0].user = userMessages
+        displayingConversations[0].bot = botMessages
+        return conversations
     }
 
     // title hovering?
     return (
         <TitleStyled
-            onMouseEnter={() => setHover(true)}
+            onMouseEnter={() => setHover(true)} 
             onMouseLeave={() => setHover(false)}
 
             // on click, open modal for changing conversation
@@ -141,13 +153,14 @@ const Title = ({
                     clearConversation()
                     e.stopPropagation()
                 }
-                }>Clear Conversation</Button>
+                }>Clear Conversation
+                </Button>
             <HStack>
                 <Text
                     color={colorMode === "light" ? "white" : "black"}
                     id="current-convo"
                 >
-                    {conversations[0]['user'].length !== 0 ?
+                    {conversations[0] ?
                         conversations[0].name :
                         "New Conversation"
                     }

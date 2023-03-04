@@ -64,6 +64,8 @@ function App() {
     stateAddMessage, 
     stateAddBotMessage, 
     botMessages,
+    setUserMessages,
+    setBotMessages
   } = useMessages()
 
   // conversations state with initial messages
@@ -72,14 +74,6 @@ function App() {
     user: userMessages,
     bot: botMessages 
   }])
-
-  useEffect(() => {
-    setConversations([{
-      name: conversations[0].name,
-      user: userMessages,
-      bot: botMessages
-    }])
-  })
 
   return (
     <ChakraProvider>
@@ -96,8 +90,8 @@ function App() {
           <Chat 
             messages={userMessages} 
             botmessages={botMessages} 
-            setUserMessages={stateAddMessage}
-            setBotMessages={stateAddBotMessage}
+            setUserMessages={setUserMessages}
+            setBotMessages={setBotMessages}
             conversations={conversations} 
             setConversations={setConversations}
           />

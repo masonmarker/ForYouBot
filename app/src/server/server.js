@@ -23,7 +23,6 @@ app.use(cors());
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-
 // create configuration
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,

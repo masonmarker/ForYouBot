@@ -6,6 +6,7 @@
  *  Harris Chaudhry
  */
 
+
 // Chakra components
 import {
     Box,
@@ -46,6 +47,7 @@ const Convos = ({ conversations }) => {
 
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
+    console.log(conversations)
     return (
         <Box>
             <Text>Conversations</Text>

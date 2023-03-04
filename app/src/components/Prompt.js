@@ -190,14 +190,16 @@ const Prompt = ({
       // current conversation is at index 0
       if (conversations[0].user.length === 0) {
         var newConversations = conversations;
+        console.log('adding title')
         newConversations[0].name = testing ?
           "test name"
           :
           await ask(`
-        summarize the below context in 8 words or less:
+        make a detailed title for the below context in 1 sentence, 8 words or less:
         ${chatLog}
         `);
         setConversations(newConversations);
+        
       }
     }
   }
