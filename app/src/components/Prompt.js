@@ -79,6 +79,11 @@ function getUserChatLog(userMessages, prompt) {
   return chatLog;
 }
 
+
+// component specific variables
+var name = 0;
+var response = 0;
+
 // Prompt component
 // should update messages array
 // message props : date
@@ -115,12 +120,17 @@ const Prompt = ({
     }
   }
 
-  // wait 1 second then return the bot's response
+  // wait then return the bot's response
   async function testBotResponse() {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    await new Promise((resolve) => setTimeout(resolve, 750));
     // return a large bot response to test scrolling
-    return "This is a test bot response.";
+    return `Testing bot response ${response++}`;
+  }
+
+  // wait then return a test name
+  async function testTitle() {
+    await new Promise((resolve) => setTimeout(resolve, 750));
+    return `Testing title ${name++}`;
   }
 
   // add message to messages
@@ -185,7 +195,7 @@ const Prompt = ({
         var newConversations = conversations;
         console.log("adding title");
         newConversations[0].name = testing
-          ? "test name"
+          ? await testTitle()
           : await ask(`
         make a detailed title for the below context in 1 sentence, 8 words or less:
         ${chatLog}
