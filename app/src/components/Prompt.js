@@ -69,7 +69,7 @@ async function ask(chatLog) {
 
 
 // gets a string representation of the user's chat log
-function getUserChatLog(userMessages) {
+function getUserChatLog(userMessages, prompt) {
   const sep = "\n--next--\n"
   var chatLog = ""
   for (let i = 0; i < userMessages.length; i++) {
@@ -159,6 +159,9 @@ const Prompt = ({
       // set waiting to true
       setWaiting(true);
 
+      // get chat log
+      const chatLog = getUserChatLog(userMessages, prompt)
+
       // add bot response to messages
       await stateAddBotMessage(
         {
@@ -167,7 +170,7 @@ const Prompt = ({
           message: testing ?
             await testBotResponse()
             :
-            await ask(getUserChatLog(userMessages))
+            await ask(chatLog),
         }
       )
 
@@ -187,7 +190,13 @@ const Prompt = ({
       // current conversation is at index 0
       if (conversations[0].user.length === 0) {
         var newConversations = conversations;
-        newConversations[0].name = "test name";
+        newConversations[0].name = testing ?
+          "test name"
+          :
+          await ask(`
+        summarize the below context in 8 words or less:
+        ${chatLog}
+        `);
         setConversations(newConversations);
       }
     }

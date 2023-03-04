@@ -46,7 +46,6 @@ const Convos = ({ conversations }) => {
 
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
-
     return (
         <Box>
             <Text>Conversations</Text>

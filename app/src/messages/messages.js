@@ -8,7 +8,7 @@
 
 
 // React
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 // useMessages hook for altering the messages array
 function useMessages() {

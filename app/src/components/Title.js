@@ -41,7 +41,12 @@ import {
 } from "@chakra-ui/react"
 
 // Chakra more icon
-import { ViewIcon, MoonIcon, SunIcon } from '@chakra-ui/icons'
+import {
+    ViewIcon,
+    MoonIcon,
+    SunIcon,
+    AddIcon
+} from '@chakra-ui/icons'
 
 // styled components
 import styled from 'styled-components'
@@ -88,10 +93,10 @@ const TitleStyled = styled.div`
 `
 
 // Title component
-const Title = ({ 
-    conversations, 
-    setConversations, 
-    setUserMessages, 
+const Title = ({
+    conversations,
+    setConversations,
+    setUserMessages,
     setBotMessages }) => {
 
     // grab current color mode
@@ -154,7 +159,15 @@ const Title = ({
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Conversations</ModalHeader>
+                    <ModalHeader>
+                        <HStack gap="0.5rem">
+                            <Text>Conversations</Text>
+                            <Button>
+                                <AddIcon />
+                            </Button>
+                        </HStack>
+                    </ModalHeader>
+
                     <ModalCloseButton />
                     <ModalBody>
                         <Convos conversations={conversations} />

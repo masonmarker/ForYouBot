@@ -13,7 +13,7 @@ import Chat from '../components/Chat'
 
 // states
 import { useMessages, useConversation } from '../messages/messages'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 // Chakra components
 import {
@@ -68,13 +68,14 @@ function App() {
 
   // conversations state with initial messages
   const { conversations, setConversations } = useConversation([{
+    name: 'New Conversation',
     user: userMessages,
     bot: botMessages 
   }])
 
   useEffect(() => {
     setConversations([{
-      name: 'New Conversation',
+      name: conversations[0].name,
       user: userMessages,
       bot: botMessages
     }])
