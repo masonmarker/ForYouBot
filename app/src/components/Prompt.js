@@ -188,7 +188,7 @@ const Prompt = ({
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-      if (conversations[0].user.length === 0) {
+      if (userMessages.length === 0) {
         var newConversations = conversations;
         console.log('adding title')
         newConversations[0].name = testing ?
