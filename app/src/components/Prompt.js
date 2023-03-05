@@ -6,8 +6,7 @@
  */
 
 // React
-import React, { useState } from "react";
-
+import { useState, useRef } from "react";
 
 // Chakra components
 import {
@@ -17,7 +16,7 @@ import {
   HStack,
   Spinner,
   Checkbox,
-  useColorMode
+  useColorMode,
 } from "@chakra-ui/react";
 
 // Chakra icons
@@ -51,33 +50,33 @@ const PromptStyled = styled.div`
   }
 `;
 
-
 async function ask(chatLog) {
   return await fetch("http://localhost:5000", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       model: "text-davinci-003",
       prompt: chatLog,
       max_tokens: 100,
-      temperature: 0.7
-    })
-  }).then(response => response.json()).then(data => data.data.trim())
+      temperature: 0.7,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => data.data.trim());
 }
-
 
 // gets a string representation of the user's chat log
 function getUserChatLog(userMessages, prompt) {
-  const sep = "\n--next--\n"
-  var chatLog = ""
+  const sep = "\n--next--\n";
+  var chatLog = "";
   for (let i = 0; i < userMessages.length; i++) {
-    chatLog += userMessages[i].message + sep
+    chatLog += userMessages[i].message + sep;
   }
-  chatLog += prompt + sep
-  console.log(chatLog)
-  return chatLog
+  chatLog += prompt + sep;
+  console.log(chatLog);
+  return chatLog;
 }
 
 // Prompt component
@@ -98,21 +97,26 @@ const Prompt = ({
   generating,
   setGenerating,
   waiting,
-  setWaiting
+  setWaiting,
 }) => {
-
   // get color mode
   const { colorMode } = useColorMode();
 
   // is testing
   const [testing, setTesting] = useState(true);
 
+  // ref for charlimit
+  const charLimitRef = useRef(null);
+
+  // ref for submit button
+  const submitRef = useRef(null);
+
   // handle enter press
   // should not execute if shift is also being held
   function handleEnterPress(e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      document.getElementById("submit").click();
+      submitRef.current.click();
     }
   }
 
@@ -121,64 +125,55 @@ const Prompt = ({
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // return a large bot response to test scrolling
-    return "This is a test bot response."
+    return "This is a test bot response.";
   }
 
   // tests a bot's response
   async function testResponse() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    return "This is a test title."
+    return "This is a test title.";
   }
   // add message to messages
   async function addMessage(date, from, prompt) {
-
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
-
       // add message to messages
-      await stateAddMessage(
-        {
-          date: date,
-          from: from,
-          message: prompt,
-        },
-      );
+      await stateAddMessage({
+        date: date,
+        from: from,
+        message: prompt,
+      });
       // area
       const area = document.getElementsByClassName("area")[0];
 
       // clear prompt
       area.value = "";
 
-      // reset character limit
-      document.getElementById("charlimit").innerHTML = "0/" + maxChars;
+      // reset character limit ref
+      charLimitRef.current.innerHTML = `0/${maxChars}`;
 
       // reset character limit color
-      document.getElementById("charlimit").style.color =
+      charLimitRef.current.style.color =
         colorMode === "light" ? "black" : "white";
 
       // disable prompt
       area.disabled = true;
 
       // disable submit button
-      document.getElementById("submit").disabled = true;
+      submitRef.current.disabled = true;
 
       // set waiting to true
       setWaiting(true);
 
       // get chat log
-      const chatLog = getUserChatLog(userMessages, prompt)
+      const chatLog = getUserChatLog(userMessages, prompt);
 
       // add bot response to messages
-      await stateAddBotMessage(
-        {
-          date: new Date().toLocaleTimeString(),
-          from: "bot",
-          message: testing ?
-            await testBotResponse()
-            :
-            await ask(chatLog),
-        }
-      )
+      await stateAddBotMessage({
+        date: new Date().toLocaleTimeString(),
+        from: "bot",
+        message: testing ? await testBotResponse() : await ask(chatLog),
+      });
 
       // set waiting to false
       setWaiting(false);
@@ -187,7 +182,7 @@ const Prompt = ({
       document.getElementsByClassName("area")[0].disabled = false;
 
       // enable submit button
-      document.getElementById("submit").disabled = false;
+      submitRef.current.disabled = false;
 
       // check if the user has sent a single message
       // in this conversation,
@@ -197,15 +192,14 @@ const Prompt = ({
       if (userMessages.length === 0) {
         setGenerating(true);
         var newConversations = conversations;
-        console.log('adding title')
-        newConversations[0].name = testing ?
-          await testResponse()
-          :
-          await ask(`
+        console.log("adding title");
+        newConversations[0].name = testing
+          ? await testResponse()
+          : await ask(`
         summarize the below context in 8 words or less:
         ${chatLog}
         `);
-        setConversations(newConversations); 
+        setConversations(newConversations);
         setGenerating(false);
       }
     }
@@ -222,11 +216,10 @@ const Prompt = ({
           onKeyPress={handleEnterPress}
           onChange={(e) => {
             const len = e.target.value.length;
-            document.getElementById("charlimit").innerHTML =
-              len + `/${maxChars}`;
+            charLimitRef.current.innerHTML = len + `/${maxChars}`;
 
             // character limit component
-            const comp = document.getElementById("charlimit");
+            const comp = charLimitRef.current;
 
             // if the length is greater than the max
             if (len >= maxChars) {
@@ -242,12 +235,13 @@ const Prompt = ({
           }}
         />
         <Button
-          id="submit"
+          ref={submitRef}
           onClick={() => {
             addMessage(
               new Date().toLocaleTimeString(),
               "user",
-              document.getElementsByClassName("area")[0].value);
+              document.getElementsByClassName("area")[0].value
+            );
           }}
         >
           {waiting ? <Spinner /> : <ArrowForwardIcon />}
@@ -266,7 +260,7 @@ const Prompt = ({
 
       <Text
         color={colorMode === "light" ? "black" : "white"}
-        id="charlimit"
+        ref={charLimitRef}
         className="limtext"
       >
         0/{maxChars}
@@ -276,4 +270,4 @@ const Prompt = ({
 };
 
 export default Prompt;
-export { getUserChatLog, ask }
+export { getUserChatLog, ask };
