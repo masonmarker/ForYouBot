@@ -208,6 +208,8 @@ const Title = ({
                         <Convos
                             conversations={conversations}
                             setConversations={setConversations}
+                            userMessages={userMessages}
+                            botMessages={botMessages}
                             setUserMessages={setUserMessages}
                             setBotMessages={setBotMessages}
                             onClose={onClose}

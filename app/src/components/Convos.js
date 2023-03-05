@@ -6,6 +6,9 @@
  *  Harris Chaudhry
  */
 
+// React
+import React, { useState } from 'react'
+
 // Chakra components
 import {
     Box,
@@ -67,13 +70,16 @@ const Convos = ({
         threshold: 0,
     })
 
+    // are you sure state (conversation removal)
+    const [areYouSure, setAreYouSure] = useState(false)
+
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
 
     return (
         <Box>
             {conversations[0]
-                ? conversations.map((convo, index) => (
+                ? conversations?.map((convo, index) => (
                     <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
                         <ConvoStyled key={`convo-${index}`}>
                             <Text className="title">{convo.name}</Text>
@@ -93,17 +99,14 @@ const Convos = ({
 
                                     // close the model  
                                     onClose()
-                                    
+
                                 }}>
                                     Open
                                 </Button>
 
                                 {/* Rename this conversation */}
-                                <Button onClick={() => {
-                                    // shows an Input
-                                    
-                                }}>
-                                    Rename
+                                <Button onClick={() => setAreYouSure(!areYouSure)}>
+                                    {areYouSure ? "Cancel Rename" : "Rename"}
                                 </Button>
 
                                 {/* Preview this conversation */}
@@ -111,11 +114,32 @@ const Convos = ({
                                     Preview
                                 </Button>
 
-                                {/* Remove this conversation */}
-                                <Button>
+                                {/* Remove the conversation */}
+                                {conversations?.length > 1 && <Button onClick={() => {
+
+                                    // remove the conversation from the conversations array
+                                    const newConversations = conversations
+                                    newConversations.splice(index, 1)
+                                    setConversations(newConversations)
+
+                                    // reset the current conversation to the user's messages
+                                    setUserMessages(newConversations[0].user)
+                                    setBotMessages(newConversations[0].bot)
+                                }}>
                                     Remove
-                                </Button>
+                                </Button>}
                             </HStack>
+                            {/* Render renaming components for this conversation only
+                            if areYouSure */}
+                            {areYouSure &&
+                                <HStack>
+                                    <Input placeholder="New name" />
+                                    <Button>
+                                        <CheckIcon />
+                                    </Button>
+                                </HStack>
+                            }
+
                         </ConvoStyled>
                     </ScaleFade>
 
