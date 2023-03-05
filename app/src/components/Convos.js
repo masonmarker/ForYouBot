@@ -40,6 +40,10 @@ const ConvoStyled = styled(HStack)`
     padding: 5px;
     cursor: pointer;
 
+    .title {
+        font-weight: bold;
+        margin-right: 1rem;
+    }
 
 `
 
@@ -68,15 +72,13 @@ const Convos = ({
             {conversations[0] 
             ? conversations.map((convo, index) => (
                 <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
-                    <ConvoStyled
-                        key={`convo-${index}`}
-                        colorScheme="purple"
-                        // backgroundColor={colorMode === "light" ? "black" : "white"}
-                        // color={colorMode === "light" ? "white" : "black"}
-                    >
-                        <Text fontWeight="bold">{conversations[0].name}</Text>
+                    <ConvoStyled key={`convo-${index}`}>
+                        <Text className="title">{conversations[0].name}</Text>
                         {/* <Text>first user message: {convo.user[0]?.message}</Text>
         <Text>first bot message: {convo.bot[0]?.message}</Text> */}
+                        <Button variant="ghost">
+                            Open
+                        </Button>
                         <Button variant="ghost">
                             Remove
                         </Button>

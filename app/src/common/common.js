@@ -24,7 +24,7 @@ export const fonts = {
 }
 
 export const css = {
-    "transition": "all 0.4s ease-in-out"
+    "transition": "0.17s ease-out"
 }
 
 
