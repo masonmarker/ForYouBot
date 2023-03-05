@@ -6,9 +6,6 @@
  *  Harris Chaudhry
  */
 
-// React
-import React, { useEffect } from 'react'
-
 // Chakra components
 import {
     Box,
@@ -55,10 +52,9 @@ const Convos = ({
     setConversations,
     userMessages,
     botMessages,
+    setUserMessages,
+    setBotMessages
 }) => {
-
-    // use color mode
-    const { colorMode } = useColorMode()
 
     // use intersection observer
     const [ref, inView] = useInView({
@@ -74,24 +70,37 @@ const Convos = ({
                 ? conversations.map((convo, index) => (
                     <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
                         <ConvoStyled key={`convo-${index}`}>
-                            <Text className="title">{conversations[0].name}</Text>
-                            {/* <Text>first user message: {convo.user[0]?.message}</Text>
-        <Text>first bot message: {convo.bot[0]?.message}</Text> */}
+                            <Text className="title">{convo.name}</Text>
                             <HStack>
-                                <Button>
+
+                                {/* Sets this conversation to the current conversation */}
+                                <Button onClick={() => {
+                                    const currentConversation = conversations[0]
+                                    const newConversations = conversations
+                                    newConversations[0] = convo
+                                    newConversations[index] = currentConversation
+                                    setConversations(newConversations)
+                                    setUserMessages(convo.user)
+                                    setBotMessages(convo.bot)
+                                }}>
                                     Open
                                 </Button>
+
+                                {/* Rename this conversation */}
                                 <Button>
                                     Rename
                                 </Button>
+
+                                {/* Preview this conversation */}
                                 <Button>
                                     Preview
                                 </Button>
+
+                                {/* Remove this conversation */}
                                 <Button>
                                     Remove
                                 </Button>
                             </HStack>
-
                         </ConvoStyled>
                     </ScaleFade>
 

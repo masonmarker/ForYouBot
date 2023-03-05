@@ -111,6 +111,9 @@ const Prompt = ({
   // ref for submit button
   const submitRef = useRef(null);
 
+  // ref for input area
+  const areaRef = useRef(null);
+
   // handle enter press
   // should not execute if shift is also being held
   function handleEnterPress(e) {
@@ -144,7 +147,7 @@ const Prompt = ({
         message: prompt,
       });
       // area
-      const area = document.getElementsByClassName("area")[0];
+      const area = areaRef.current;
 
       // clear prompt
       area.value = "";
@@ -179,7 +182,7 @@ const Prompt = ({
       setWaiting(false);
 
       // enable prompt
-      document.getElementsByClassName("area")[0].disabled = false;
+      areaRef.current.disabled = false;
 
       // enable submit button
       submitRef.current.disabled = false;
@@ -193,12 +196,28 @@ const Prompt = ({
         setGenerating(true);
         var newConversations = conversations;
         console.log("adding title");
-        newConversations[0].name = testing
-          ? await testResponse()
-          : await ask(`
-        summarize the below context in 8 words or less:
-        ${chatLog}
-        `);
+
+        if (testing) {
+          newConversations[0].name = await testResponse();
+        } else {
+
+          // retrieve title suggestion from api
+          var response = await ask(`
+          create a title for the below context in one sentence, 8 words or less:
+          ${chatLog}
+          `);
+
+          // remove surrounding quotations, if they exist
+          if ((response[0] === '"' && response[response.length - 1] === '"') ||
+            (response[0] === "'" && response[response.length - 1] === "'") ||
+            (response[0] === "`" && response[response.length - 1] === "`") ||
+            (response[0] === "“" && response[response.length - 1] === "”") ||
+            (response[0] === "‘" && response[response.length - 1] === "’")) {
+            response = response.substring(1, response.length - 1);
+          }
+
+          newConversations[0].name = response
+        }
         setConversations(newConversations);
         setGenerating(false);
       }
@@ -209,6 +228,7 @@ const Prompt = ({
     <PromptStyled>
       <HStack className="inp">
         <Textarea
+          ref={areaRef}
           colorScheme="purple"
           className="area"
           placeholder="Write a complex prompt..."
@@ -216,18 +236,18 @@ const Prompt = ({
           onKeyPress={handleEnterPress}
           onChange={(e) => {
             const len = e.target.value.length;
-            charLimitRef.current.innerHTML = len + `/${maxChars}`;
 
             // character limit component
             const comp = charLimitRef.current;
 
+            // set the character limit
+            comp.innerHTML = len + `/${maxChars}`;
+
+
             // if the length is greater than the max
             if (len >= maxChars) {
               comp.style.color = "red";
-            }
-
-            // if the color is red and the length is less than the max
-            else if (comp.style.color === "red") {
+            } else if (comp.style.color === "red") {
               comp.style.color = colorMode === "light" ? "black" : "white";
             } else {
               comp.style.color = colorMode === "light" ? "black" : "white";
@@ -240,7 +260,7 @@ const Prompt = ({
             addMessage(
               new Date().toLocaleTimeString(),
               "user",
-              document.getElementsByClassName("area")[0].value
+              areaRef.current.value
             );
           }}
         >
