@@ -73,6 +73,9 @@ const Convos = ({
     // are you sure state (conversation removal)
     const [areYouSure, setAreYouSure] = useState(false)
 
+    // renaming index state
+    const [renameIndex, setRenameIndex] = useState(null)
+
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
 
@@ -105,8 +108,21 @@ const Convos = ({
                                 </Button>
 
                                 {/* Rename this conversation */}
-                                <Button onClick={() => setAreYouSure(!areYouSure)}>
-                                    {areYouSure ? "Cancel Rename" : "Rename"}
+                                <Button index={index} onClick={(e) => {
+
+                                    // get the index of the rendering conversation
+                                    const index = e.target.getAttribute("index")
+
+                                    // if areYouSure is true, then the user is renaming the conversation
+                                    setAreYouSure(!areYouSure)
+
+                                    // set the renaming index
+                                    setRenameIndex(index)
+
+                                    console.log(renameIndex)
+                                }}>
+                                    {areYouSure && renameIndex === index ?
+                                        "Cancel Rename" : "Rename"}
                                 </Button>
 
                                 {/* Preview this conversation */}
@@ -132,9 +148,11 @@ const Convos = ({
                                     Remove
                                 </Button>}
                             </HStack>
+
+
                             {/* Render renaming components for this conversation only
                             if areYouSure */}
-                            {areYouSure &&
+                            {areYouSure && renameIndex === index &&
                                 <HStack>
                                     <Input placeholder="New name" />
                                     <Button>
@@ -142,6 +160,7 @@ const Convos = ({
                                     </Button>
                                 </HStack>
                             }
+
 
                         </ConvoStyled>
                     </ScaleFade>
