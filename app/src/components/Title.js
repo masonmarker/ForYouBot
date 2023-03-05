@@ -129,7 +129,7 @@ const Title = ({
         displayingConversations[0].user = userMessages
         displayingConversations[0].bot = botMessages
         setConversations(displayingConversations)
-    }, [userMessages, botMessages])
+    }, [userMessages, botMessages, conversations, setConversations])
 
     // update and return conversations
     // function getConversations() {

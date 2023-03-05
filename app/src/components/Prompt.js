@@ -205,7 +205,7 @@ const Prompt = ({
         summarize the below context in 8 words or less:
         ${chatLog}
         `);
-        setConversations(newConversations);
+        setConversations(newConversations); 
         setGenerating(false);
       }
     }
