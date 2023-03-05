@@ -14,6 +14,7 @@ import {
     Box,
     Button,
     HStack,
+    VStack,
     Text,
     ScaleFade,
     useColorMode
@@ -25,7 +26,7 @@ import styled from 'styled-components'
 import { useInView } from 'react-intersection-observer'
 
 // individual conversation styled
-const ConvoStyled = styled(HStack)`
+const ConvoStyled = styled(VStack)`
 
     display: flex;
     flex-direction: column;
@@ -41,14 +42,15 @@ const ConvoStyled = styled(HStack)`
     cursor: pointer;
 
     .title {
+        font-size: 1.2rem;
         font-weight: bold;
-        margin-right: 1rem;
+        margin: 0.5rem;        
     }
 
 `
 
 // Convos component
-const Convos = ({ 
+const Convos = ({
     conversations,
     setConversations,
     userMessages,
@@ -68,24 +70,32 @@ const Convos = ({
 
     return (
         <Box>
-            <Text>Conversations</Text>
-            {conversations[0] 
-            ? conversations.map((convo, index) => (
-                <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
-                    <ConvoStyled key={`convo-${index}`}>
-                        <Text className="title">{conversations[0].name}</Text>
-                        {/* <Text>first user message: {convo.user[0]?.message}</Text>
+            {conversations[0]
+                ? conversations.map((convo, index) => (
+                    <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
+                        <ConvoStyled key={`convo-${index}`}>
+                            <Text className="title">{conversations[0].name}</Text>
+                            {/* <Text>first user message: {convo.user[0]?.message}</Text>
         <Text>first bot message: {convo.bot[0]?.message}</Text> */}
-                        <Button variant="ghost">
-                            Open
-                        </Button>
-                        <Button variant="ghost">
-                            Remove
-                        </Button>
-                    </ConvoStyled>
-                </ScaleFade>
+                            <HStack>
+                                <Button>
+                                    Open
+                                </Button>
+                                <Button>
+                                    Rename
+                                </Button>
+                                <Button>
+                                    Preview
+                                </Button>
+                                <Button>
+                                    Remove
+                                </Button>
+                            </HStack>
 
-            )) :
+                        </ConvoStyled>
+                    </ScaleFade>
+
+                )) :
                 <Text>No conversations</Text>
             }
         </Box>
