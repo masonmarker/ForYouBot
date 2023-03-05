@@ -94,13 +94,15 @@ const Prompt = ({
   stateAddMessage,
   stateAddBotMessage,
   conversations,
-  setConversations }) => {
+  setConversations,
+  generating,
+  setGenerating,
+  waiting,
+  setWaiting
+}) => {
 
   // get color mode
   const { colorMode } = useColorMode();
-
-  // is waiting for response
-  const [waiting, setWaiting] = useState(false);
 
   // is testing
   const [testing, setTesting] = useState(true);
@@ -122,6 +124,11 @@ const Prompt = ({
     return "This is a test bot response."
   }
 
+  // tests a bot's response
+  async function testResponse() {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return "This is a test response."
+  }
   // add message to messages
   async function addMessage(date, from, prompt) {
 
@@ -136,7 +143,6 @@ const Prompt = ({
           message: prompt,
         },
       );
-
       // area
       const area = document.getElementsByClassName("area")[0];
 
@@ -189,16 +195,18 @@ const Prompt = ({
       // set the first conversations name to that name
       // current conversation is at index 0
       if (userMessages.length === 0) {
+        setGenerating(true);
         var newConversations = conversations;
         console.log('adding title')
         newConversations[0].name = testing ?
-          "test name"
+          await testResponse()
           :
           await ask(`
         summarize the below context in 8 words or less:
         ${chatLog}
         `);
         setConversations(newConversations);
+        setGenerating(false);
       }
     }
   }

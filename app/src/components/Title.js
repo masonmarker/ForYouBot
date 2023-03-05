@@ -27,6 +27,7 @@ import {
     Text,
     Button,
     HStack,
+    Spinner,
 
     // modal for changing conversation
     Modal,
@@ -99,7 +100,9 @@ const Title = ({
     conversations,
     setConversations,
     setUserMessages,
-    setBotMessages}) => {
+    setBotMessages,
+    generating,
+}) => {
 
     // grab current color mode
     const { colorMode, toggleColorMode } = useColorMode()
@@ -119,17 +122,17 @@ const Title = ({
     }
 
     // update and return conversations
-    function getConversations() {
-        var displayingConversations = conversations
-        displayingConversations[0].user = userMessages
-        displayingConversations[0].bot = botMessages
-        return conversations
-    }
+    // function getConversations() {
+    //     var displayingConversations = conversations
+    //     displayingConversations[0].user = userMessages
+    //     displayingConversations[0].bot = botMessages
+    //     return conversations
+    // }
 
     // title hovering?
     return (
         <TitleStyled
-            onMouseEnter={() => setHover(true)} 
+            onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
 
             // on click, open modal for changing conversation
@@ -154,7 +157,7 @@ const Title = ({
                     e.stopPropagation()
                 }
                 }>Clear Conversation
-                </Button>
+            </Button>
             <HStack>
                 <Text
                     color={colorMode === "light" ? "white" : "black"}
@@ -165,8 +168,8 @@ const Title = ({
                         "New Conversation"
                     }
                 </Text>
-                {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"}
-                />}
+                {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"} />}
+                {generating && <Spinner color='black' />}
             </HStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">

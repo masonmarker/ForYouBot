@@ -14,14 +14,12 @@ import {
   // general
   useColorMode,
   useToast,
-  Text,
   Box,
   HStack,
   Button,
   Input,
 
   // modal for viewing more information about the message
-  useDisclosure,
 
   // Fading
   ScaleFade,
@@ -37,7 +35,7 @@ import { CopyIcon } from "@chakra-ui/icons";
 import styled from "styled-components";
 
 // import common
-import { colors, fonts, css } from "../common/common";
+import { colors, fonts } from "../common/common";
 
 // styled Message
 const MessageStyled = styled(Box)`
@@ -87,8 +85,6 @@ const MessageStyled = styled(Box)`
     width: 90%;
     word-wrap: break-word;
     white-space: pre-wrap;
-
-
   }
 `;
 
@@ -106,7 +102,7 @@ const Message = (props) => {
 
   // state for switching between the message and a textarea to alter the message
   // and resend
-  const [edit, setEdit] = useState(false);
+  const [edit] = useState(false);
 
   // fading
   const { ref, inView } = useInView({

@@ -10,7 +10,6 @@
 // Chakra components
 import {
     Box,
-    Button,
     Text,
 
     useColorMode
@@ -19,8 +18,6 @@ import {
 // styled components
 import styled from 'styled-components'
 
-// common
-import { colors } from '../common/common'
 
 // individual conversation styled
 const ConvoStyled = styled.div`

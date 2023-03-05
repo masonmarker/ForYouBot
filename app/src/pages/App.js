@@ -13,7 +13,7 @@ import Chat from '../components/Chat'
 
 // states
 import { useMessages, useConversation } from '../messages/messages'
-import { useEffect, useRef } from 'react'
+import { useState } from 'react'
 
 // Chakra components
 import {
@@ -75,6 +75,12 @@ function App() {
     bot: botMessages 
   }])
 
+  // state for generating
+  const [generating, setGenerating] = useState(false)
+
+  // is waiting for response
+  const [waiting, setWaiting] = useState(false);
+
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
@@ -86,6 +92,10 @@ function App() {
             stateAddBotMessage={stateAddBotMessage}
             conversations={conversations}
             setConversations={setConversations}
+            generating={generating}
+            setGenerating={setGenerating}
+            waiting={waiting}
+            setWaiting={setWaiting}
           />
           <Chat 
             messages={userMessages} 
@@ -94,6 +104,10 @@ function App() {
             setBotMessages={setBotMessages}
             conversations={conversations} 
             setConversations={setConversations}
+            generating={generating}
+            setGenerating={setGenerating}
+            waiting={waiting}
+            setWaiting={setWaiting}
           />
         </AppStyled>
       </Fade>

@@ -7,7 +7,7 @@
  */
 
 // React
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 // components
 import Title from './Title'
@@ -16,10 +16,9 @@ import Message from './Message'
 // Chakra components
 import {
     useColorMode,
-    Text,
     Box,
-    ScaleFade,
-    useDisclosure
+    Spinner,
+    Fade,
 } from "@chakra-ui/react"
 
 // styled components
@@ -27,12 +26,6 @@ import styled from 'styled-components'
 
 // common 
 import { colors } from '../common/common'
-
-// useMessages
-import { useMessages } from '../messages/messages'
-
-// intersection observer
-import { useInView } from 'react-intersection-observer';
 
 // styled ChatPanel
 // should exist in the center of the screen
@@ -52,13 +45,17 @@ const ChatPanelStyled = styled.div`
 
 // ChatPanel component
 // should re-render each time a message is pushed to messages
-const ChatPanel = ({ 
-    messages, 
-    botmessages, 
-    conversations, 
-    setConversations, 
-    setUserMessages, 
-    setBotMessages}) => {
+const ChatPanel = ({
+    messages,
+    botmessages,
+    conversations,
+    setConversations,
+    setUserMessages,
+    setBotMessages,
+    generating,
+    setGenerating,
+    waiting,
+}) => {
 
     // grab current color mode
     const { colorMode } = useColorMode()
@@ -69,21 +66,24 @@ const ChatPanel = ({
     // scroll to bottom
     useEffect(() => {
         bottomRef.current.scrollIntoView()
-    }, [messages, botmessages])
+    }, [messages, botmessages, waiting])
 
-    // return
+    // return,
     return (
         <ChatPanelStyled
             backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
 
             {/* Title for switching conversations */}
-            <Title 
-                conversations={conversations} 
+            <Title
+                conversations={conversations}
                 setConversations={setConversations}
-                userMessages={messages} 
-                botMessages={botmessages} 
-                setUserMessages={setUserMessages} 
-                setBotMessages={setBotMessages} />
+                userMessages={messages}
+                botMessages={botmessages}
+                setUserMessages={setUserMessages}
+                setBotMessages={setBotMessages}
+                generating={generating}
+                setGenerating={setGenerating}
+            />
 
             {/* Chat History */}
             <Box className="chat">
@@ -108,6 +108,14 @@ const ChatPanel = ({
                             </div>
                         );
                     })}
+                    {waiting &&
+                        <Fade in={waiting}>
+                            <Spinner
+                                thickness="4px"
+                                colorScheme="purple"
+                                margin="1rem" />
+                        </Fade>
+                    }
                     <div ref={bottomRef} />
                 </div>
             </Box>
