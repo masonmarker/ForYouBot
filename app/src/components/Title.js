@@ -194,7 +194,6 @@ const Title = ({
                                         user: [],
                                         bot: []
                                     }])
-                                    console.log(`added conversation ${JSON.stringify(conversations)}`)
                                 }}
                             >
                                 <AddIcon />

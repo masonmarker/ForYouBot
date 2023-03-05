@@ -12,26 +12,35 @@ import React, { useEffect } from 'react'
 // Chakra components
 import {
     Box,
+    Button,
+    HStack,
     Text,
-
+    ScaleFade,
     useColorMode
 } from "@chakra-ui/react"
-
 // styled components
 import styled from 'styled-components'
 
+// intersection observer
+import { useInView } from 'react-intersection-observer'
 
 // individual conversation styled
-const ConvoStyled = styled.div`
+const ConvoStyled = styled(HStack)`
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
     height: 10%;
     background-color: ${props => props.backgroundColor};
     color: ${props => props.color};
+    border: 1px solid ${props => props.color};
+    border-radius: 5px;
+    margin: 5px 0;
+    padding: 5px;
+    cursor: pointer;
+
+
 `
 
 // Convos component
@@ -45,6 +54,11 @@ const Convos = ({
     // use color mode
     const { colorMode } = useColorMode()
 
+    // use intersection observer
+    const [ref, inView] = useInView({
+        threshold: 0,
+    })
+
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
 
@@ -52,19 +66,24 @@ const Convos = ({
         <Box>
             <Text>Conversations</Text>
             {conversations[0] 
-            ? conversations.map((convo, index) => {
-                return (
+            ? conversations.map((convo, index) => (
+                <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
                     <ConvoStyled
                         key={`convo-${index}`}
-                        backgroundColor={colorMode === "light" ? "black" : "white"}
-                        color={colorMode === "light" ? "white" : "black"}
+                        colorScheme="purple"
+                        // backgroundColor={colorMode === "light" ? "black" : "white"}
+                        // color={colorMode === "light" ? "white" : "black"}
                     >
-                        <Text>name: {conversations[0].name}</Text>
-                        <Text>first user message: {convo.user[0]?.message}</Text>
+                        <Text fontWeight="bold">{conversations[0].name}</Text>
+                        {/* <Text>first user message: {convo.user[0]?.message}</Text>
+        <Text>first bot message: {convo.bot[0]?.message}</Text> */}
+                        <Button variant="ghost">
+                            Remove
+                        </Button>
                     </ConvoStyled>
+                </ScaleFade>
 
-                )
-            }) :
+            )) :
                 <Text>No conversations</Text>
             }
         </Box>
