@@ -30,11 +30,7 @@ const ConvoStyled = styled.div`
     height: 10%;
     background-color: ${props => props.backgroundColor};
     color: ${props => props.color};
-    
-
 `
-
-
 
 // Convos component
 const Convos = ({ conversations }) => {

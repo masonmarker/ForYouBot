@@ -18,7 +18,7 @@ import SidePanel from './SidePanel'
 import SettingsPanel from './SettingsPanel'
 
 // React
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Chakra components
 import {
@@ -28,6 +28,7 @@ import {
     Button,
     HStack,
     Spinner,
+    Fade,
 
     // modal for changing conversation
     Modal,
@@ -121,6 +122,15 @@ const Title = ({
         setBotMessages([])
     }
 
+    // keep conversations updated,
+    // check for change once every half second
+    useEffect(() => {
+        var displayingConversations = conversations
+        displayingConversations[0].user = userMessages
+        displayingConversations[0].bot = botMessages
+        setConversations(displayingConversations)
+    }, [userMessages, botMessages])
+
     // update and return conversations
     // function getConversations() {
     //     var displayingConversations = conversations
@@ -169,7 +179,12 @@ const Title = ({
                     }
                 </Text>
                 {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"} />}
-                {generating && <Spinner color='black' />}
+                {generating &&
+                    <Fade in={generating}>
+                        <Spinner
+                            color={colorMode === "light" ? "white" : "black"}
+                        />
+                    </Fade>}
             </HStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -186,7 +201,9 @@ const Title = ({
 
                     <ModalCloseButton />
                     <ModalBody>
-                        <Convos conversations={conversations} />
+                        <Convos
+                            conversations={conversations}
+                        />
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="purple" mr={3} onClick={onClose}>
