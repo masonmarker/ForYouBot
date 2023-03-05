@@ -6,6 +6,8 @@
  *  Harris Chaudhry
  */
 
+// React
+import React, { useEffect } from 'react'
 
 // Chakra components
 import {
@@ -33,18 +35,24 @@ const ConvoStyled = styled.div`
 `
 
 // Convos component
-const Convos = ({ conversations }) => {
+const Convos = ({ 
+    conversations,
+    setConversations,
+    userMessages,
+    botMessages,
+}) => {
 
     // use color mode
     const { colorMode } = useColorMode()
 
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
-    console.log(conversations)
+
     return (
         <Box>
             <Text>Conversations</Text>
-            {conversations[0].user.length !== 0 ? conversations.map((convo, index) => {
+            {conversations[0] 
+            ? conversations.map((convo, index) => {
                 return (
                     <ConvoStyled
                         key={`convo-${index}`}
@@ -52,7 +60,7 @@ const Convos = ({ conversations }) => {
                         color={colorMode === "light" ? "white" : "black"}
                     >
                         <Text>name: {conversations[0].name}</Text>
-                        <Text>first user message: {convo.user[0].message}</Text>
+                        <Text>first user message: {convo.user[0]?.message}</Text>
                     </ConvoStyled>
 
                 )

@@ -127,7 +127,7 @@ const Prompt = ({
   // tests a bot's response
   async function testResponse() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    return "This is a test response."
+    return "This is a test title."
   }
   // add message to messages
   async function addMessage(date, from, prompt) {

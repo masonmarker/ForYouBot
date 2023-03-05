@@ -122,24 +122,14 @@ const Title = ({
         setBotMessages([])
     }
 
-    // keep conversations updated,
-    // check for change once every half second
-    useEffect(() => {
-        var displayingConversations = conversations
-        displayingConversations[0].user = userMessages
-        displayingConversations[0].bot = botMessages
-        setConversations(displayingConversations)
-    }, [userMessages, botMessages, conversations, setConversations])
+        // keep conversations updated
+        useEffect(() => {
+            var displayingConversations = conversations
+            displayingConversations[0].user = userMessages
+            displayingConversations[0].bot = botMessages
+            setConversations(displayingConversations)
+        }, [userMessages, botMessages, conversations, setConversations])
 
-    // update and return conversations
-    // function getConversations() {
-    //     var displayingConversations = conversations
-    //     displayingConversations[0].user = userMessages
-    //     displayingConversations[0].bot = botMessages
-    //     return conversations
-    // }
-
-    // title hovering?
     return (
         <TitleStyled
             onMouseEnter={() => setHover(true)}
@@ -193,9 +183,25 @@ const Title = ({
                     <ModalHeader>
                         <HStack gap="0.5rem">
                             <Text>Conversations</Text>
-                            <Button>
+
+                            {/* Adding a conversation */}
+                            <Button
+                                colorScheme="purple"
+                                size="sm"
+                                onClick={() => {
+                                    setConversations([...conversations, {
+                                        name: "New Conversation",
+                                        user: [],
+                                        bot: []
+                                    }])
+                                    console.log(`added conversation ${JSON.stringify(conversations)}`)
+                                }}
+                            >
                                 <AddIcon />
                             </Button>
+
+
+
                         </HStack>
                     </ModalHeader>
 
@@ -203,6 +209,9 @@ const Title = ({
                     <ModalBody>
                         <Convos
                             conversations={conversations}
+                            setConversations={setConversations}
+                            setUserMessages={setUserMessages}
+                            setBotMessages={setBotMessages}
                         />
                     </ModalBody>
                     <ModalFooter>
