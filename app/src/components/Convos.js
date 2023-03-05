@@ -125,6 +125,9 @@ const Convos = ({
                                     // reset the current conversation to the user's messages
                                     setUserMessages(newConversations[0].user)
                                     setBotMessages(newConversations[0].bot)
+
+                                    // close the model
+                                    onClose()
                                 }}>
                                     Remove
                                 </Button>}

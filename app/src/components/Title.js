@@ -122,13 +122,13 @@ const Title = ({
         setBotMessages([])
     }
 
-        // keep conversations updated
-        useEffect(() => {
-            var displayingConversations = conversations
-            displayingConversations[0].user = userMessages
-            displayingConversations[0].bot = botMessages
-            setConversations(displayingConversations)
-        }, [userMessages, botMessages, conversations, setConversations])
+    // keep conversations updated
+    useEffect(() => {
+        var displayingConversations = conversations
+        displayingConversations[0].user = userMessages
+        displayingConversations[0].bot = botMessages
+        setConversations(displayingConversations)
+    }, [userMessages, botMessages, conversations, setConversations])
 
     return (
         <TitleStyled
@@ -199,7 +199,27 @@ const Title = ({
                                 <AddIcon />
                             </Button>
 
-                            
+                            {/* Clearing all conversations */}
+                            {conversations?.length > 1 && <Button
+                                colorScheme="purple"
+                                size="sm"
+                                onClick={() => {
+                                    setConversations([{
+                                        name: "New Conversation",
+                                        user: [],
+                                        bot: []
+                                    }])
+                                    setUserMessages([])
+                                    setBotMessages([])
+
+                                    onClose()
+                                }}
+                            >
+                                Clear All
+                            </Button>}
+
+
+
                         </HStack>
                     </ModalHeader>
 
