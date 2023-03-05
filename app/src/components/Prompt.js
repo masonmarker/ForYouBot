@@ -79,11 +79,6 @@ function getUserChatLog(userMessages, prompt) {
   return chatLog;
 }
 
-
-// component specific variables
-var name = 0;
-var response = 0;
-
 // Prompt component
 // should update messages array
 // message props : date
@@ -124,13 +119,7 @@ const Prompt = ({
   async function testBotResponse() {
     await new Promise((resolve) => setTimeout(resolve, 750));
     // return a large bot response to test scrolling
-    return `Testing bot response ${response++}`;
-  }
-
-  // wait then return a test name
-  async function testTitle() {
-    await new Promise((resolve) => setTimeout(resolve, 750));
-    return `Testing title ${name++}`;
+    return `Testing bot response`;
   }
 
   // add message to messages
@@ -190,18 +179,19 @@ const Prompt = ({
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
+      console.log(conversations[0])
       if (conversations[0].user.length === 0) {
-        setIsGeneratingTitle(true);
+      //  setIsGeneratingTitle(true);
         var newConversations = conversations;
         console.log("adding title");
         newConversations[0].name = testing
-          ? await testTitle()
+          ? "Test conversation name"
           : await ask(`
         make a detailed title for the below context in 1 sentence, 8 words or less:
         ${chatLog}
         `);
         setConversations(newConversations);
-        setIsGeneratingTitle(false);
+      //  setIsGeneratingTitle(false);
       }
     }
   }
