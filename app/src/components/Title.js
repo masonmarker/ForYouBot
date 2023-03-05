@@ -210,6 +210,7 @@ const Title = ({
                             setConversations={setConversations}
                             setUserMessages={setUserMessages}
                             setBotMessages={setBotMessages}
+                            onClose={onClose}
                         />
                     </ModalBody>
                     <ModalFooter>

@@ -14,8 +14,13 @@ import {
     VStack,
     Text,
     ScaleFade,
+    Input,
     useColorMode
 } from "@chakra-ui/react"
+
+// Check icon
+import { CheckIcon } from '@chakra-ui/icons'
+
 // styled components
 import styled from 'styled-components'
 
@@ -53,7 +58,8 @@ const Convos = ({
     userMessages,
     botMessages,
     setUserMessages,
-    setBotMessages
+    setBotMessages,
+    onClose
 }) => {
 
     // use intersection observer
@@ -75,6 +81,8 @@ const Convos = ({
 
                                 {/* Sets this conversation to the current conversation */}
                                 <Button onClick={() => {
+
+                                    // switch the current conversation to the selected conversation
                                     const currentConversation = conversations[0]
                                     const newConversations = conversations
                                     newConversations[0] = convo
@@ -82,12 +90,19 @@ const Convos = ({
                                     setConversations(newConversations)
                                     setUserMessages(convo.user)
                                     setBotMessages(convo.bot)
+
+                                    // close the model  
+                                    onClose()
+                                    
                                 }}>
                                     Open
                                 </Button>
 
                                 {/* Rename this conversation */}
-                                <Button>
+                                <Button onClick={() => {
+                                    // shows an Input
+                                    
+                                }}>
                                     Rename
                                 </Button>
 
