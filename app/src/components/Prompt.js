@@ -114,9 +114,10 @@ const Prompt = ({
     }
   }
 
-  // wait then return the bot's response
+  // wait 1 second then return the bot's response
   async function testBotResponse() {
-    await new Promise((resolve) => setTimeout(resolve, 750));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // return a large bot response to test scrolling
     return "This is a test bot response."
   }
@@ -187,19 +188,17 @@ const Prompt = ({
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-      console.log(conversations[0])
       if (conversations[0].user.length === 0) {
-        setIsGeneratingTitle(true);
         var newConversations = conversations;
-        console.log("adding title");
-        newConversations[0].name = testing
-          ? "test name"
-          : await ask(`
-        make a detailed title for the below context in 1 sentence, 8 words or less:
+        console.log('adding title')
+        newConversations[0].name = testing ?
+          "test name"
+          :
+          await ask(`
+        summarize the below context in 8 words or less:
         ${chatLog}
         `);
         setConversations(newConversations);
-        setIsGeneratingTitle(false);
       }
     }
   }
