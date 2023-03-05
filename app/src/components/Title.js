@@ -27,7 +27,6 @@ import {
     Text,
     Button,
     HStack,
-    Spinner,
 
     // modal for changing conversation
     Modal,
@@ -100,10 +99,7 @@ const Title = ({
     conversations,
     setConversations,
     setUserMessages,
-    setBotMessages,
-    isGeneratingTitle,
-    setIsGeneratingTitle
-}) => {
+    setBotMessages}) => {
 
     // grab current color mode
     const { colorMode, toggleColorMode } = useColorMode()
@@ -169,10 +165,8 @@ const Title = ({
                         "New Conversation"
                     }
                 </Text>
-                {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"}/>}
-                {isGeneratingTitle && 
-                    <Spinner color={colorMode === "light" ? "white" : "black"}/>}
-
+                {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"}
+                />}
             </HStack>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">

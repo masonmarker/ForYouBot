@@ -58,10 +58,7 @@ const ChatPanel = ({
     conversations, 
     setConversations, 
     setUserMessages, 
-    setBotMessages,
-    isGeneratingTitle,
-    setIsGeneratingTitle
-}) => {
+    setBotMessages}) => {
 
     // grab current color mode
     const { colorMode } = useColorMode()
@@ -86,10 +83,7 @@ const ChatPanel = ({
                 userMessages={messages} 
                 botMessages={botmessages} 
                 setUserMessages={setUserMessages} 
-                setBotMessages={setBotMessages}
-                isGeneratingTitle={isGeneratingTitle}
-                setIsGeneratingTitle={setIsGeneratingTitle} 
-            />
+                setBotMessages={setBotMessages} />
 
             {/* Chat History */}
             <Box className="chat">
