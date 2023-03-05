@@ -13,7 +13,7 @@ import Chat from '../components/Chat'
 
 // states
 import { useMessages, useConversation } from '../messages/messages'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // Chakra components
 import {
@@ -75,6 +75,9 @@ function App() {
     bot: botMessages 
   }])
 
+  // is generating title
+  const [isGeneratingTitle, setIsGeneratingTitle] = useState(false)
+
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
@@ -86,6 +89,8 @@ function App() {
             stateAddBotMessage={stateAddBotMessage}
             conversations={conversations}
             setConversations={setConversations}
+            isGeneratingTitle={isGeneratingTitle}
+            setIsGeneratingTitle={setIsGeneratingTitle}
           />
           <Chat 
             messages={userMessages} 
@@ -94,6 +99,8 @@ function App() {
             setBotMessages={setBotMessages}
             conversations={conversations} 
             setConversations={setConversations}
+            isGeneratingTitle={isGeneratingTitle}
+            setIsGeneratingTitle={setIsGeneratingTitle}
           />
         </AppStyled>
       </Fade>
