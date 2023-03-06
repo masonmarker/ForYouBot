@@ -91,9 +91,12 @@ function getUserChatLog(userMessages, botMessages, prompt) {
 user: ${prompt}
 ChatGPT: ???
 
-fill in ChatGPT's ???`
+fill in ChatGPT's ??? in the least amount of words possible`
   } else {
-    chatLog += prompt;
+    chatLog += `
+respond in the least amount of words possible:
+${prompt}
+    `;
   }
   console.log(chatLog);
   return chatLog;
