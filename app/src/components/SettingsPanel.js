@@ -6,13 +6,22 @@
  */
 
 // React
-import { useRef } from "react";
+import { useRef, useState } from "react";
+
+// pricing
+import { tokensForWords, wordsForTokens } from "../pricing/pricing";
 
 // Chakra components
 import {
+  Box,
   Text,
   VStack,
+  HStack,
   Button,
+  Input,
+
+
+  // Drawer
   Drawer,
   DrawerBody,
   DrawerFooter,
@@ -21,6 +30,8 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
+
+  // Modal
   Modal,
   ModalOverlay,
   ModalContent,
@@ -93,6 +104,7 @@ const SettingsPanel = () => {
                 Compute Pricing
               </Button>
             </VStack>
+            <Divider />
           </ModalBody>
 
           <ModalFooter>
@@ -132,20 +144,69 @@ const SettingsPanel = () => {
                 <DrawerCloseButton />
                 <DrawerHeader>Compute Pricing</DrawerHeader>
                 <DrawerBody>
-                  <Text>Compute pricing goes here</Text>
+                  <ComputePricing />
                 </DrawerBody>
                 <DrawerFooter></DrawerFooter>
               </DrawerContent>
             </Drawer>
-            
-
-
-
           </ModalFooter>
         </ModalContent>
       </Modal>
     </SettingsPanelStyled>
   );
 };
+
+
+// computing pricing component
+// contains a dropdown for a specific OpenAI model
+// includes a state for the selected model  
+// includes an Input for the number of words / tokens
+// includes a button to compute the price
+// includes a text box to display the price
+
+const ComputePricing = () => {
+
+  // words for tokens state
+  const [wft, setWordsForTokens] = useState(0);
+
+  // tokens for words state
+  const [tfw, setTokensForWords] = useState(0);
+
+  return (
+    <VStack>
+      
+      {/* Section for converting tokens to words */}
+      <HStack>
+        <Text>Convert tokens to words</Text>
+        <Input 
+          placeholder="Enter number of tokens" 
+          onChange={(e) => {
+            setWordsForTokens(tokensForWords(e.target.value));  
+          }}
+        />
+        <Text>{wft} words</Text>
+      </HStack>
+
+
+      {/* Section for converting words to tokens */}
+      <HStack>
+        <Text>Convert words to tokens</Text>
+        <Input
+          placeholder="Enter number of words"
+          onChange={(e) => {
+            setTokensForWords(wordsForTokens(e.target.value));
+
+            // make the numbers typed in the input box 
+            // be comma separated
+            e.target.value = e.target.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }}
+        />
+        <Text>{tfw} tokens</Text>
+      </HStack>
+
+
+    </VStack>
+  )
+}
 
 export default SettingsPanel;
