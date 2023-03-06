@@ -81,11 +81,19 @@ function App() {
   // is waiting for response
   const [waiting, setWaiting] = useState(false);
 
+  // state for bot response contstraints
+  const [constraints, setConstraints] = useState([
+    "- don't include 'ChatGPT:'",
+    "- use the least amount of words possible"
+  ])
+
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
           <Prompt
+
+            // message / conversation states
             userMessages={userMessages}
             botMessages={botMessages}
             stateAddMessage={stateAddMessage}
@@ -96,6 +104,10 @@ function App() {
             setGenerating={setGenerating}
             waiting={waiting}
             setWaiting={setWaiting}
+
+            // constraints
+            constraints={constraints}
+            setConstraints={setConstraints}
           />
           <Chat 
             messages={userMessages} 

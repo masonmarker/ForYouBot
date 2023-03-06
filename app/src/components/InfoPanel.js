@@ -16,17 +16,9 @@
 
 
 // Chakra components
-import {
-    Box,
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-    Text,
-    HStack,
-    useColorMode
-} from "@chakra-ui/react"
+// import {
+//     useColorMode
+// } from "@chakra-ui/react"
 
 // styled components
 import styled from 'styled-components'
@@ -60,8 +52,7 @@ const InfoPanelStyled = styled.div`
 // Information Panel
 const InfoPanel = () => {
 
-    // grab current color mode
-    const { colorMode } = useColorMode()
+    
 
     return (
         <InfoPanelStyled>

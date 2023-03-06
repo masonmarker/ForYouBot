@@ -53,6 +53,13 @@ const SettingsPanel = () => {
     onClose: onCloseHelp,
   } = useDisclosure();
 
+  // compute pricing Drawer state
+  const {
+    isOpen: isOpenComputePricing,
+    onOpen: onOpenComputePricing,
+    onClose: onCloseComputePricing,
+  } = useDisclosure();
+
   return (
     <SettingsPanelStyled>
       <Button
@@ -82,7 +89,7 @@ const SettingsPanel = () => {
                 words / tokens given to and receieved
                 by an AI model.
               </Text>
-              <Button>
+              <Button onClick={onOpenComputePricing}>
                 Compute Pricing
               </Button>
             </VStack>
@@ -96,6 +103,8 @@ const SettingsPanel = () => {
               Help
             </Button>
 
+
+            {/* Help drawer */}
             <Drawer
               isOpen={isOpenHelp}
               placement="bottom"
@@ -111,6 +120,27 @@ const SettingsPanel = () => {
                 <DrawerFooter></DrawerFooter>
               </DrawerContent>
             </Drawer>
+
+            {/* Compute pricing drawer */}
+            <Drawer
+              isOpen={isOpenComputePricing}
+              placement="bottom"
+              onClose={onCloseComputePricing}
+            >
+              <DrawerOverlay />
+              <DrawerContent>
+                <DrawerCloseButton />
+                <DrawerHeader>Compute Pricing</DrawerHeader>
+                <DrawerBody>
+                  <Text>Compute pricing goes here</Text>
+                </DrawerBody>
+                <DrawerFooter></DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+            
+
+
+
           </ModalFooter>
         </ModalContent>
       </Modal>

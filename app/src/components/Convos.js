@@ -18,7 +18,6 @@ import {
     Text,
     ScaleFade,
     Input,
-    useColorMode
 } from "@chakra-ui/react"
 
 // Check icon

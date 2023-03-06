@@ -14,19 +14,8 @@ import styled from "styled-components";
 
 // Chakra components
 import {
-  RadioGroup,
-  Stack,
-  Radio,
   Button,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-  DrawerCloseButton,
-  Text,
   useDisclosure,
-  useColorMode,
   Modal,
   ModalOverlay,
   ModalContent,

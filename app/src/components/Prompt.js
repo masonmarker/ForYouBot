@@ -12,7 +12,7 @@ import { useState, useRef } from "react";
 import {
   Button,
   Textarea,
-  Text,
+  Text, 
   HStack,
   Spinner,
   Checkbox,
@@ -68,10 +68,10 @@ async function ask(chatLog) {
 }
 
 // gets a string representation of the user's chat log
-function getUserChatLog(userMessages, botMessages, prompt) {
+function getUserChatLog(userMessages, botMessages, constraints, prompt) {
 
   // separator between message exchanges
-  const sep = "\n--next--\n";
+  // const sep = "\n--next--\n";
 
   // string representation of the chat log context
   var chatLog = ""
@@ -91,13 +91,19 @@ function getUserChatLog(userMessages, botMessages, prompt) {
 user: ${prompt}
 ChatGPT: ???
 
-fill in ChatGPT's ??? in the least amount of words possible`
+fill in ChatGPT's ??? given the following constraints:`
   } else {
     chatLog += `
-respond in the least amount of words possible:
 ${prompt}
-    `;
+respond given the following constraints:`;
   }
+
+  // add each elements from the constraints array to the chat log
+  chatLog += "\n";
+  for (let i = 0; i < constraints.length; i++) {
+    chatLog += constraints[i] + "\n";
+  }
+
   console.log(chatLog);
   return chatLog;
 }
@@ -121,6 +127,9 @@ const Prompt = ({
   setGenerating,
   waiting,
   setWaiting,
+
+  constraints,
+  setConstraints
 }) => {
   // get color mode
   const { colorMode } = useColorMode();
@@ -148,7 +157,7 @@ const Prompt = ({
 
   // wait 1 second then return the bot's response
   async function testBotResponse() {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 750));
 
     // return a large bot response to test scrolling
     return "This is a test bot response.";
@@ -156,7 +165,7 @@ const Prompt = ({
 
   // tests a bot's response
   async function testResponse() {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 750));
     return "This is a test title.";
   }
   // add message to messages
@@ -192,7 +201,7 @@ const Prompt = ({
       setWaiting(true);
 
       // get chat log
-      const chatLog = getUserChatLog(userMessages, botMessages, prompt);
+      const chatLog = getUserChatLog(userMessages, botMessages, constraints, prompt);
 
       // add bot response to messages
       await stateAddBotMessage({
@@ -229,7 +238,8 @@ const Prompt = ({
 
           // retrieve title suggestion from api
           var response = await ask(`
-          create a title for the below context in one sentence, 8 words or less:
+          create a title for the below context in one sentence, 8 words or less, and
+          do not answer the question:
           ${chatLog}
           `);
 
