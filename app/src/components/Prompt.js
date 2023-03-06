@@ -59,8 +59,8 @@ async function ask(chatLog) {
     body: JSON.stringify({
       model: "text-davinci-003",
       prompt: chatLog,
-      max_tokens: 100,
-      temperature: 0.7,
+      max_tokens: 1000,
+      temperature: 0.5,
     }),
   })
     .then((response) => response.json())
@@ -68,13 +68,33 @@ async function ask(chatLog) {
 }
 
 // gets a string representation of the user's chat log
-function getUserChatLog(userMessages, prompt) {
+function getUserChatLog(userMessages, botMessages, prompt) {
+
+  // separator between message exchanges
   const sep = "\n--next--\n";
-  var chatLog = "";
+
+  // string representation of the chat log context
+  var chatLog = ""
+
+  // add each message exchange to the chat log
   for (let i = 0; i < userMessages.length; i++) {
-    chatLog += userMessages[i].message + sep;
+    chatLog += "user:" + userMessages[i].message + "\n";
+    chatLog += "ChatGPT:" + botMessages[i].message + "\n";
+    // if (i < userMessages.length - 1) {
+    //   chatLog += sep;
+    // }
   }
-  chatLog += prompt + sep;
+
+  // if there are messages in the chat log, add the context footer
+  if (userMessages.length > 0) {
+    chatLog += `
+user: ${prompt}
+ChatGPT: ???
+
+fill in ChatGPT's ???`
+  } else {
+    chatLog += prompt;
+  }
   console.log(chatLog);
   return chatLog;
 }
@@ -169,13 +189,16 @@ const Prompt = ({
       setWaiting(true);
 
       // get chat log
-      const chatLog = getUserChatLog(userMessages, prompt);
+      const chatLog = getUserChatLog(userMessages, botMessages, prompt);
 
       // add bot response to messages
       await stateAddBotMessage({
         date: new Date().toLocaleTimeString(),
         from: "bot",
-        message: testing ? await testBotResponse() : await ask(chatLog),
+        message: testing ?
+          await testBotResponse()
+          :
+          await ask(chatLog),
       });
 
       // set waiting to false

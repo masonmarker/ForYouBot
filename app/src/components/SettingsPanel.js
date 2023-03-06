@@ -6,11 +6,12 @@
  */
 
 // React
-import React from "react";
+import { useRef } from "react";
 
 // Chakra components
 import {
   Text,
+  VStack,
   Button,
   Drawer,
   DrawerBody,
@@ -27,6 +28,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+
+  Divider,
 } from "@chakra-ui/react";
 
 // styled components
@@ -38,7 +41,7 @@ const SettingsPanelStyled = styled.div``;
 // SettingsPanel component
 const SettingsPanel = () => {
   // modal ref
-  const finalRef = React.useRef(null);
+  const finalRef = useRef(null);
 
   // drawer state
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -69,7 +72,20 @@ const SettingsPanel = () => {
           <ModalHeader>Settings</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>Settings go here</Text>
+            <Divider />
+
+            {/* Button for computing pricing */}
+            <VStack>
+              <Text>
+                Compute pricing for
+                a certain amount of
+                words / tokens given to and receieved
+                by an AI model.
+              </Text>
+              <Button>
+                Compute Pricing
+              </Button>
+            </VStack>
           </ModalBody>
 
           <ModalFooter>
