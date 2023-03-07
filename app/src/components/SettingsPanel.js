@@ -174,9 +174,11 @@ const ComputePricing = () => {
 
   return (
     <VStack>
+
       
       {/* Section for converting tokens to words */}
-      <HStack>
+      <HStack
+      >
         <Text>Convert tokens to words</Text>
         <Input 
           placeholder="Enter number of tokens" 
@@ -184,7 +186,7 @@ const ComputePricing = () => {
             setWordsForTokens(tokensForWords(e.target.value));  
           }}
         />
-        <Text>tokens = {wft} words</Text>
+        <Text>tokens = {wft.toLocaleString()} words</Text>
       </HStack>
 
 
@@ -195,17 +197,11 @@ const ComputePricing = () => {
           placeholder="Enter number of words"
           onChange={(e) => {
             setTokensForWords(wordsForTokens(e.target.value));
-
-            // numbers in the input field should
-            // have the following format:
-            // 1,000,000
-            // 1,000,000.00
-            // 1,000,000.000
-
             e.target.value = e.target.value.replace(/,/g, "");
           }}
         />
-        <Text>words = {tfw} tokens</Text>
+        {/* format tfw to have proper number notation */}
+        <Text>words = {tfw.toLocaleString()} tokens</Text>
       </HStack>
 
 
