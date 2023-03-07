@@ -31,7 +31,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "nodemon src/server/server.js"
-
   },
   "eslintConfig": {
     "extends": [
@@ -41,7 +40,7 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%", 
+      ">0.2%",
       "not dead",
       "not op_mini all"
     ],

@@ -32,7 +32,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // port
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3080;
 
 // post to /ask a function to respond to the request
 app.post("/", async (req, res) => {
@@ -47,7 +47,7 @@ app.post("/", async (req, res) => {
 
     res.status(200).json({
         success: true,
-        data: response.data.choices[0].text
+        data: response.data.choices[0].text 
     })
 });
 
