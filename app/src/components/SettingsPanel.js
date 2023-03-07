@@ -184,7 +184,7 @@ const ComputePricing = () => {
             setWordsForTokens(tokensForWords(e.target.value));  
           }}
         />
-        <Text>{wft} words</Text>
+        <Text>tokens = {wft} words</Text>
       </HStack>
 
 
@@ -196,12 +196,16 @@ const ComputePricing = () => {
           onChange={(e) => {
             setTokensForWords(wordsForTokens(e.target.value));
 
-            // make the numbers typed in the input box 
-            // be comma separated
-            e.target.value = e.target.value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            // numbers in the input field should
+            // have the following format:
+            // 1,000,000
+            // 1,000,000.00
+            // 1,000,000.000
+
+            e.target.value = e.target.value.replace(/,/g, "");
           }}
         />
-        <Text>{tfw} tokens</Text>
+        <Text>words = {tfw} tokens</Text>
       </HStack>
 
 

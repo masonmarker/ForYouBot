@@ -52,9 +52,10 @@ const PromptStyled = styled.div`
 
 async function ask(chatLog) {
   return await fetch("http://localhost:5000", {
-    method: "POST",
+    method: "POST", 
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
     },
     body: JSON.stringify({
       model: "text-davinci-003",
