@@ -9,7 +9,12 @@
 import { useRef, useState } from "react";
 
 // pricing
-import { tokensForWords, wordsForTokens } from "../pricing/pricing";
+import {
+  tokensForWords,
+  wordsForTokens,
+  priceForTokens,
+  priceForWords,
+} from "../pricing/pricing";
 
 // Chakra components
 import {
@@ -40,6 +45,17 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+
+  // Dropdown
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuIcon,
+  MenuCommand,
+
 
   Divider,
 } from "@chakra-ui/react";
@@ -173,10 +189,52 @@ const ComputePricing = () => {
   // tokens for words state
   const [tfw, setTokensForWords] = useState(0);
 
+  // price for tokens state
+  const [pft, setPriceForTokens] = useState(0);
+
+  // price for words state
+  const [pfw, setPriceForWords] = useState(0);
+
+  // state for selected model
+  const [selectedModel, setSelectedModel] = useState("davinci");
+
   return (
     <VStack
-      // center all elements horizontally and vertically
+    // center all elements horizontally and vertically
     >
+
+      {/* Dropdown to choose model */}
+      <VStack>
+        <Text>Selected model: {selectedModel}</Text>
+        <Menu>
+          <MenuButton as={Button}>Choose a model</MenuButton>
+          <MenuList>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("davinci");
+              }}
+            >davinci</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("curie");
+              }}
+            >curie</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("babbage");
+              }}
+            >babbage</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("ada");
+              }}
+            >ada</MenuItem>
+          </MenuList>
+        </Menu>
+
+      </VStack>
+
+
 
       <Grid
         templateColumns="repeat(2, 1fr)"
@@ -211,6 +269,38 @@ const ComputePricing = () => {
             <Text>words = {tfw.toLocaleString()} tokens</Text>
           </VStack>
         </GridItem>
+
+        {/* Section for converting tokens to price */}
+        <GridItem>
+          <VStack>
+            <Text>Convert tokens to price</Text>
+            <Input
+              placeholder="Enter number of tokens"
+              onChange={(e) => {
+                setPriceForTokens(priceForTokens(e.target.value, selectedModel));
+              }}
+            />
+            <Text>tokens = ${pft.toLocaleString()}</Text>
+          </VStack>
+        </GridItem>
+
+        {/* Section for converting words to price */}
+        <GridItem>
+          <VStack>
+            <Text>Convert words to price</Text>
+            <Input
+              placeholder="Enter number of words"
+              onChange={(e) => {
+                setPriceForWords(priceForWords(e.target.value, selectedModel));
+              }}
+            />
+            <Text>words = ${pfw.toLocaleString()}</Text>
+          </VStack>
+        </GridItem>
+
+                
+
+
 
       </Grid>
 

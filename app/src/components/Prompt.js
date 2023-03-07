@@ -8,11 +8,19 @@
 // React
 import { useState, useRef } from "react";
 
+// pricing functions
+import {
+  tokensForWords,
+  wordsForTokens,
+  priceForTokens,
+  priceForWords,
+} from "../pricing/pricing";
+
 // Chakra components
 import {
   Button,
   Textarea,
-  Text, 
+  Text,
   HStack,
   Spinner,
   Checkbox,
@@ -51,8 +59,8 @@ const PromptStyled = styled.div`
 `;
 
 async function ask(chatLog) {
-  return await fetch("http://localhost:3080", { 
-    method: "POST", 
+  return await fetch("http://localhost:3080", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"
@@ -204,14 +212,17 @@ const Prompt = ({
       // get chat log
       const chatLog = getUserChatLog(userMessages, botMessages, constraints, prompt);
 
+      // obtain the bot's response to the prompt
+      const botResponse = testing ?
+        await testBotResponse()
+        :
+        await ask(chatLog);
+
       // add bot response to messages
       await stateAddBotMessage({
         date: new Date().toLocaleTimeString(),
         from: "bot",
-        message: testing ?
-          await testBotResponse()
-          :
-          await ask(chatLog),
+        message: botResponse
       });
 
       // set waiting to false
@@ -262,7 +273,30 @@ const Prompt = ({
       // appending token information to current conversation's 'info' field
       // current conversation is at index 0
       var conversationsWithInfo = conversations;
-      conversationsWithInfo[0].info += chatLog;
+
+      // compute the amount of tokens used by
+      // chatLog
+      const userTokens = tokensForWords(chatLog.split(" ").length);
+      const botTokens = tokensForWords(botResponse.split(" ").length);
+
+      // compute expenses
+      var userExpenses = priceForTokens(userTokens, 'davinci');
+      var botExpenses = priceForTokens(botTokens, 'davinci');
+
+      // round expenses to 6 decimal places
+      userExpenses = Math.round(userExpenses * 1000000) / 1000000;
+      botExpenses = Math.round(botExpenses * 1000000) / 1000000;
+
+      // add expenses to info
+      conversationsWithInfo[0].info = {
+        userTokens: userTokens,
+        userExpenses: userExpenses,
+        botTokens: botTokens,
+        botExpenses: botExpenses
+      }
+
+      // set conversations
+      setConversations(conversationsWithInfo);
     }
   }
 
@@ -271,6 +305,7 @@ const Prompt = ({
       <HStack className="inp">
         <Textarea
           ref={areaRef}
+          resize="none"
           colorScheme="purple"
           className="area"
           placeholder="Write a complex prompt..."

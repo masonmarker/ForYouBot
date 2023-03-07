@@ -14,6 +14,7 @@ import React, { useState, useRef } from 'react'
 import {
     Box,
     Button,
+    Divider,
     HStack,
     VStack,
     Text,
@@ -88,7 +89,23 @@ const Convos = ({
     //modal state use disclosure
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    // states for displaying more of each individual conversation
+    const [moreConversation, setMoreConversation] = useState(-1)
+
+    // input value state
+    const [inputValue, setInputValue] = useState('') // input value state
+
+    // enter button reference
+    const enterButtonRef = useRef() // button ref
+
+    // rename input reference
     const renameInput = useRef(null)
+
+    function handleKeyDown(e) {
+        if (e.key === 'Enter') {
+            enterButtonRef.current.click()
+        }
+    }
 
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
@@ -141,14 +158,14 @@ const Convos = ({
                                         <ModalHeader>{conversations[index].name}</ModalHeader>
                                         <ModalCloseButton />
                                         <ModalBody>
-                                            <Input ref={renameInput} placeholder="New name" />
+                                            <Input ref={renameInput} value={inputValue} onChange={(event) => setInputValue(event.target.value)} onKeyDown={handleKeyDown} placeholder="New name" />
                                         </ModalBody>
 
                                         <ModalFooter>
                                             <Button colorScheme="purple" mr={3} onClick={onClose}>
                                                 Close
                                             </Button>
-                                            <Button variant="ghost" onClick={
+                                            <Button variant="ghost" ref={enterButtonRef} onClick={
                                                 () => {
                                                     const newConversations = conversations
                                                     newConversations[index].name = renameInput.current.value
@@ -158,10 +175,19 @@ const Convos = ({
                                                 }}>Submit</Button>
                                         </ModalFooter>
                                     </ModalContent>
+
                                 </Modal>
+
                                 {/* Preview this conversation */}
                                 <Button>
                                     Preview
+                                </Button>
+
+                                {/* Viewing information for the current conversation */}
+                                <Button onClick={() => {
+                                    setMoreConversation(moreConversation === index ? -1 : index)
+                                }}>
+                                    {moreConversation === index ? 'Close' : 'More'}
                                 </Button>
 
                                 {/* Remove the conversation */}
@@ -194,6 +220,21 @@ const Convos = ({
                                     </Button>
                                 </HStack>
                             }
+                            {/* displaying more about the conversation requested */}
+                            {moreConversation === index &&
+                                <ScaleFade in={moreConversation === index}>
+                                    <VStack>
+                                        <Divider />
+                                        <Text>User Tokens: {conversations[moreConversation].info.userTokens}</Text>
+                                        <Text>User Expenses: ${conversations[moreConversation].info.userExpenses}</Text>
+                                        <Divider />
+                                        <Text>Bot Tokens: {conversations[moreConversation].info.botTokens}</Text>
+                                        <Text>Bot Expenses: ${conversations[moreConversation].info.botExpenses}</Text>
+                                        <Divider />
+                                    </VStack>
+                                </ScaleFade>
+                            }
+
 
 
                         </ConvoStyled>
@@ -204,6 +245,32 @@ const Convos = ({
             }
 
         </Box>
+    )
+}
+
+// modal for displaying more information about a conversation
+const MoreModal = ({
+    isMoreOpen,
+    onMoreClose,
+    conversation
+}) => {
+
+    return (
+        <Modal isOpen={isMoreOpen} onClose={onMoreClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>{conversation.name}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Text>{JSON.stringify(conversation.info)}</Text>
+                </ModalBody>
+                <ModalFooter>
+                    <Button colorScheme="purple" mr={3} onClick={onMoreClose}>
+                        Close
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     )
 }
 
