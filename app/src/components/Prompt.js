@@ -51,7 +51,7 @@ const PromptStyled = styled.div`
 `;
 
 async function ask(chatLog) {
-  return await fetch("http://localhost:5000", {
+  return await fetch("http://localhost:3080", { 
     method: "POST", 
     headers: {
       "Content-Type": "application/json",
@@ -228,7 +228,7 @@ const Prompt = ({
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-      if (userMessages.length === 0) {
+      if (userMessages.length === 0 && conversations[0].wasRenamed === false) {
         setGenerating(true);
         var newConversations = conversations;
         console.log("adding title");
@@ -258,6 +258,11 @@ const Prompt = ({
         setConversations(newConversations);
         setGenerating(false);
       }
+
+      // appending token information to current conversation's 'info' field
+      // current conversation is at index 0
+      var conversationsWithInfo = conversations;
+      conversationsWithInfo[0].info += chatLog;
     }
   }
 

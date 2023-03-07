@@ -32,7 +32,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // port
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3080;
 
 // post to /ask a function to respond to the request
 app.post("/", async (req, res) => {

@@ -7,7 +7,8 @@
  */
 
 // React
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+
 
 // Chakra components
 import {
@@ -18,6 +19,16 @@ import {
     Text,
     ScaleFade,
     Input,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+
+    useDisclosure,
+
 } from "@chakra-ui/react"
 
 // Check icon
@@ -43,7 +54,6 @@ const ConvoStyled = styled(VStack)`
     border-radius: 5px;
     margin: 5px 0;
     padding: 5px;
-    cursor: pointer;
 
     .title {
         font-size: 1.2rem;
@@ -61,7 +71,7 @@ const Convos = ({
     botMessages,
     setUserMessages,
     setBotMessages,
-    onClose
+    onClose1
 }) => {
 
     // use intersection observer
@@ -75,6 +85,11 @@ const Convos = ({
     // renaming index state
     const [renameIndex, setRenameIndex] = useState(null)
 
+    //modal state use disclosure
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const renameInput = useRef(null)
+
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
 
@@ -85,6 +100,14 @@ const Convos = ({
                     <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
                         <ConvoStyled key={`convo-${index}`}>
                             <Text className="title">{convo.name}</Text>
+                            {index === 0 &&
+                                <Button
+                                    colorScheme="green"
+                                    size="xs"
+                                    cursor="default"
+                                >
+                                    Currently Open</Button>
+                            }
                             <HStack>
 
                                 {/* Sets this conversation to the current conversation */}
@@ -100,30 +123,42 @@ const Convos = ({
                                     setBotMessages(convo.bot)
 
                                     // close the model  
-                                    onClose()
-
+                                    onClose1()
                                 }}>
                                     Open
                                 </Button>
 
                                 {/* Rename this conversation */}
-                                <Button index={index} onClick={(e) => {
+                                <Button onClick={(e) => {
 
-                                    // get the index of the rendering conversation
-                                    const index = e.target.getAttribute("index")
+                                    onOpen()
 
-                                    // if areYouSure is true, then the user is renaming the conversation
-                                    setAreYouSure(!areYouSure)
-
-                                    // set the renaming index
-                                    setRenameIndex(index)
-
-                                    console.log(renameIndex)
-                                }}>
-                                    {areYouSure && renameIndex === index ?
-                                        "Cancel Rename" : "Rename"}
+                                }}> Rename
                                 </Button>
+                                <Modal isOpen={isOpen} onClose={onClose}>
+                                    <ModalOverlay />
+                                    <ModalContent>
+                                        <ModalHeader>{conversations[index].name}</ModalHeader>
+                                        <ModalCloseButton />
+                                        <ModalBody>
+                                            <Input ref={renameInput} placeholder="New name" />
+                                        </ModalBody>
 
+                                        <ModalFooter>
+                                            <Button colorScheme="purple" mr={3} onClick={onClose}>
+                                                Close
+                                            </Button>
+                                            <Button variant="ghost" onClick={
+                                                () => {
+                                                    const newConversations = conversations
+                                                    newConversations[index].name = renameInput.current.value
+                                                    newConversations[index].wasRenamed = true
+                                                    setConversations(newConversations)
+                                                    onClose()
+                                                }}>Submit</Button>
+                                        </ModalFooter>
+                                    </ModalContent>
+                                </Modal>
                                 {/* Preview this conversation */}
                                 <Button>
                                     Preview
@@ -142,7 +177,7 @@ const Convos = ({
                                     setBotMessages(newConversations[0].bot)
 
                                     // close the model
-                                    onClose()
+                                    onClose1()
                                 }}>
                                     Remove
                                 </Button>}
@@ -167,6 +202,7 @@ const Convos = ({
                 )) :
                 <Text>No conversations</Text>
             }
+
         </Box>
     )
 }

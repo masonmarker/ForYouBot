@@ -11,6 +11,9 @@
 import Prompt from '../components/Prompt'
 import Chat from '../components/Chat'
 
+// importing empty conversation
+import { emptyConversation } from '../messages/messages'
+
 // states
 import { useMessages, useConversation } from '../messages/messages'
 import { useState } from 'react'
@@ -69,11 +72,9 @@ function App() {
   } = useMessages()
 
   // conversations state with initial messages
-  const { conversations, setConversations } = useConversation([{
-    name: 'New Conversation',
-    user: userMessages,
-    bot: botMessages 
-  }])
+  const { conversations, setConversations } = useConversation([
+    emptyConversation(userMessages, botMessages)
+  ])
 
   // state for generating
   const [generating, setGenerating] = useState(false)

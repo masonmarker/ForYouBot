@@ -37,4 +37,15 @@ function wordsForTokens(tokens) {
     return Math.ceil(tokens / words_per_token);
 }
 
-export { tokensForWords, wordsForTokens }
+// price for words
+function priceForTokens(tokens, model) {
+    return tokens * pricingPer1Token[model];
+}
+
+// price for tokens
+
+export { 
+    tokensForWords, 
+    wordsForTokens,
+    priceForTokens,
+}

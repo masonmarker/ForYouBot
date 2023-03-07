@@ -11,6 +11,9 @@
 // components
 import Convos from './Convos'
 
+// generating a new conversation
+import { emptyConversation } from '../messages/messages'
+
 // SidePanel
 import SidePanel from './SidePanel'
 
@@ -113,7 +116,7 @@ const Title = ({
 
     // modal for changing conversation
     const { isOpen, onOpen, onClose } = useDisclosure()
-
+ 
     // clears the current conversation
     const clearConversation = () => {
         conversations[0].name = "New Conversation"
@@ -189,11 +192,9 @@ const Title = ({
                                 colorScheme="purple"
                                 size="sm"
                                 onClick={() => {
-                                    setConversations([...conversations, {
-                                        name: "New Conversation",
-                                        user: [],
-                                        bot: []
-                                    }])
+                                    setConversations([...conversations,
+                                    emptyConversation(userMessages, botMessages)
+                                    ])
                                 }}
                             >
                                 <AddIcon />
@@ -204,11 +205,7 @@ const Title = ({
                                 colorScheme="purple"
                                 size="sm"
                                 onClick={() => {
-                                    setConversations([{
-                                        name: "New Conversation",
-                                        user: [],
-                                        bot: []
-                                    }])
+                                    setConversations([emptyConversation([], [])])
                                     setUserMessages([])
                                     setBotMessages([])
 
@@ -232,7 +229,8 @@ const Title = ({
                             botMessages={botMessages}
                             setUserMessages={setUserMessages}
                             setBotMessages={setBotMessages}
-                            onClose={onClose}
+                            onClose1={onClose}
+                            
                         />
                     </ModalBody>
                     <ModalFooter>

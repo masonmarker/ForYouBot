@@ -13,13 +13,14 @@ import { tokensForWords, wordsForTokens } from "../pricing/pricing";
 
 // Chakra components
 import {
-  Box,
   Text,
   VStack,
-  HStack,
   Button,
   Input,
 
+  // grid components
+  Grid,
+  GridItem,
 
   // Drawer
   Drawer,
@@ -173,36 +174,45 @@ const ComputePricing = () => {
   const [tfw, setTokensForWords] = useState(0);
 
   return (
-    <VStack>
+    <VStack
+      // center all elements horizontally and vertically
+    >
 
-      
-      {/* Section for converting tokens to words */}
-      <HStack
+      <Grid
+        templateColumns="repeat(2, 1fr)"
       >
-        <Text>Convert tokens to words</Text>
-        <Input 
-          placeholder="Enter number of tokens" 
-          onChange={(e) => {
-            setWordsForTokens(tokensForWords(e.target.value));  
-          }}
-        />
-        <Text>tokens = {wft.toLocaleString()} words</Text>
-      </HStack>
 
+        <GridItem>
+          {/* Section for converting tokens to words */}
+          <VStack>
+            <Text>Convert tokens to words</Text>
+            <Input
+              placeholder="Enter number of tokens"
+              onChange={(e) => {
+                setWordsForTokens(tokensForWords(e.target.value));
+              }}
+            />
+            <Text>tokens = {wft.toLocaleString()} words</Text>
+          </VStack>
+        </GridItem>
 
-      {/* Section for converting words to tokens */}
-      <HStack>
-        <Text>Convert words to tokens</Text>
-        <Input
-          placeholder="Enter number of words"
-          onChange={(e) => {
-            setTokensForWords(wordsForTokens(e.target.value));
-            e.target.value = e.target.value.replace(/,/g, "");
-          }}
-        />
-        {/* format tfw to have proper number notation */}
-        <Text>words = {tfw.toLocaleString()} tokens</Text>
-      </HStack>
+        <GridItem>
+          {/* Section for converting words to tokens */}
+          <VStack>
+            <Text>Convert words to tokens</Text>
+            <Input
+              placeholder="Enter number of words"
+              onChange={(e) => {
+                setTokensForWords(wordsForTokens(e.target.value));
+                e.target.value = e.target.value.replace(/,/g, "");
+              }}
+            />
+            {/* format tfw to have proper number notation */}
+            <Text>words = {tfw.toLocaleString()} tokens</Text>
+          </VStack>
+        </GridItem>
+
+      </Grid>
 
 
     </VStack>
