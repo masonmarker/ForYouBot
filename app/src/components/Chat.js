@@ -31,7 +31,11 @@ const Chat = ({
     generating,
     setGenerating,
     waiting,
-    setWaiting
+    setWaiting,
+
+    // models
+    model,
+    setModel
 }) => {
     return (
         <ChatStyled>
@@ -46,6 +50,10 @@ const Chat = ({
                 setGenerating={setGenerating}
                 waiting={waiting}
                 setWaiting={setWaiting}
+
+                // models
+                model={model}
+                setModel={setModel} 
             />
             <InfoPanel />
         </ChatStyled>

@@ -82,6 +82,9 @@ function App() {
   // is waiting for response
   const [waiting, setWaiting] = useState(false);
 
+  // state for bot model
+  const [model, setModel] = useState("davinci")  
+
   // state for bot response contstraints
   const [constraints, setConstraints] = useState([
     "- don't include 'ChatGPT:'",
@@ -109,6 +112,10 @@ function App() {
             // constraints
             constraints={constraints}
             setConstraints={setConstraints}
+
+            // model information
+            model={model}
+            setModel={setModel}
           />
           <Chat 
             messages={userMessages} 
@@ -121,6 +128,10 @@ function App() {
             setGenerating={setGenerating}
             waiting={waiting}
             setWaiting={setWaiting}
+
+            // model information
+            model={model}
+            setModel={setModel}
           />
         </AppStyled>
       </Fade>

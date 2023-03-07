@@ -137,8 +137,13 @@ const Prompt = ({
   waiting,
   setWaiting,
 
+  // constraints
   constraints,
-  setConstraints
+  setConstraints,
+
+  // models
+  model, 
+  setModel
 }) => {
   // get color mode
   const { colorMode } = useColorMode();

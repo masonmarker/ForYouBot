@@ -75,11 +75,6 @@ const Convos = ({
     onClose1
 }) => {
 
-    // use intersection observer
-    const [ref, inView] = useInView({
-        threshold: 0,
-    })
-
     // are you sure state (conversation removal)
     const [areYouSure, setAreYouSure] = useState(false)
 
@@ -114,7 +109,7 @@ const Convos = ({
         <Box>
             {conversations[0]
                 ? conversations?.map((convo, index) => (
-                    <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
+                    <ScaleFade in={1} key={`convo-${index}`}>
                         <ConvoStyled key={`convo-${index}`}>
                             <Text className="title">{convo.name}</Text>
                             {index === 0 &&
@@ -222,7 +217,7 @@ const Convos = ({
                             }
                             {/* displaying more about the conversation requested */}
                             {moreConversation === index &&
-                                <ScaleFade in={moreConversation === index}>
+                                <ScaleFade in={1}>
                                     <VStack>
                                         <Divider />
                                         <Text>User Tokens: {conversations[moreConversation].info.userTokens}</Text>

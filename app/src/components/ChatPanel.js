@@ -55,6 +55,10 @@ const ChatPanel = ({
     generating,
     setGenerating,
     waiting,
+
+    // model information
+    model,
+    setModel
 }) => {
 
     // grab current color mode
