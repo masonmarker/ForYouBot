@@ -7,6 +7,10 @@
  *  Mason Marker 
  */
 
+// for extracting an amount of tokens
+// const { encode } = require('gpt-3-encoder')
+
+
 
 // listed pricing rates per OpenAI model
 const pricingPer1kTokens = {
@@ -24,17 +28,10 @@ const pricingPer1Token = {
     "davinci": pricingPer1kTokens["davinci"] / 1000
 };
 
-// rough approximation of words per single token
-const words_per_token = 0.75;
-
-// computes how many tokens are needed for a given number of words
-function tokensForWords(words) {
-    return Math.ceil(words_per_token * words);
-}
-
-// computes how many words are needed for a given number of tokens
-function wordsForTokens(tokens) {
-    return Math.ceil(tokens / words_per_token);
+// computes how many tokens will be encoded for a given string
+function tokensForString(string) {
+    // return encode(string).length;
+    return 0;
 }
 
 // price for tokens
@@ -42,15 +39,7 @@ function priceForTokens(tokens, model) {
     return tokens * pricingPer1Token[model];
 }
 
-// price for words
-function priceForWords(words, model) {
-    return priceForTokens(tokensForWords(words), model);
-}
-
-
 export { 
-    tokensForWords, 
-    wordsForTokens,
+    tokensForString,
     priceForTokens,
-    priceForWords,
 }

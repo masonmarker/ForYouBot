@@ -10,10 +10,8 @@ import { useRef, useState } from "react";
 
 // pricing
 import {
-  tokensForWords,
-  wordsForTokens,
-  priceForTokens,
-  priceForWords,
+  tokensForString,
+  priceForTokens
 } from "../pricing/pricing";
 
 // Chakra components
@@ -183,17 +181,12 @@ const SettingsPanel = () => {
 
 const ComputePricing = () => {
 
-  // words for tokens state
-  const [wft, setWordsForTokens] = useState(0);
-
-  // tokens for words state
-  const [tfw, setTokensForWords] = useState(0);
+  // tokens for string state
+  const [tfs, setTfs] = useState(0);
 
   // price for tokens state
-  const [pft, setPriceForTokens] = useState(0);
+  const [pft, setPft] = useState(0);
 
-  // price for words state
-  const [pfw, setPriceForWords] = useState(0);
 
   // state for selected model
   const [selectedModel, setSelectedModel] = useState("davinci");
@@ -240,63 +233,20 @@ const ComputePricing = () => {
         templateColumns="repeat(2, 1fr)"
       >
 
+        {/* Section for converting a string to tokens */}
         <GridItem>
-          {/* Section for converting tokens to words */}
           <VStack>
-            <Text>Convert tokens to words</Text>
+            <Text>Convert a string to tokens</Text>
             <Input
-              placeholder="Enter number of tokens"
+              placeholder="Enter a string"
               onChange={(e) => {
-                setWordsForTokens(tokensForWords(e.target.value));
+                setTfs(tokensForString(e.target.value));
               }}
             />
-            <Text>tokens = {wft.toLocaleString()} words</Text>
+            <Text>Number of tokens: {tfs}</Text>
           </VStack>
         </GridItem>
 
-        <GridItem>
-          {/* Section for converting words to tokens */}
-          <VStack>
-            <Text>Convert words to tokens</Text>
-            <Input
-              placeholder="Enter number of words"
-              onChange={(e) => {
-                setTokensForWords(wordsForTokens(e.target.value));
-                e.target.value = e.target.value.replace(/,/g, "");
-              }}
-            />
-            {/* format tfw to have proper number notation */}
-            <Text>words = {tfw.toLocaleString()} tokens</Text>
-          </VStack>
-        </GridItem>
-
-        {/* Section for converting tokens to price */}
-        <GridItem>
-          <VStack>
-            <Text>Convert tokens to price</Text>
-            <Input
-              placeholder="Enter number of tokens"
-              onChange={(e) => {
-                setPriceForTokens(priceForTokens(e.target.value, selectedModel));
-              }}
-            />
-            <Text>tokens = ${pft.toLocaleString()}</Text>
-          </VStack>
-        </GridItem>
-
-        {/* Section for converting words to price */}
-        <GridItem>
-          <VStack>
-            <Text>Convert words to price</Text>
-            <Input
-              placeholder="Enter number of words"
-              onChange={(e) => {
-                setPriceForWords(priceForWords(e.target.value, selectedModel));
-              }}
-            />
-            <Text>words = ${pfw.toLocaleString()}</Text>
-          </VStack>
-        </GridItem>
 
                 
 

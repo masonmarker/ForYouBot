@@ -10,10 +10,8 @@ import { useState, useRef } from "react";
 
 // pricing functions
 import {
-  tokensForWords,
-  wordsForTokens,
+  tokensForString,
   priceForTokens,
-  priceForWords,
 } from "../pricing/pricing";
 
 // Chakra components
@@ -281,8 +279,8 @@ const Prompt = ({
 
       // compute the amount of tokens used by
       // chatLog
-      const userTokens = tokensForWords(chatLog.split(" ").length);
-      const botTokens = tokensForWords(botResponse.split(" ").length);
+      const userTokens = tokensForString(chatLog);
+      const botTokens = tokensForString(botResponse);
 
       // compute expenses
       var userExpenses = priceForTokens(userTokens, 'davinci');
