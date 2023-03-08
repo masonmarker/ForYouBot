@@ -8,12 +8,6 @@
 // React
 import { useRef, useState } from "react";
 
-// pricing
-import {
-  tokensForString,
-  priceForTokens
-} from "../pricing/pricing";
-
 // Chakra components
 import {
   Text,
@@ -234,7 +228,7 @@ const ComputePricing = () => {
       >
 
         {/* Section for converting a string to tokens */}
-        <GridItem>
+        {/* <GridItem>
           <VStack>
             <Text>Convert a string to tokens</Text>
             <Input
@@ -245,7 +239,7 @@ const ComputePricing = () => {
             />
             <Text>Number of tokens: {tfs}</Text>
           </VStack>
-        </GridItem>
+        </GridItem> */}
 
 
                 

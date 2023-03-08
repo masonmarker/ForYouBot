@@ -9,10 +9,7 @@
 import { useState, useRef } from "react";
 
 // pricing functions
-import {
-  tokensForString,
-  priceForTokens,
-} from "../pricing/pricing";
+import { priceForTokens } from "../pricing/pricing";
 
 // Chakra components
 import {
@@ -56,6 +53,8 @@ const PromptStyled = styled.div`
   }
 `;
 
+// asks the OpenAI API for a response
+// based on a specific model
 async function ask(chatLog) {
   return await fetch("http://localhost:3080", {
     method: "POST",
@@ -73,6 +72,28 @@ async function ask(chatLog) {
     .then((response) => response.json())
     .then((data) => data.data.trim());
 }
+
+// asks the tokenizer for OpenAI's
+// token count for a given prompt.
+// this token count is used to calculate
+// the exact price of a request
+async function tokensForString(string) {
+  return await fetch("http://localhost:3080/tokenizer", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    },
+    body: JSON.stringify({
+      string: string,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => data.data);
+}
+
+
+
 
 // gets a string representation of the user's chat log
 function getUserChatLog(userMessages, botMessages, constraints, prompt) {
@@ -140,7 +161,7 @@ const Prompt = ({
   setConstraints,
 
   // models
-  model, 
+  model,
   setModel
 }) => {
   // get color mode
@@ -279,8 +300,8 @@ const Prompt = ({
 
       // compute the amount of tokens used by
       // chatLog
-      const userTokens = tokensForString(chatLog);
-      const botTokens = tokensForString(botResponse);
+      const userTokens = await tokensForString(chatLog);
+      const botTokens = await tokensForString(botResponse);
 
       // compute expenses
       var userExpenses = priceForTokens(userTokens, 'davinci');
@@ -290,12 +311,12 @@ const Prompt = ({
       userExpenses = Math.round(userExpenses * 1000000) / 1000000;
       botExpenses = Math.round(botExpenses * 1000000) / 1000000;
 
-      // add expenses to info
+      // add tokens and expenses to info
       conversationsWithInfo[0].info = {
-        userTokens: userTokens,
-        userExpenses: userExpenses,
-        botTokens: botTokens,
-        botExpenses: botExpenses
+        userTokens: conversationsWithInfo[0].info.userTokens + userTokens,
+        userExpenses: conversationsWithInfo[0].info.userExpenses + userExpenses,
+        botTokens: conversationsWithInfo[0].info.botTokens + botTokens,
+        botExpenses: conversationsWithInfo[0].info.botExpenses + botExpenses
       }
 
       // set conversations

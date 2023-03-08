@@ -98,21 +98,21 @@ function App() {
           <Prompt
 
             // message / conversation states
-            userMessages={userMessages}
+            userMessages={userMessages} 
             botMessages={botMessages}
             stateAddMessage={stateAddMessage}
             stateAddBotMessage={stateAddBotMessage}
-            conversations={conversations}
+            conversations={conversations}  
             setConversations={setConversations}
             generating={generating}
             setGenerating={setGenerating}
             waiting={waiting}
             setWaiting={setWaiting}
 
-            // constraints
+            // constraints 
             constraints={constraints}
-            setConstraints={setConstraints}
-
+            setConstraints={setConstraints} 
+ 
             // model information
             model={model}
             setModel={setModel}

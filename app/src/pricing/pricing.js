@@ -8,8 +8,6 @@
  */
 
 // for extracting an amount of tokens
-// const { encode } = require('gpt-3-encoder')
-
 
 
 // listed pricing rates per OpenAI model
@@ -28,18 +26,9 @@ const pricingPer1Token = {
     "davinci": pricingPer1kTokens["davinci"] / 1000
 };
 
-// computes how many tokens will be encoded for a given string
-function tokensForString(string) {
-    // return encode(string).length;
-    return 0;
-}
-
 // price for tokens
 function priceForTokens(tokens, model) {
     return tokens * pricingPer1Token[model];
 }
 
-export { 
-    tokensForString,
-    priceForTokens,
-}
+export { priceForTokens }
