@@ -8,10 +8,15 @@
 // React
 import { useRef, useState } from "react";
 
+// pricing functions
+import { tokensForString } from "./Prompt"
+import { priceForTokens } from "../pricing/pricing"
+
 // Chakra components
 import {
   Text,
   VStack,
+  HStack,
   Button,
   Input,
 
@@ -181,9 +186,34 @@ const ComputePricing = () => {
   // price for tokens state
   const [pft, setPft] = useState(0);
 
+  // reference for tokens for string input
+  const tfsRef = useRef(null);
+
+  // reference for price for tokens input
+  const pftRef = useRef(null);
 
   // state for selected model
   const [selectedModel, setSelectedModel] = useState("davinci");
+
+  // async function to compute tokens for string
+  async function computeTokensForString() {
+    setTfs(await tokensForString(tfsRef.current.value));
+  }
+
+  // async function to compute price for tokens
+  function computePriceForTokens() {
+    // get price
+    const price = priceForTokens(
+      parseInt(pftRef.current.value), selectedModel);
+
+    // round price to 6 decimal places
+    const roundedPrice = Math.round(price * 1000000) / 1000000;
+
+    // set price state
+    setPft(roundedPrice);
+  }
+
+
 
   return (
     <VStack
@@ -225,24 +255,58 @@ const ComputePricing = () => {
 
       <Grid
         templateColumns="repeat(2, 1fr)"
+        gap="1rem"
       >
 
         {/* Section for converting a string to tokens */}
-        {/* <GridItem>
+        <GridItem>
           <VStack>
             <Text>Convert a string to tokens</Text>
-            <Input
-              placeholder="Enter a string"
-              onChange={(e) => {
-                setTfs(tokensForString(e.target.value));
-              }}
-            />
+            <HStack>
+              <Input
+                ref={tfsRef}
+                placeholder="Enter a string"
+                onKeyPress={async (e) => {
+                  if (e.key === "Enter") {
+                    await computeTokensForString();
+                  }
+                }}
+              />
+              <Button
+                onClick={async () => 
+                  await computeTokensForString()}
+              >Convert</Button>
+
+            </HStack>
             <Text>Number of tokens: {tfs}</Text>
           </VStack>
-        </GridItem> */}
+        </GridItem>
+
+        {/* Section for converting tokens to price */}
+        <GridItem>
+          <VStack>
+            <Text>Convert tokens to price</Text>
+            <HStack>
+              <Input
+                ref={pftRef}
+                placeholder="Enter a number of tokens"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    computePriceForTokens();
+                  }
+                }}
+              />
+              <Button
+                onClick={computePriceForTokens}
+              >Convert</Button>
+
+            </HStack>
+            <Text>Price: ${pft}</Text>
+          </VStack>
+        </GridItem>
 
 
-                
+
 
 
 

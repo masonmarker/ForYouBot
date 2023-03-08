@@ -391,4 +391,4 @@ const Prompt = ({
 };
 
 export default Prompt;
-export { getUserChatLog, ask };
+export { getUserChatLog, ask, tokensForString };
