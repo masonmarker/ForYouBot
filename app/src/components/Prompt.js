@@ -249,14 +249,15 @@ const Prompt = ({
         message: botResponse
       });
 
-      // set waiting to false
-      setWaiting(false);
-
       // enable prompt
       areaRef.current.disabled = false;
 
       // enable submit button
       submitRef.current.disabled = false;
+
+      // set waiting to false
+      setWaiting(false);
+
 
       // check if the user has sent a single message
       // in this conversation,
@@ -321,6 +322,10 @@ const Prompt = ({
 
       // set conversations
       setConversations(conversationsWithInfo);
+
+
+      // refocus on the input area
+      areaRef.current.focus();
     }
   }
 
