@@ -87,8 +87,8 @@ function App() {
 
   // state for bot response contstraints
   const [constraints, setConstraints] = useState([
-    "- don't include 'ChatGPT:'",
-    "- use the least amount of words possible"
+    "- don't include 'bot:'",
+    "- least amount of tokens"
   ])
 
   return (

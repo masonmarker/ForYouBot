@@ -107,7 +107,7 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
   // add each message exchange to the chat log
   for (let i = 0; i < userMessages.length; i++) {
     chatLog += "user:" + userMessages[i].message + "\n";
-    chatLog += "ChatGPT:" + botMessages[i].message + "\n";
+    chatLog += "bot:" + botMessages[i].message + "\n";
     // if (i < userMessages.length - 1) {
     //   chatLog += sep;
     // }
@@ -117,13 +117,13 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
   if (userMessages.length > 0) {
     chatLog += `
 user: ${prompt}
-ChatGPT: ???
+bot: ???
 
-fill in ChatGPT's ??? given the following constraints:`
+fill in bot's ???
+### CONSTRAINTS ###`
   } else {
-    chatLog += `
-${prompt}
-respond given the following constraints:`;
+    chatLog += `${prompt}
+### CONSTRAINTS ###`;
   }
 
   // add each elements from the constraints array to the chat log
@@ -201,6 +201,48 @@ const Prompt = ({
     await new Promise((resolve) => setTimeout(resolve, 750));
     return "This is a test title.";
   }
+
+  // updates the current conversation's tokens and expenses
+  async function updateInfo(userPrompt, botResponse) {
+    
+    // compute tokens for user prompt and bot response
+    const userTokens = await tokensForString(userPrompt);
+    const botTokens = await tokensForString(botResponse);
+
+    // compute pricing for the tokens based on the current model
+    var userExpenses = priceForTokens(userTokens, model);
+    var botExpenses = priceForTokens(botTokens, model);
+
+    // round expenses to 6 decimal places
+    userExpenses = Math.round(userExpenses * 1000000) / 1000000;
+    botExpenses = Math.round(botExpenses * 1000000) / 1000000;
+
+    // increment current conversation's tokens and expenses
+    var newConversations = [...conversations];
+
+    // add the information
+    newConversations[0].info = {
+      botTokens: newConversations[0].info.botTokens + botTokens,
+      botExpenses: newConversations[0].info.botExpenses + botExpenses,
+      userTokens: newConversations[0].info.userTokens + userTokens,
+      userExpenses: newConversations[0].info.userExpenses + userExpenses,
+    }
+    
+    // set conversations
+    setConversations(newConversations);
+
+    // print a summary of information that was updated
+    console.log("-".repeat(50));
+    console.log("updated conversation info:");
+    console.log("user tokens: " + newConversations[0].info.userTokens);
+    console.log("user expenses: " + newConversations[0].info.userExpenses);
+    console.log("bot tokens: " + newConversations[0].info.botTokens);
+    console.log("bot expenses: " + newConversations[0].info.botExpenses);
+    console.log("-".repeat(50));
+
+
+  }
+
   // add message to messages
   async function addMessage(date, from, prompt) {
     // if prompt exists, add it to messages
@@ -264,21 +306,35 @@ const Prompt = ({
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-      if (userMessages.length === 0 && conversations[0].wasRenamed === false) {
+      if (userMessages.length === 0 && !conversations[0].wasRenamed) {
         setGenerating(true);
         var newConversations = conversations;
         console.log("adding title");
 
+        // if testing
         if (testing) {
+
+          // set the name of the conversation
           newConversations[0].name = await testResponse();
+
+          // setting conversations again so info can be updated
+          setConversations(newConversations);
+
+          // update the conversations info
+          await updateInfo(chatLog, newConversations[0].name);
         } else {
 
-          // retrieve title suggestion from api
-          var response = await ask(`
+          var pr = `
           create a title for the below context in one sentence, 8 words or less, and
           do not answer the question:
           ${chatLog}
-          `);
+          `
+
+          // retrieve title suggestion from api
+          var response = await ask(pr);
+
+          // update info
+          await updateInfo(pr, response);
 
           // remove surrounding quotations, if they exist
           if ((response[0] === '"' && response[response.length - 1] === '"') ||
@@ -289,40 +345,15 @@ const Prompt = ({
             response = response.substring(1, response.length - 1);
           }
 
+          // set conversation name to the response
           newConversations[0].name = response
         }
         setConversations(newConversations);
         setGenerating(false);
       }
 
-      // appending token information to current conversation's 'info' field
-      // current conversation is at index 0
-      var conversationsWithInfo = conversations;
-
-      // compute the amount of tokens used by
-      // chatLog
-      const userTokens = await tokensForString(chatLog);
-      const botTokens = await tokensForString(botResponse);
-
-      // compute expenses
-      var userExpenses = priceForTokens(userTokens, 'davinci');
-      var botExpenses = priceForTokens(botTokens, 'davinci');
-
-      // round expenses to 6 decimal places
-      userExpenses = Math.round(userExpenses * 1000000) / 1000000;
-      botExpenses = Math.round(botExpenses * 1000000) / 1000000;
-
-      // add tokens and expenses to info
-      conversationsWithInfo[0].info = {
-        userTokens: conversationsWithInfo[0].info.userTokens + userTokens,
-        userExpenses: conversationsWithInfo[0].info.userExpenses + userExpenses,
-        botTokens: conversationsWithInfo[0].info.botTokens + botTokens,
-        botExpenses: conversationsWithInfo[0].info.botExpenses + botExpenses
-      }
-
-      // set conversations
-      setConversations(conversationsWithInfo);
-
+      // update info
+      await updateInfo(chatLog, botResponse);
 
       // refocus on the input area
       areaRef.current.focus();
