@@ -175,6 +175,7 @@ const Title = ({
                 {generating &&
                     <Fade in={generating}>
                         <Spinner
+                            thickness="4px"
                             color={colorMode === "light" ? "white" : "black"}
                         />
                     </Fade>}

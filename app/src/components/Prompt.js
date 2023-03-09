@@ -65,6 +65,11 @@ async function ask(chatLog) {
     body: JSON.stringify({
       model: "text-davinci-003",
       prompt: chatLog,
+
+      // 4096 for davinci
+      // 2048 for curie
+      // 2048 for ada
+      // 2048 for babbage
       max_tokens: 1000,
       temperature: 0.5,
     }),
@@ -107,7 +112,7 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
   // add each message exchange to the chat log
   for (let i = 0; i < userMessages.length; i++) {
     chatLog += "user:" + userMessages[i].message + "\n";
-    chatLog += "bot:" + botMessages[i].message + "\n";
+    chatLog += "you:" + botMessages[i].message + "\n";
     // if (i < userMessages.length - 1) {
     //   chatLog += sep;
     // }
@@ -117,9 +122,9 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
   if (userMessages.length > 0) {
     chatLog += `
 user: ${prompt}
-bot: ???
+you: ???
 
-fill in bot's ???
+fill in your ???
 ### CONSTRAINTS ###`
   } else {
     chatLog += `${prompt}
