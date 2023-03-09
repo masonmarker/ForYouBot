@@ -28,6 +28,13 @@ import {
     GridItem
 } from "@chakra-ui/react"
 
+// Chakra icons
+import {
+    ViewIcon,
+    SettingsIcon,
+    PlusSquareIcon,
+} from '@chakra-ui/icons'
+
 // styled components
 import styled from 'styled-components'
 
@@ -60,8 +67,27 @@ const ChatPanelStyled = styled.div`
         background-color: ${props => props.backgroundColor};
         border-radius: 10px;
         padding: 1rem;
+        font-size: 1rem;
     }
 
+    .grid {}
+
+    /* when width of screen is below 887 pixels,
+        make template columns 1 and rows 3*/
+    @media (max-width: 887px) {
+        .grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+        }
+        .init-title {
+            margin-top: 0;
+            font-size: 4rem;
+        }
+        .item {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+    }
 `
 
 // ChatPanel component
@@ -153,6 +179,7 @@ const ChatPanel = ({
 
                         {/* Welcome message, 3 columns and 1 row */}
                         <Grid
+                            className="grid"
                             templateColumns="repeat(3, 1fr)"
                             templateRows="repeat(1, 1fr)"
                             gap={4}
@@ -161,13 +188,27 @@ const ChatPanel = ({
                             <GridItem colSpan={1}
                                 className="item"
                             >
-                                <Text fontSize="2xl" fontWeight="600">Welcome to ____</Text>
+                                <VStack>
+                                    <ViewIcon boxSize="2rem"/>
+                                    <Text>Welcome to ____</Text>
+                                </VStack>
                             </GridItem>
                             <GridItem colSpan={1} className="item">
-                                <Text fontSize="xl" fontWeight="400">____ is a chatbot that uses OpenAI's GPT-3 API to generate responses to your messages.</Text>
+                                <VStack>
+                                    <SettingsIcon boxSize="2rem"/>
+                                    <Text>____ is a highly customizable, creative chat bot for everyday tasks.</Text>
+
+                                </VStack>
                             </GridItem>
                             <GridItem colSpan={1} className="item">
-                                <Text fontSize="xl" fontWeight="400">To get started, select a conversation from the dropdown menu above.</Text>
+                                <VStack>
+                                    <PlusSquareIcon boxSize="2rem"/>
+                                    <Text>To get started, select a conversation
+                                        from the title above or ask a question in the
+                                        text area below.
+                                    </Text>
+                                </VStack>
+
                             </GridItem>
 
                         </Grid>
