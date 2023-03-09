@@ -204,7 +204,7 @@ const Prompt = ({
 
   // updates the current conversation's tokens and expenses
   async function updateInfo(userPrompt, botResponse) {
-    
+
     // compute tokens for user prompt and bot response
     const userTokens = await tokensForString(userPrompt);
     const botTokens = await tokensForString(botResponse);
@@ -227,20 +227,9 @@ const Prompt = ({
       userTokens: newConversations[0].info.userTokens + userTokens,
       userExpenses: newConversations[0].info.userExpenses + userExpenses,
     }
-    
+
     // set conversations
     setConversations(newConversations);
-
-    // print a summary of information that was updated
-    console.log("-".repeat(50));
-    console.log("updated conversation info:");
-    console.log("user tokens: " + newConversations[0].info.userTokens);
-    console.log("user expenses: " + newConversations[0].info.userExpenses);
-    console.log("bot tokens: " + newConversations[0].info.botTokens);
-    console.log("bot expenses: " + newConversations[0].info.botExpenses);
-    console.log("-".repeat(50));
-
-
   }
 
   // add message to messages

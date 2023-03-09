@@ -19,6 +19,13 @@ import {
     Box,
     Spinner,
     Fade,
+    Text,
+    VStack,
+    ScaleFade,
+
+    // grid components
+    Grid,
+    GridItem
 } from "@chakra-ui/react"
 
 // styled components
@@ -41,6 +48,20 @@ const ChatPanelStyled = styled.div`
         width: 100%;
         overflow-y: scroll;
     } 
+
+    .init-title {
+        font-size: 6rem;
+        font-weight: 600;
+        margin-top: 3rem;
+    }
+
+    .item {
+        border: 3px solid ${props => props.borderColor};
+        background-color: ${props => props.backgroundColor};
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
 `
 
 // ChatPanel component
@@ -90,39 +111,72 @@ const ChatPanel = ({
             />
 
             {/* Chat History */}
-            <Box className="chat">
-                <div id="chat">
-                    {messages.map((message, index) => {
-                        return (
-                            <div key={`chat-div-${index}`}>
-                                <Message
-                                    key={`user-${index}`}
-                                    message={message.message}
-                                    from={message.from}
-                                    date={message.date}
-                                />
-                                {botmessages[index] && (
+
+            {messages.length > 0 ?
+                <Box className="chat">
+                    <div id="chat">
+                        {messages.map((message, index) => {
+                            return (
+                                <div key={`chat-div-${index}`}>
                                     <Message
-                                        key={`bot-${index}`}
-                                        message={botmessages[index].message}
-                                        from="bot"
-                                        date={botmessages[index].date}
+                                        key={`user-${index}`}
+                                        message={message.message}
+                                        from={message.from}
+                                        date={message.date}
                                     />
-                                )}
-                            </div>
-                        );
-                    })}
-                    {waiting &&
-                        <Fade in={waiting}>
-                            <Spinner
-                                thickness="4px"
-                                colorScheme="purple"
-                                margin="1rem" />
-                        </Fade>
-                    }
-                    <div ref={bottomRef} />
-                </div>
-            </Box>
+                                    {botmessages[index] && (
+                                        <Message
+                                            key={`bot-${index}`}
+                                            message={botmessages[index].message}
+                                            from="bot"
+                                            date={botmessages[index].date}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
+                        {waiting &&
+                            <Fade in={waiting}>
+                                <Spinner
+                                    thickness="4px"
+                                    colorScheme="purple"
+                                    margin="1rem" />
+                            </Fade>
+                        }
+                        <div ref={bottomRef} />
+                    </div>
+                </Box>
+                :
+                <ScaleFade in={1}>
+                    <VStack ref={bottomRef}>
+                        <Text className="init-title">GoofyBot</Text>
+
+                        {/* Welcome message, 3 columns and 1 row */}
+                        <Grid
+                            templateColumns="repeat(3, 1fr)"
+                            templateRows="repeat(1, 1fr)"
+                            gap={4}
+                            width="70%"
+                        >
+                            <GridItem colSpan={1}
+                                className="item"
+                            >
+                                <Text fontSize="2xl" fontWeight="600">Welcome to ____</Text>
+                            </GridItem>
+                            <GridItem colSpan={1} className="item">
+                                <Text fontSize="xl" fontWeight="400">____ is a chatbot that uses OpenAI's GPT-3 API to generate responses to your messages.</Text>
+                            </GridItem>
+                            <GridItem colSpan={1} className="item">
+                                <Text fontSize="xl" fontWeight="400">To get started, select a conversation from the dropdown menu above.</Text>
+                            </GridItem>
+
+                        </Grid>
+
+
+                    </VStack>
+                </ScaleFade>
+
+            }
         </ChatPanelStyled>
     )
 }

@@ -57,6 +57,9 @@ import {
   Divider,
 } from "@chakra-ui/react";
 
+// Chakra checkicon
+import { CheckIcon } from "@chakra-ui/icons";
+
 // styled components
 import styled from "styled-components";
 

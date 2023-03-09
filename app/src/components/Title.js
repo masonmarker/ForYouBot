@@ -15,7 +15,7 @@ import Convos from './Convos'
 import { emptyConversation } from '../messages/messages'
 
 // SidePanel
-import SidePanel from './SidePanel'
+import EditPanel from './EditPanel'
 
 // Settings Panel
 import SettingsPanel from './SettingsPanel'
@@ -242,7 +242,7 @@ const Title = ({
             </Modal>
 
             <Box className="buttons">
-                <SidePanel />
+                <EditPanel />
                 <SettingsPanel />
             </Box>
         </TitleStyled>
