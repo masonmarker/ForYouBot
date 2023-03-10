@@ -198,7 +198,6 @@ const ChatPanel = ({
                                 <VStack>
                                     <SettingsIcon boxSize="2rem" />
                                     <Text>____ is a highly customizable, creative chat bot for everyday tasks.</Text>
-
                                 </VStack>
                             </GridItem>
                             <GridItem colSpan={1} className="item">
