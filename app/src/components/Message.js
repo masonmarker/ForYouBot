@@ -11,6 +11,7 @@ import { useState } from "react";
 
 // Chakra components
 import {
+
   // general
   useColorMode,
   useToast,
@@ -20,16 +21,29 @@ import {
   Input,
 
   // modal for viewing more information about the message
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 
-  // Fading
+  // fading
   ScaleFade,
+
+  // states
+  useDisclosure,
 } from "@chakra-ui/react";
 
 // intersection observer
 import { useInView } from "react-intersection-observer";
 
 // Chakra icons
-import { CopyIcon } from "@chakra-ui/icons";
+import {
+  CopyIcon,
+  EditIcon,
+} from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -109,13 +123,15 @@ const Message = (props) => {
     threshold: 0,
   });
 
+  // useDisclosure for modal
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <ScaleFade ref={ref} in={inView}>
       <MessageStyled
         borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
         _hover={{
-          backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
-          cursor: "pointer",
+          backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52"
         }}
         // states for displaying the copy button
         onMouseOver={() => setShowCopy(true)}
@@ -146,6 +162,31 @@ const Message = (props) => {
           {showCopy && (
             <HStack>
               <CopyButton message={props.message} />
+              <ScaleFade in={showCopy}>
+                <Button
+                  size="xs"
+                  variant="ghost"
+                >
+                  <EditIcon />
+                </Button>
+              </ScaleFade>
+
+              {/* Edit Message modal */}
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Edit Message</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Input id="input" />
+                  </ModalBody>
+
+                  <ModalFooter>
+
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+
             </HStack>
           )}
         </HStack>

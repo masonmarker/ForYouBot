@@ -46,7 +46,7 @@ const SidePanelStyled = styled.div`
 `;
 
 // SidePanel component
-const SidePanel = () => {
+const SidePanel = ({constraints, setConstraints}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const finalRef = React.useRef(null);

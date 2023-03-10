@@ -28,8 +28,15 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 // styled components
 import styled from "styled-components";
 
+
+// ----------- Prompt Variables ----------- //
 // max characters permitted in a single prompt
 const maxChars = 2000;
+
+// constraints separator
+const constraintSeparator = "##LIMITS##";
+// --------------------------------------- //
+
 
 // styled Prompt
 const PromptStyled = styled.div`
@@ -111,8 +118,8 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
 
   // add each message exchange to the chat log
   for (let i = 0; i < userMessages.length; i++) {
-    chatLog += "user:" + userMessages[i].message + "\n";
-    chatLog += "you:" + botMessages[i].message + "\n";
+    chatLog += "user:\n" + userMessages[i].message + "\n";
+    chatLog += "you:\n" + botMessages[i].message + "\n";
     // if (i < userMessages.length - 1) {
     //   chatLog += sep;
     // }
@@ -121,18 +128,23 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
   // if there are messages in the chat log, add the context footer
   if (userMessages.length > 0) {
     chatLog += `
-user: ${prompt}
-you: ???
+user: 
+${prompt}
+you:
+???
 
 fill in your ???
-### CONSTRAINTS ###`
+
+${constraintSeparator}
+`;
   } else {
     chatLog += `${prompt}
-### CONSTRAINTS ###`;
+
+${constraintSeparator}
+`;
   }
 
   // add each elements from the constraints array to the chat log
-  chatLog += "\n";
   for (let i = 0; i < constraints.length; i++) {
     chatLog += constraints[i] + "\n";
   }
