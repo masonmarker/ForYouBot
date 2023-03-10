@@ -175,7 +175,7 @@ const ChatPanel = ({
                 :
                 <ScaleFade in={1}>
                     <VStack ref={bottomRef}>
-                        <Text className="init-title">GoofyBot</Text>
+                        <Text className="init-title">ForYouBot</Text>
 
                         {/* Welcome message, 3 columns and 1 row */}
                         <Grid
@@ -185,24 +185,25 @@ const ChatPanel = ({
                             gap={4}
                             width="70%"
                         >
-                            <GridItem colSpan={1}
+                            <GridItem
+                                colSpan={1}
                                 className="item"
                             >
                                 <VStack>
-                                    <ViewIcon boxSize="2rem"/>
+                                    <ViewIcon boxSize="2rem" />
                                     <Text>Welcome to ____</Text>
                                 </VStack>
                             </GridItem>
                             <GridItem colSpan={1} className="item">
                                 <VStack>
-                                    <SettingsIcon boxSize="2rem"/>
+                                    <SettingsIcon boxSize="2rem" />
                                     <Text>____ is a highly customizable, creative chat bot for everyday tasks.</Text>
 
                                 </VStack>
                             </GridItem>
                             <GridItem colSpan={1} className="item">
                                 <VStack>
-                                    <PlusSquareIcon boxSize="2rem"/>
+                                    <PlusSquareIcon boxSize="2rem" />
                                     <Text>To get started, select a conversation
                                         from the title above or ask a question in the
                                         text area below.

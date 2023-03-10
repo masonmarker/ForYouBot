@@ -14,6 +14,8 @@ import styled from "styled-components";
 
 // Chakra components
 import {
+  Text,
+  VStack,
   Button,
   useDisclosure,
   Modal,
@@ -23,6 +25,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Checkbox
 } from "@chakra-ui/react";
 
 // styled SidePanel
@@ -45,8 +48,11 @@ const SidePanelStyled = styled.div`
   }
 `;
 
-// SidePanel component
-const SidePanel = ({constraints, setConstraints}) => {
+// 
+const EditPanel = ({
+  constraints,
+  setConstraints
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const finalRef = React.useRef(null);
@@ -68,7 +74,9 @@ const SidePanel = ({constraints, setConstraints}) => {
         <ModalContent>
           <ModalHeader>Edit Bot</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Edit interface</ModalBody>
+          <ModalBody>
+            <Text>Constraints</Text>
+          </ModalBody>
           <ModalFooter>
             <Button colorScheme="purple" mr={3} onClick={onClose}>
               Close
@@ -81,4 +89,4 @@ const SidePanel = ({constraints, setConstraints}) => {
   );
 };
 
-export default SidePanel;
+export default EditPanel;
