@@ -7,7 +7,7 @@
  */
 
 // React
-import React from "react";
+import { useRef } from 'react';
 
 // styled components
 import styled from "styled-components";
@@ -58,14 +58,17 @@ const SidePanelStyled = styled.div`
 
 `;
 
-// 
+// Edit Bot modal
 const EditPanel = ({
   constraints,
   setConstraints
 }) => {
+
+  // disclosure for displaying the modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const finalRef = React.useRef(null);
+  // modal reference
+  const finalRef = useRef(null);
 
   return (
     <SidePanelStyled>

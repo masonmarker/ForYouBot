@@ -161,26 +161,7 @@ ${constraintSeparator}
 //               : messageID
 // when the enter key is pressed (without shift being held)
 // or when the submit button is pressed should the request go through
-const Prompt = ({
-  userMessages,
-  botMessages,
-  stateAddMessage,
-  stateAddBotMessage,
-  conversations,
-  setConversations,
-  generating,
-  setGenerating,
-  waiting,
-  setWaiting,
-
-  // constraints
-  constraints,
-  setConstraints,
-
-  // models
-  model,
-  setModel
-}) => {
+const Prompt = ({app}) => {
   // get color mode
   const { colorMode } = useColorMode();
 
@@ -227,15 +208,15 @@ const Prompt = ({
     const botTokens = await tokensForString(botResponse);
 
     // compute pricing for the tokens based on the current model
-    var userExpenses = priceForTokens(userTokens, model);
-    var botExpenses = priceForTokens(botTokens, model);
+    var userExpenses = priceForTokens(userTokens, app.model);
+    var botExpenses = priceForTokens(botTokens, app.model);
 
     // round expenses to 6 decimal places
     userExpenses = Math.round(userExpenses * 1000000) / 1000000;
     botExpenses = Math.round(botExpenses * 1000000) / 1000000;
 
     // increment current conversation's tokens and expenses
-    var newConversations = [...conversations];
+    var newConversations = [...app.conversations];
 
     // add the information
     newConversations[0].info = {
@@ -246,7 +227,7 @@ const Prompt = ({
     }
 
     // set conversations
-    setConversations(newConversations);
+    app.setConversations(newConversations);
   }
 
   // add message to messages
@@ -254,7 +235,7 @@ const Prompt = ({
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
       // add message to messages
-      await stateAddMessage({
+      await app.stateAddMessage({
         date: date,
         from: from,
         message: prompt,
@@ -279,10 +260,10 @@ const Prompt = ({
       submitRef.current.disabled = true;
 
       // set waiting to true
-      setWaiting(true);
+      app.setWaiting(true);
 
       // get chat log
-      const chatLog = getUserChatLog(userMessages, botMessages, constraints, prompt);
+      const chatLog = getUserChatLog(app.userMessages, app.botMessages, app.constraints, prompt);
 
       // obtain the bot's response to the prompt
       const botResponse = testing ?
@@ -291,7 +272,7 @@ const Prompt = ({
         await ask(chatLog);
 
       // add bot response to messages
-      await stateAddBotMessage({
+      await app.stateAddBotMessage({
         date: new Date().toLocaleTimeString(),
         from: "bot",
         message: botResponse
@@ -304,7 +285,7 @@ const Prompt = ({
       submitRef.current.disabled = false;
 
       // set waiting to false
-      setWaiting(false);
+      app.setWaiting(false);
 
 
       // check if the user has sent a single message
@@ -312,9 +293,9 @@ const Prompt = ({
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-      if (userMessages.length === 0 && !conversations[0].wasRenamed) {
-        setGenerating(true);
-        var newConversations = conversations;
+      if (app.userMessages.length === 0 && !app.conversations[0].wasRenamed) {
+        app.setGenerating(true);
+        var newConversations = app.conversations;
         console.log("adding title");
 
         // if testing
@@ -324,7 +305,7 @@ const Prompt = ({
           newConversations[0].name = await testResponse();
 
           // setting conversations again so info can be updated
-          setConversations(newConversations);
+          app.setConversations(newConversations);
 
           // update the conversations info
           await updateInfo(chatLog, newConversations[0].name);
@@ -354,8 +335,8 @@ const Prompt = ({
           // set conversation name to the response
           newConversations[0].name = response
         }
-        setConversations(newConversations);
-        setGenerating(false);
+        app.setConversations(newConversations);
+        app.setGenerating(false);
       }
 
       // update info
@@ -407,7 +388,7 @@ const Prompt = ({
             );
           }}
         >
-          {waiting ? <Spinner /> : <ArrowForwardIcon />}
+          {app.waiting ? <Spinner /> : <ArrowForwardIcon />}
         </Button>
         {/* testing checkbox */}
         <Checkbox

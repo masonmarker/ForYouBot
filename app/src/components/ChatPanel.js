@@ -92,21 +92,7 @@ const ChatPanelStyled = styled.div`
 
 // ChatPanel component
 // should re-render each time a message is pushed to messages
-const ChatPanel = ({
-    messages,
-    botmessages,
-    conversations,
-    setConversations,
-    setUserMessages,
-    setBotMessages,
-    generating,
-    setGenerating,
-    waiting,
-
-    // model information
-    model,
-    setModel
-}) => {
+const ChatPanel = ({ app }) => {
 
     // grab current color mode
     const { colorMode } = useColorMode()
@@ -117,7 +103,7 @@ const ChatPanel = ({
     // scroll to bottom
     useEffect(() => {
         bottomRef.current.scrollIntoView()
-    }, [messages, botmessages, waiting])
+    }, [app.userMessages, app.botMessages, app.waiting])
 
     // return,
     return (
@@ -125,23 +111,14 @@ const ChatPanel = ({
             backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
 
             {/* Title for switching conversations */}
-            <Title
-                conversations={conversations}
-                setConversations={setConversations}
-                userMessages={messages}
-                botMessages={botmessages}
-                setUserMessages={setUserMessages}
-                setBotMessages={setBotMessages}
-                generating={generating}
-                setGenerating={setGenerating}
-            />
+            <Title app={app}/>
 
             {/* Chat History */}
 
-            {messages.length > 0 ?
+            {app.userMessages.length > 0 ?
                 <Box className="chat">
                     <div id="chat">
-                        {messages.map((message, index) => {
+                        {app.userMessages.map((message, index) => {
                             return (
                                 <div key={`chat-div-${index}`}>
                                     <Message
@@ -150,19 +127,19 @@ const ChatPanel = ({
                                         from={message.from}
                                         date={message.date}
                                     />
-                                    {botmessages[index] && (
+                                    {app.botMessages[index] && (
                                         <Message
                                             key={`bot-${index}`}
-                                            message={botmessages[index].message}
+                                            message={app.botMessages[index].message}
                                             from="bot"
-                                            date={botmessages[index].date}
+                                            date={app.botMessages[index].date}
                                         />
                                     )}
                                 </div>
                             );
                         })}
-                        {waiting &&
-                            <Fade in={waiting}>
+                        {app.waiting &&
+                            <Fade in={app.waiting}>
                                 <Spinner
                                     thickness="4px"
                                     colorScheme="purple"

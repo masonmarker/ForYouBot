@@ -65,15 +65,7 @@ const ConvoStyled = styled(VStack)`
 `
 
 // Convos component
-const Convos = ({
-    conversations,
-    setConversations,
-    userMessages,
-    botMessages,
-    setUserMessages,
-    setBotMessages,
-    onClose1
-}) => {
+const Convos = ({ app }) => {
 
     // are you sure state (conversation removal)
     const [areYouSure, setAreYouSure] = useState(false)
@@ -107,8 +99,8 @@ const Convos = ({
 
     return (
         <Box>
-            {conversations[0]
-                ? conversations?.map((convo, index) => (
+            {app.conversations[0]
+                ? app.conversations?.map((convo, index) => (
                     <ScaleFade in={1} key={`convo-${index}`}>
                         <ConvoStyled key={`convo-${index}`}>
                             <Text className="title">{convo.name}</Text>
@@ -126,16 +118,16 @@ const Convos = ({
                                 <Button onClick={() => {
 
                                     // switch the current conversation to the selected conversation
-                                    const currentConversation = conversations[0]
-                                    const newConversations = conversations
+                                    const currentConversation = app.conversations[0]
+                                    const newConversations = app.conversations
                                     newConversations[0] = convo
                                     newConversations[index] = currentConversation
-                                    setConversations(newConversations)
-                                    setUserMessages(convo.user)
-                                    setBotMessages(convo.bot)
+                                    app.setConversations(newConversations)
+                                    app.setUserMessages(convo.user)
+                                    app.setBotMessages(convo.bot)
 
                                     // close the model  
-                                    onClose1()
+                                    // onClose1()
                                 }}>
                                     Open
                                 </Button>
@@ -150,10 +142,16 @@ const Convos = ({
                                 <Modal isOpen={isOpen} onClose={onClose}>
                                     <ModalOverlay />
                                     <ModalContent>
-                                        <ModalHeader>{conversations[index].name}</ModalHeader>
+                                        <ModalHeader>{app.conversations[index].name}</ModalHeader>
                                         <ModalCloseButton />
                                         <ModalBody>
-                                            <Input ref={renameInput} value={inputValue} onChange={(event) => setInputValue(event.target.value)} onKeyDown={handleKeyDown} placeholder="New name" />
+                                            <Input
+                                                ref={renameInput}
+                                                value={inputValue}
+                                                onChange={(event) => setInputValue(event.target.value)}
+                                                onKeyDown={handleKeyDown}
+                                                placeholder="New name"
+                                            />
                                         </ModalBody>
 
                                         <ModalFooter>
@@ -162,10 +160,10 @@ const Convos = ({
                                             </Button>
                                             <Button variant="ghost" ref={enterButtonRef} onClick={
                                                 () => {
-                                                    const newConversations = conversations
+                                                    const newConversations = app.conversations
                                                     newConversations[index].name = renameInput.current.value
                                                     newConversations[index].wasRenamed = true
-                                                    setConversations(newConversations)
+                                                    app.setConversations(newConversations)
                                                     onClose()
                                                 }}>Submit</Button>
                                         </ModalFooter>
@@ -186,19 +184,19 @@ const Convos = ({
                                 </Button>
 
                                 {/* Remove the conversation */}
-                                {conversations?.length > 1 && <Button onClick={() => {
+                                {app.conversations?.length > 1 && <Button onClick={() => {
 
                                     // remove the conversation from the conversations array
-                                    const newConversations = conversations
+                                    const newConversations = app.conversations
                                     newConversations.splice(index, 1)
-                                    setConversations(newConversations)
+                                    app.setConversations(newConversations)
 
                                     // reset the current conversation to the user's messages
-                                    setUserMessages(newConversations[0].user)
-                                    setBotMessages(newConversations[0].bot)
+                                    app.setUserMessages(newConversations[0].user)
+                                    app.setBotMessages(newConversations[0].bot)
 
                                     // close the model
-                                    onClose1()
+                                    // onClose1()
                                 }}>
                                     Remove
                                 </Button>}
@@ -220,11 +218,11 @@ const Convos = ({
                                 <ScaleFade in={1}>
                                     <VStack>
                                         <Divider />
-                                        <Text>User Tokens: {conversations[moreConversation].info.userTokens}</Text>
-                                        <Text>User Expenses: ${conversations[moreConversation].info.userExpenses}</Text>
+                                        <Text>User Tokens: {app.conversations[moreConversation].info.userTokens}</Text>
+                                        <Text>User Expenses: ${app.conversations[moreConversation].info.userExpenses}</Text>
                                         <Divider />
-                                        <Text>Bot Tokens: {conversations[moreConversation].info.botTokens}</Text>
-                                        <Text>Bot Expenses: ${conversations[moreConversation].info.botExpenses}</Text>
+                                        <Text>Bot Tokens: {app.conversations[moreConversation].info.botTokens}</Text>
+                                        <Text>Bot Expenses: ${app.conversations[moreConversation].info.botExpenses}</Text>
                                         <Divider />
                                     </VStack>
                                 </ScaleFade>
