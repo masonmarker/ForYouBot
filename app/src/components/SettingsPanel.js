@@ -9,7 +9,7 @@
 import { useRef, useState } from "react";
 
 // pricing
-import { tokensForWords, wordsForTokens } from "../pricing/pricing";
+import { tokensForWords, wordsForTokens, priceForTokens } from "../pricing/pricing";
 
 // Chakra components
 import {
@@ -173,6 +173,9 @@ const ComputePricing = () => {
   // tokens for words state
   const [tfw, setTokensForWords] = useState(0);
 
+  // price for tokens state
+  const [pft, setPriceForTokens] = useState(0);
+
   return (
     <VStack
       // center all elements horizontally and vertically
@@ -212,6 +215,20 @@ const ComputePricing = () => {
           </VStack>
         </GridItem>
 
+        {/* Price for tokens */}
+        <GridItem>
+          <VStack>
+            <Text>Price for tokens</Text>
+            <Input
+              placeholder="Enter number of tokens"
+              onChange={(e) => {
+                setPriceForTokens(priceForTokens(e.target.value));
+              }}
+            />
+            <Text>tokens = ${pft.toLocaleString()}</Text>
+          </VStack>
+        </GridItem>
+        
       </Grid>
 
 
