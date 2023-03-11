@@ -8,14 +8,9 @@
 // React
 import { useRef, useState } from "react";
 
-<<<<<<< HEAD
-// pricing
-import { tokensForWords, wordsForTokens, priceForTokens } from "../pricing/pricing";
-=======
 // pricing functions
 import { tokensForString } from "./Prompt"
 import { priceForTokens } from "../pricing/pricing"
->>>>>>> 40f15ee3064e10792ae81cd3679dc14af17ebc06
 
 // Chakra components
 import {
@@ -193,7 +188,7 @@ const ComputePricing = () => {
 
   // price for tokens state
   const [pft, setPft] = useState(0);
-
+ 
   // reference for tokens for string input
   const tfsRef = useRef(null);
 
@@ -220,11 +215,6 @@ const ComputePricing = () => {
     // set price state
     setPft(roundedPrice);
   }
-
-
-
-  // price for tokens state
-  const [pft, setPriceForTokens] = useState(0);
 
   return (
     <VStack
@@ -266,19 +256,11 @@ const ComputePricing = () => {
 
       <Grid
         templateColumns="repeat(2, 1fr)"
-<<<<<<< HEAD
-        gap="0.5rem"
-      >
-
-        <GridItem >
-          {/* Section for converting tokens to words */}
-=======
         gap="1rem"
       >
 
         {/* Section for converting a string to tokens */}
         <GridItem>
->>>>>>> 40f15ee3064e10792ae81cd3679dc14af17ebc06
           <VStack>
             <Text>Convert a string to tokens</Text>
             <HStack>
@@ -323,31 +305,7 @@ const ComputePricing = () => {
             <Text>Price: ${pft}</Text>
           </VStack>
         </GridItem>
-
-<<<<<<< HEAD
-        {/* Price for tokens */}
-        <GridItem>
-          <VStack>
-            <Text>Price for tokens</Text>
-            <Input
-              placeholder="Enter number of tokens"
-              onChange={(e) => {
-                setPriceForTokens(priceForTokens(e.target.value));
-              }}
-            />
-            <Text>tokens = ${pft.toLocaleString()}</Text>
-          </VStack>
-        </GridItem>
-=======
-
-
-
-
->>>>>>> 40f15ee3064e10792ae81cd3679dc14af17ebc06
-
       </Grid>
-
-
     </VStack>
   )
 }

@@ -19,7 +19,7 @@ const cors = require("cors");
 app.use(cors());
 
 // use body parser
-const bodyParser = require("body-parser");
+const bodyParser = require("body-parser"); 
 app.use(bodyParser.json());
 
 // create configuration
