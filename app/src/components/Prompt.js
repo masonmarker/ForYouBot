@@ -28,7 +28,6 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 // styled components
 import styled from "styled-components";
 
-
 // ----------- Prompt Variables ----------- //
 // max characters permitted in a single prompt
 const maxChars = 2000;
@@ -36,7 +35,6 @@ const maxChars = 2000;
 // constraints separator
 const constraintSeparator = "##LIMITS##";
 // --------------------------------------- //
-
 
 // styled Prompt
 const PromptStyled = styled.div`
@@ -62,15 +60,29 @@ const PromptStyled = styled.div`
 
 // asks the OpenAI API for a response
 // based on a specific model
-async function ask(chatLog) {
+async function ask(chatLog, model) {
   return await fetch("http://localhost:3080", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
     },
+
+    // manages the actual model name
+    // model: 'text-davinci-003' if model === 'davinci'
+    // model: 'text-curie-001' if model === 'curie'
+    // model: 'text-ada-001' if model === 'ada'
+    // model: 'text-babbage-001' if model === 'babbage'
+    // use ternary operator to manage this
     body: JSON.stringify({
-      model: "text-davinci-003",
+      model:
+        model === "davinci"
+          ? "text-davinci-003"
+          : model === "curie"
+          ? "text-curie-001"
+          : model === "ada"
+          ? "text-ada-001"
+          : "text-babbage-001",
       prompt: chatLog,
 
       // 4096 for davinci
@@ -94,7 +106,7 @@ async function tokensForString(string) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({
       string: string,
@@ -104,17 +116,13 @@ async function tokensForString(string) {
     .then((data) => data.data);
 }
 
-
-
-
 // gets a string representation of the user's chat log
 function getUserChatLog(userMessages, botMessages, constraints, prompt) {
-
   // separator between message exchanges
   // const sep = "\n--next--\n";
 
   // string representation of the chat log context
-  var chatLog = ""
+  var chatLog = "";
 
   // add each message exchange to the chat log
   for (let i = 0; i < userMessages.length; i++) {
@@ -161,7 +169,7 @@ ${constraintSeparator}
 //               : messageID
 // when the enter key is pressed (without shift being held)
 // or when the submit button is pressed should the request go through
-const Prompt = ({app}) => {
+const Prompt = ({ app }) => {
   // get color mode
   const { colorMode } = useColorMode();
 
@@ -202,7 +210,6 @@ const Prompt = ({app}) => {
 
   // updates the current conversation's tokens and expenses
   async function updateInfo(userPrompt, botResponse) {
-
     // compute tokens for user prompt and bot response
     const userTokens = await tokensForString(userPrompt);
     const botTokens = await tokensForString(botResponse);
@@ -224,7 +231,7 @@ const Prompt = ({app}) => {
       botExpenses: newConversations[0].info.botExpenses + botExpenses,
       userTokens: newConversations[0].info.userTokens + userTokens,
       userExpenses: newConversations[0].info.userExpenses + userExpenses,
-    }
+    };
 
     // set conversations
     app.setConversations(newConversations);
@@ -263,19 +270,23 @@ const Prompt = ({app}) => {
       app.setWaiting(true);
 
       // get chat log
-      const chatLog = getUserChatLog(app.userMessages, app.botMessages, app.constraints, prompt);
+      const chatLog = getUserChatLog(
+        app.userMessages,
+        app.botMessages,
+        app.constraints,
+        prompt
+      );
 
       // obtain the bot's response to the prompt
-      const botResponse = testing ?
-        await testBotResponse()
-        :
-        await ask(chatLog);
+      const botResponse = testing
+        ? await testBotResponse()
+        : await ask(chatLog);
 
       // add bot response to messages
       await app.stateAddBotMessage({
         date: new Date().toLocaleTimeString(),
         from: "bot",
-        message: botResponse
+        message: botResponse,
       });
 
       // enable prompt
@@ -286,7 +297,6 @@ const Prompt = ({app}) => {
 
       // set waiting to false
       app.setWaiting(false);
-
 
       // check if the user has sent a single message
       // in this conversation,
@@ -300,7 +310,6 @@ const Prompt = ({app}) => {
 
         // if testing
         if (testing) {
-
           // set the name of the conversation
           newConversations[0].name = await testResponse();
 
@@ -310,12 +319,11 @@ const Prompt = ({app}) => {
           // update the conversations info
           await updateInfo(chatLog, newConversations[0].name);
         } else {
-
           var pr = `
           create a title for the below context in one sentence, 8 words or less, and
           do not answer the question:
           ${chatLog}
-          `
+          `;
 
           // retrieve title suggestion from api
           var response = await ask(pr);
@@ -324,16 +332,18 @@ const Prompt = ({app}) => {
           await updateInfo(pr, response);
 
           // remove surrounding quotations, if they exist
-          if ((response[0] === '"' && response[response.length - 1] === '"') ||
+          if (
+            (response[0] === '"' && response[response.length - 1] === '"') ||
             (response[0] === "'" && response[response.length - 1] === "'") ||
             (response[0] === "`" && response[response.length - 1] === "`") ||
             (response[0] === "“" && response[response.length - 1] === "”") ||
-            (response[0] === "‘" && response[response.length - 1] === "’")) {
+            (response[0] === "‘" && response[response.length - 1] === "’")
+          ) {
             response = response.substring(1, response.length - 1);
           }
 
           // set conversation name to the response
-          newConversations[0].name = response
+          newConversations[0].name = response;
         }
         app.setConversations(newConversations);
         app.setGenerating(false);
@@ -366,7 +376,6 @@ const Prompt = ({app}) => {
 
             // set the character limit
             comp.innerHTML = len + `/${maxChars}`;
-
 
             // if the length is greater than the max
             if (len >= maxChars) {

@@ -227,7 +227,7 @@ const Title = ({ app }) => {
             </Modal>
 
             <Box className="buttons">
-                <EditPanel />
+                <EditPanel app={app}/>
                 <SettingsPanel />
             </Box>
         </TitleStyled>

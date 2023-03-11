@@ -53,7 +53,6 @@ import {
   MenuIcon,
   MenuCommand,
 
-
   Divider,
 } from "@chakra-ui/react";
 
@@ -204,23 +203,14 @@ const ComputePricing = () => {
   }
 
   // async function to compute price for tokens
-  function computePriceForTokens() {
-    // get price
-    const price = priceForTokens(
-      parseInt(pftRef.current.value), selectedModel);
-
-    // round price to 6 decimal places
-    const roundedPrice = Math.round(price * 1000000) / 1000000;
-
+  function computePriceForTokens() { 
     // set price state
-    setPft(roundedPrice);
+    setPft(Math.round(priceForTokens(
+      parseInt(pftRef.current.value), selectedModel) * 1000000) / 1000000);
   }
 
   return (
-    <VStack
-    // center all elements horizontally and vertically
-    >
-
+    <VStack>
       {/* Dropdown to choose model */}
       <VStack>
         <Text>Selected model: {selectedModel}</Text>
@@ -277,7 +267,6 @@ const ComputePricing = () => {
                 onClick={async () => 
                   await computeTokensForString()}
               >Convert</Button>
-
             </HStack>
             <Text>Number of tokens: {tfs}</Text>
           </VStack>
@@ -300,7 +289,6 @@ const ComputePricing = () => {
               <Button
                 onClick={computePriceForTokens}
               >Convert</Button>
-
             </HStack>
             <Text>Price: ${pft}</Text>
           </VStack>

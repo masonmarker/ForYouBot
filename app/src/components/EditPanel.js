@@ -7,7 +7,7 @@
  */
 
 // React
-import { useRef } from 'react';
+import { useRef } from "react";
 
 // styled components
 import styled from "styled-components";
@@ -28,8 +28,15 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Checkbox
+  Checkbox,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
+
+// Chakra Chevron icon
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 // styled SidePanel
 // should be permanently in the bottom right corner
@@ -49,21 +56,10 @@ const SidePanelStyled = styled.div`
     right: 0;
     margin: 1rem;
   }
-
-  /* list items vertically */
-  .constraints-1 {
-    display: flex;
-    flex-direction: column;
-  }
-
 `;
 
 // Edit Bot modal
-const EditPanel = ({
-  constraints,
-  setConstraints
-}) => {
-
+const EditPanel = ({ app }) => {
   // disclosure for displaying the modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -89,11 +85,84 @@ const EditPanel = ({
           <ModalCloseButton />
           <ModalBody>
             <Divider marginBottom="1rem" />
-            <Text>Constraints</Text>
-            <Box className="constraints-1">
+
+            {/* Selecting OpenAI model */}
+            <VStack gap="1rem">
+              <VStack>
+                <Text fontWeight="bold">Active Model</Text>
+                <Text fontSize="4rem" fontWeight="light">
+                  {app.model}
+                </Text>
+                <HStack>
+                  {/* Display attributes according to the current model */}
+                  {app.model === "davinci" && (
+                    <>
+                      <ModelAttribute title="Most Capable" color="green" />
+                      <ModelAttribute title="Most Accurate" color="green" />
+                      <ModelAttribute title="Costly" color="orange" />
+                    </>
+                  )}
+                  {app.model === "curie" && (
+                    <>
+                      <ModelAttribute title="needs testing" color="red" />
+                    </>
+                  )}
+                  {app.model === "babbage" && (
+                    <>
+                      <ModelAttribute title="needs testing" color="red" />
+                    </>
+                  )}
+                  {app.model === "ada" && (
+                    <>
+                      <ModelAttribute title="needs testing" color="red" />
+                    </>
+                  )}
+                </HStack>
+              </VStack>
+              {/* Selecting model */}
+              <Menu>
+                <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                  Select Model
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    onClick={() => {
+                      app.setModel("davinci");
+                    }}
+                  >
+                    davinci
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      app.setModel("curie");
+                    }}
+                  >
+                    curie
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      app.setModel("babbage");
+                    }}
+                  >
+                    babbage
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      app.setModel("ada");
+                    }}
+                  >
+                    ada
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </VStack>
+
+            <Divider marginBottom="1rem" marginTop="1rem" />
+            <Text fontWeight="bold">Constraints</Text>
+            <VStack align="left">
               <Checkbox colorScheme="purple">Show work</Checkbox>
               <Checkbox colorScheme="purple">Answer only</Checkbox>
-            </Box>
+            </VStack>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="purple" mr={3} onClick={onClose}>
@@ -104,6 +173,15 @@ const EditPanel = ({
         </ModalContent>
       </Modal>
     </SidePanelStyled>
+  );
+};
+
+// model attribute
+const ModelAttribute = ({ title, color }) => {
+  return (
+    <Button colorScheme={color} cursor="default" size="xs">
+      {title}
+    </Button>
   );
 };
 
