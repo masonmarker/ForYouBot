@@ -19,7 +19,21 @@ import {
     Box,
     Spinner,
     Fade,
+    Text,
+    VStack,
+    ScaleFade,
+
+    // grid components
+    Grid,
+    GridItem
 } from "@chakra-ui/react"
+
+// Chakra icons
+import {
+    ViewIcon,
+    SettingsIcon,
+    PlusSquareIcon,
+} from '@chakra-ui/icons'
 
 // styled components
 import styled from 'styled-components'
@@ -41,21 +55,44 @@ const ChatPanelStyled = styled.div`
         width: 100%;
         overflow-y: scroll;
     } 
+
+    .init-title {
+        font-size: 6rem;
+        font-weight: 600;
+        margin-top: 3rem;
+    }
+
+    .item {
+        border: 3px solid ${props => props.borderColor};
+        background-color: ${props => props.backgroundColor};
+        border-radius: 10px;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .grid {}
+
+    /* when width of screen is below 887 pixels,
+        make template columns 1 and rows 3*/
+    @media (max-width: 887px) {
+        .grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+        }
+        .init-title {
+            margin-top: 0;
+            font-size: 4rem;
+        }
+        .item {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+    }
 `
 
 // ChatPanel component
 // should re-render each time a message is pushed to messages
-const ChatPanel = ({
-    messages,
-    botmessages,
-    conversations,
-    setConversations,
-    setUserMessages,
-    setBotMessages,
-    generating,
-    setGenerating,
-    waiting,
-}) => {
+const ChatPanel = ({ app }) => {
 
     // grab current color mode
     const { colorMode } = useColorMode()
@@ -66,7 +103,7 @@ const ChatPanel = ({
     // scroll to bottom
     useEffect(() => {
         bottomRef.current.scrollIntoView()
-    }, [messages, botmessages, waiting])
+    }, [app.userMessages, app.botMessages, app.waiting])
 
     // return,
     return (
@@ -74,51 +111,90 @@ const ChatPanel = ({
             backgroundColor={colorMode === "light" ? colors.lightGray : colors.darkGray}>
 
             {/* Title for switching conversations */}
-            <Title
-                conversations={conversations}
-                setConversations={setConversations}
-                userMessages={messages}
-                botMessages={botmessages}
-                setUserMessages={setUserMessages}
-                setBotMessages={setBotMessages}
-                generating={generating}
-                setGenerating={setGenerating}
-            />
+            <Title app={app}/>
 
             {/* Chat History */}
-            <Box className="chat">
-                <div id="chat">
-                    {messages.map((message, index) => {
-                        return (
-                            <div key={`chat-div-${index}`}>
-                                <Message
-                                    key={`user-${index}`}
-                                    message={message.message}
-                                    from={message.from}
-                                    date={message.date}
-                                />
-                                {botmessages[index] && (
+
+            {app.userMessages.length > 0 ?
+                <Box className="chat">
+                    <div id="chat">
+                        {app.userMessages.map((message, index) => {
+                            return (
+                                <div key={`chat-div-${index}`}>
                                     <Message
-                                        key={`bot-${index}`}
-                                        message={botmessages[index].message}
-                                        from="bot"
-                                        date={botmessages[index].date}
+                                        key={`user-${index}`}
+                                        message={message.message}
+                                        from={message.from}
+                                        date={message.date}
                                     />
-                                )}
-                            </div>
-                        );
-                    })}
-                    {waiting &&
-                        <Fade in={waiting}>
-                            <Spinner
-                                thickness="4px"
-                                colorScheme="purple"
-                                margin="1rem" />
-                        </Fade>
-                    }
-                    <div ref={bottomRef} />
-                </div>
-            </Box>
+                                    {app.botMessages[index] && (
+                                        <Message
+                                            key={`bot-${index}`}
+                                            message={app.botMessages[index].message}
+                                            from="bot"
+                                            date={app.botMessages[index].date}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
+                        {app.waiting &&
+                            <Fade in={app.waiting}>
+                                <Spinner
+                                    thickness="4px"
+                                    colorScheme="purple"
+                                    margin="1rem" />
+                            </Fade>
+                        }
+                        <div ref={bottomRef} />
+                    </div>
+                </Box>
+                :
+                <ScaleFade in={1}>
+                    <VStack ref={bottomRef}>
+                        <Text className="init-title">ForYouBot</Text>
+
+                        {/* Welcome message, 3 columns and 1 row */}
+                        <Grid
+                            className="grid"
+                            templateColumns="repeat(3, 1fr)"
+                            templateRows="repeat(1, 1fr)"
+                            gap={4}
+                            width="70%"
+                        >
+                            <GridItem
+                                colSpan={1}
+                                className="item"
+                            >
+                                <VStack>
+                                    <ViewIcon boxSize="2rem" />
+                                    <Text>Welcome to ____</Text>
+                                </VStack>
+                            </GridItem>
+                            <GridItem colSpan={1} className="item">
+                                <VStack>
+                                    <SettingsIcon boxSize="2rem" />
+                                    <Text>____ is a highly customizable, creative chat bot for everyday tasks.</Text>
+                                </VStack>
+                            </GridItem>
+                            <GridItem colSpan={1} className="item">
+                                <VStack>
+                                    <PlusSquareIcon boxSize="2rem" />
+                                    <Text>To get started, select a conversation
+                                        from the title above or ask a question in the
+                                        text area below.
+                                    </Text>
+                                </VStack>
+
+                            </GridItem>
+
+                        </Grid>
+
+
+                    </VStack>
+                </ScaleFade>
+
+            }
         </ChatPanelStyled>
     )
 }

@@ -14,6 +14,7 @@ import React, { useState, useRef } from 'react'
 import {
     Box,
     Button,
+    Divider,
     HStack,
     VStack,
     Text,
@@ -64,20 +65,7 @@ const ConvoStyled = styled(VStack)`
 `
 
 // Convos component
-const Convos = ({
-    conversations,
-    setConversations,
-    userMessages,
-    botMessages,
-    setUserMessages,
-    setBotMessages,
-    onClose1
-}) => {
-
-    // use intersection observer
-    const [ref, inView] = useInView({
-        threshold: 0,
-    })
+const Convos = ({ app }) => {
 
     // are you sure state (conversation removal)
     const [areYouSure, setAreYouSure] = useState(false)
@@ -88,16 +76,32 @@ const Convos = ({
     //modal state use disclosure
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    // states for displaying more of each individual conversation
+    const [moreConversation, setMoreConversation] = useState(-1)
+
+    // input value state
+    const [inputValue, setInputValue] = useState('') // input value state
+
+    // enter button reference
+    const enterButtonRef = useRef() // button ref
+
+    // rename input reference
     const renameInput = useRef(null)
+
+    function handleKeyDown(e) {
+        if (e.key === 'Enter') {
+            enterButtonRef.current.click()
+        }
+    }
 
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
 
     return (
         <Box>
-            {conversations[0]
-                ? conversations?.map((convo, index) => (
-                    <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
+            {app.conversations[0]
+                ? app.conversations?.map((convo, index) => (
+                    <ScaleFade in={1} key={`convo-${index}`}>
                         <ConvoStyled key={`convo-${index}`}>
                             <Text className="title">{convo.name}</Text>
                             {index === 0 &&
@@ -114,16 +118,16 @@ const Convos = ({
                                 <Button onClick={() => {
 
                                     // switch the current conversation to the selected conversation
-                                    const currentConversation = conversations[0]
-                                    const newConversations = conversations
+                                    const currentConversation = app.conversations[0]
+                                    const newConversations = app.conversations
                                     newConversations[0] = convo
                                     newConversations[index] = currentConversation
-                                    setConversations(newConversations)
-                                    setUserMessages(convo.user)
-                                    setBotMessages(convo.bot)
+                                    app.setConversations(newConversations)
+                                    app.setUserMessages(convo.user)
+                                    app.setBotMessages(convo.bot)
 
                                     // close the model  
-                                    onClose1()
+                                    // onClose1()
                                 }}>
                                     Open
                                 </Button>
@@ -138,46 +142,61 @@ const Convos = ({
                                 <Modal isOpen={isOpen} onClose={onClose}>
                                     <ModalOverlay />
                                     <ModalContent>
-                                        <ModalHeader>{conversations[index].name}</ModalHeader>
+                                        <ModalHeader>{app.conversations[index].name}</ModalHeader>
                                         <ModalCloseButton />
                                         <ModalBody>
-                                            <Input ref={renameInput} placeholder="New name" />
+                                            <Input
+                                                ref={renameInput}
+                                                value={inputValue}
+                                                onChange={(event) => setInputValue(event.target.value)}
+                                                onKeyDown={handleKeyDown}
+                                                placeholder="New name"
+                                            />
                                         </ModalBody>
 
                                         <ModalFooter>
                                             <Button colorScheme="purple" mr={3} onClick={onClose}>
                                                 Close
                                             </Button>
-                                            <Button variant="ghost" onClick={
+                                            <Button variant="ghost" ref={enterButtonRef} onClick={
                                                 () => {
-                                                    const newConversations = conversations
+                                                    const newConversations = app.conversations
                                                     newConversations[index].name = renameInput.current.value
                                                     newConversations[index].wasRenamed = true
-                                                    setConversations(newConversations)
+                                                    app.setConversations(newConversations)
                                                     onClose()
                                                 }}>Submit</Button>
                                         </ModalFooter>
                                     </ModalContent>
+
                                 </Modal>
+
                                 {/* Preview this conversation */}
                                 <Button>
                                     Preview
                                 </Button>
 
+                                {/* Viewing information for the current conversation */}
+                                <Button onClick={() => {
+                                    setMoreConversation(moreConversation === index ? -1 : index)
+                                }}>
+                                    {moreConversation === index ? 'Close' : 'More'}
+                                </Button>
+
                                 {/* Remove the conversation */}
-                                {conversations?.length > 1 && <Button onClick={() => {
+                                {app.conversations?.length > 1 && <Button onClick={() => {
 
                                     // remove the conversation from the conversations array
-                                    const newConversations = conversations
+                                    const newConversations = app.conversations
                                     newConversations.splice(index, 1)
-                                    setConversations(newConversations)
+                                    app.setConversations(newConversations)
 
                                     // reset the current conversation to the user's messages
-                                    setUserMessages(newConversations[0].user)
-                                    setBotMessages(newConversations[0].bot)
+                                    app.setUserMessages(newConversations[0].user)
+                                    app.setBotMessages(newConversations[0].bot)
 
                                     // close the model
-                                    onClose1()
+                                    // onClose1()
                                 }}>
                                     Remove
                                 </Button>}
@@ -194,6 +213,21 @@ const Convos = ({
                                     </Button>
                                 </HStack>
                             }
+                            {/* displaying more about the conversation requested */}
+                            {moreConversation === index &&
+                                <ScaleFade in={1}>
+                                    <VStack>
+                                        <Divider />
+                                        <Text>User Tokens: {app.conversations[moreConversation].info.userTokens}</Text>
+                                        <Text>User Expenses: ${app.conversations[moreConversation].info.userExpenses}</Text>
+                                        <Divider />
+                                        <Text>Bot Tokens: {app.conversations[moreConversation].info.botTokens}</Text>
+                                        <Text>Bot Expenses: ${app.conversations[moreConversation].info.botExpenses}</Text>
+                                        <Divider />
+                                    </VStack>
+                                </ScaleFade>
+                            }
+
 
 
                         </ConvoStyled>
@@ -204,6 +238,32 @@ const Convos = ({
             }
 
         </Box>
+    )
+}
+
+// modal for displaying more information about a conversation
+const MoreModal = ({
+    isMoreOpen,
+    onMoreClose,
+    conversation
+}) => {
+
+    return (
+        <Modal isOpen={isMoreOpen} onClose={onMoreClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>{conversation.name}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Text>{JSON.stringify(conversation.info)}</Text>
+                </ModalBody>
+                <ModalFooter>
+                    <Button colorScheme="purple" mr={3} onClick={onMoreClose}>
+                        Close
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     )
 }
 

@@ -15,7 +15,7 @@ import Convos from './Convos'
 import { emptyConversation } from '../messages/messages'
 
 // SidePanel
-import SidePanel from './SidePanel'
+import EditPanel from './EditPanel'
 
 // Settings Panel
 import SettingsPanel from './SettingsPanel'
@@ -69,6 +69,7 @@ const TitleStyled = styled.div`
     width: 100%;
     background-color: ${props => props.backgroundColor};
     transition: ${css.transition};
+    user-select: none;
 
     .buttons {
         display: flex;
@@ -98,15 +99,7 @@ const TitleStyled = styled.div`
 `
 
 // Title component
-const Title = ({
-    userMessages,
-    botMessages,
-    conversations,
-    setConversations,
-    setUserMessages,
-    setBotMessages,
-    generating,
-}) => {
+const Title = ({ app }) => {
 
     // grab current color mode
     const { colorMode, toggleColorMode } = useColorMode()
@@ -116,22 +109,22 @@ const Title = ({
 
     // modal for changing conversation
     const { isOpen, onOpen, onClose } = useDisclosure()
- 
+
     // clears the current conversation
     const clearConversation = () => {
-        conversations[0].name = "New Conversation"
-        setConversations(conversations)
-        setUserMessages([])
-        setBotMessages([])
+        app.conversations[0].name = "New Conversation"
+        app.setConversations(app.conversations)
+        app.setUserMessages([])
+        app.setBotMessages([])
     }
 
     // keep conversations updated
     useEffect(() => {
-        var displayingConversations = conversations
-        displayingConversations[0].user = userMessages
-        displayingConversations[0].bot = botMessages
-        setConversations(displayingConversations)
-    }, [userMessages, botMessages, conversations, setConversations])
+        var displayingConversations = app.conversations
+        displayingConversations[0].user = app.userMessages
+        displayingConversations[0].bot = app.botMessages
+        app.setConversations(displayingConversations)
+    }, [app.userMessages, app.botMessages, app.conversations, app.setConversations])
 
     return (
         <TitleStyled
@@ -166,15 +159,16 @@ const Title = ({
                     color={colorMode === "light" ? "white" : "black"}
                     id="current-convo"
                 >
-                    {conversations[0] ?
-                        conversations[0].name :
+                    {app.conversations[0] ?
+                        app.conversations[0].name :
                         "New Conversation"
                     }
                 </Text>
                 {hover && <ViewIcon color={colorMode === "light" ? "white" : "black"} />}
-                {generating &&
-                    <Fade in={generating}>
+                {app.generating &&
+                    <Fade in={app.generating}>
                         <Spinner
+                            thickness="4px"
                             color={colorMode === "light" ? "white" : "black"}
                         />
                     </Fade>}
@@ -192,8 +186,8 @@ const Title = ({
                                 colorScheme="purple"
                                 size="sm"
                                 onClick={() => {
-                                    setConversations([...conversations,
-                                    emptyConversation(userMessages, botMessages)
+                                    app.setConversations([...app.conversations,
+                                    emptyConversation(app.userMessages, app.botMessages)
                                     ])
                                 }}
                             >
@@ -201,13 +195,13 @@ const Title = ({
                             </Button>
 
                             {/* Clearing all conversations */}
-                            {conversations?.length > 1 && <Button
+                            {app.conversations?.length > 1 && <Button
                                 colorScheme="purple"
                                 size="sm"
                                 onClick={() => {
-                                    setConversations([emptyConversation([], [])])
-                                    setUserMessages([])
-                                    setBotMessages([])
+                                    app.setConversations([emptyConversation([], [])])
+                                    app.setUserMessages([])
+                                    app.setBotMessages([])
 
                                     onClose()
                                 }}
@@ -222,16 +216,7 @@ const Title = ({
 
                     <ModalCloseButton />
                     <ModalBody>
-                        <Convos
-                            conversations={conversations}
-                            setConversations={setConversations}
-                            userMessages={userMessages}
-                            botMessages={botMessages}
-                            setUserMessages={setUserMessages}
-                            setBotMessages={setBotMessages}
-                            onClose1={onClose}
-                            
-                        />
+                        <Convos app={app}/>
                     </ModalBody>
                     <ModalFooter>
                         <Button colorScheme="purple" mr={3} onClick={onClose}>
@@ -242,7 +227,7 @@ const Title = ({
             </Modal>
 
             <Box className="buttons">
-                <SidePanel />
+                <EditPanel />
                 <SettingsPanel />
             </Box>
         </TitleStyled>

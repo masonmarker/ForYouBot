@@ -11,6 +11,7 @@ import { useState } from "react";
 
 // Chakra components
 import {
+
   // general
   useColorMode,
   useToast,
@@ -20,16 +21,36 @@ import {
   Input,
 
   // modal for viewing more information about the message
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 
-  // Fading
+  // menu
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+
+  // fading
   ScaleFade,
+
+  // states
+  useDisclosure,
 } from "@chakra-ui/react";
 
 // intersection observer
 import { useInView } from "react-intersection-observer";
 
 // Chakra icons
-import { CopyIcon } from "@chakra-ui/icons";
+import {
+  CopyIcon,
+  EditIcon,
+} from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -109,13 +130,22 @@ const Message = (props) => {
     threshold: 0,
   });
 
+  // useDisclosure for modal
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // disclosure for menu
+  const {
+    isOpen: isOpenMenu,
+    onOpen: onOpenMenu,
+    onClose: onCloseMenu }
+    = useDisclosure();
+
   return (
     <ScaleFade ref={ref} in={inView}>
       <MessageStyled
         borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
         _hover={{
-          backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
-          cursor: "pointer",
+          backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52"
         }}
         // states for displaying the copy button
         onMouseOver={() => setShowCopy(true)}
@@ -136,6 +166,7 @@ const Message = (props) => {
           }
         }}
       >
+
         {/* message box */}
         <HStack w="100%" minHeight="2rem">
           {edit ?
@@ -146,9 +177,35 @@ const Message = (props) => {
           {showCopy && (
             <HStack>
               <CopyButton message={props.message} />
+              <ScaleFade in={showCopy}>
+                <Button
+                  size="xs"
+                  variant="ghost"
+                >
+                  <EditIcon />
+                </Button>
+              </ScaleFade>
+
+              {/* Edit Message modal */}
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Edit Message</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Input id="input" />
+                  </ModalBody>
+
+                  <ModalFooter>
+
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+
             </HStack>
           )}
         </HStack>
+
         {/* end of message box */}
       </MessageStyled>
     </ScaleFade>
@@ -181,7 +238,17 @@ const CopyButton = (props) => {
           });
           e.stopPropagation();
         }}
+
+        // on right click, show a chakra menu with options to copy, edit, delete
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+
+        }}
       >
+
+
         <CopyIcon />
       </Button>
     </ScaleFade>

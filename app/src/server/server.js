@@ -2,9 +2,8 @@
 // require express
 const express = require("express");
 
-// require("dotenv").config();
-
-
+// GPT encoder for tokenizing strings
+const { encode } = require('gpt-3-encoder')
 
 // require openai
 const { Configuration, OpenAIApi } = require("openai");
@@ -34,7 +33,9 @@ const openai = new OpenAIApi(configuration);
 // port
 const port = process.env.PORT || 3080;
 
-// post to /ask a function to respond to the request
+
+
+// post to / a function to respond to the request
 app.post("/", async (req, res) => {
     const { model, prompt, max_tokens, temperature } = req.body;
     const response = await openai.createCompletion({
@@ -50,6 +51,20 @@ app.post("/", async (req, res) => {
         data: response.data.choices[0].text 
     })
 });
+
+
+
+// post to /tokenizer a function to tokenize a string passed through the header
+app.post("/tokenizer", async (req, res) => {
+    const { string } = req.body;
+    const response = encode(string).length;
+    res.status(200).json({
+        success: true,
+        data: response
+    })
+});
+
+
 
 // start listen
 app.listen(port, () => console.log(`Server started on port ${port}`));

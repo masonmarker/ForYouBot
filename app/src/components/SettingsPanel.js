@@ -8,13 +8,20 @@
 // React
 import { useRef, useState } from "react";
 
+<<<<<<< HEAD
 // pricing
 import { tokensForWords, wordsForTokens, priceForTokens } from "../pricing/pricing";
+=======
+// pricing functions
+import { tokensForString } from "./Prompt"
+import { priceForTokens } from "../pricing/pricing"
+>>>>>>> 40f15ee3064e10792ae81cd3679dc14af17ebc06
 
 // Chakra components
 import {
   Text,
   VStack,
+  HStack,
   Button,
   Input,
 
@@ -41,8 +48,22 @@ import {
   ModalBody,
   ModalCloseButton,
 
+  // Dropdown
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuIcon,
+  MenuCommand,
+
+
   Divider,
 } from "@chakra-ui/react";
+
+// Chakra checkicon
+import { CheckIcon } from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -167,55 +188,143 @@ const SettingsPanel = () => {
 
 const ComputePricing = () => {
 
-  // words for tokens state
-  const [wft, setWordsForTokens] = useState(0);
+  // tokens for string state
+  const [tfs, setTfs] = useState(0);
 
-  // tokens for words state
-  const [tfw, setTokensForWords] = useState(0);
+  // price for tokens state
+  const [pft, setPft] = useState(0);
+
+  // reference for tokens for string input
+  const tfsRef = useRef(null);
+
+  // reference for price for tokens input
+  const pftRef = useRef(null);
+
+  // state for selected model
+  const [selectedModel, setSelectedModel] = useState("davinci");
+
+  // async function to compute tokens for string
+  async function computeTokensForString() {
+    setTfs(await tokensForString(tfsRef.current.value));
+  }
+
+  // async function to compute price for tokens
+  function computePriceForTokens() {
+    // get price
+    const price = priceForTokens(
+      parseInt(pftRef.current.value), selectedModel);
+
+    // round price to 6 decimal places
+    const roundedPrice = Math.round(price * 1000000) / 1000000;
+
+    // set price state
+    setPft(roundedPrice);
+  }
+
+
 
   // price for tokens state
   const [pft, setPriceForTokens] = useState(0);
 
   return (
     <VStack
-      // center all elements horizontally and vertically
+    // center all elements horizontally and vertically
     >
+
+      {/* Dropdown to choose model */}
+      <VStack>
+        <Text>Selected model: {selectedModel}</Text>
+        <Menu>
+          <MenuButton as={Button}>Choose a model</MenuButton>
+          <MenuList>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("davinci");
+              }}
+            >davinci</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("curie");
+              }}
+            >curie</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("babbage");
+              }}
+            >babbage</MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("ada");
+              }}
+            >ada</MenuItem>
+          </MenuList>
+        </Menu>
+
+      </VStack>
+
+
 
       <Grid
         templateColumns="repeat(2, 1fr)"
+<<<<<<< HEAD
         gap="0.5rem"
       >
 
         <GridItem >
           {/* Section for converting tokens to words */}
-          <VStack>
-            <Text>Convert tokens to words</Text>
-            <Input
-              placeholder="Enter number of tokens"
-              onChange={(e) => {
-                setWordsForTokens(tokensForWords(e.target.value));
-              }}
-            />
-            <Text>tokens = {wft.toLocaleString()} words</Text>
-          </VStack>
-        </GridItem>
+=======
+        gap="1rem"
+      >
 
+        {/* Section for converting a string to tokens */}
         <GridItem>
-          {/* Section for converting words to tokens */}
+>>>>>>> 40f15ee3064e10792ae81cd3679dc14af17ebc06
           <VStack>
-            <Text>Convert words to tokens</Text>
-            <Input
-              placeholder="Enter number of words"
-              onChange={(e) => {
-                setTokensForWords(wordsForTokens(e.target.value));
-                e.target.value = e.target.value.replace(/,/g, "");
-              }}
-            />
-            {/* format tfw to have proper number notation */}
-            <Text>words = {tfw.toLocaleString()} tokens</Text>
+            <Text>Convert a string to tokens</Text>
+            <HStack>
+              <Input
+                ref={tfsRef}
+                placeholder="Enter a string"
+                onKeyPress={async (e) => {
+                  if (e.key === "Enter") {
+                    await computeTokensForString();
+                  }
+                }}
+              />
+              <Button
+                onClick={async () => 
+                  await computeTokensForString()}
+              >Convert</Button>
+
+            </HStack>
+            <Text>Number of tokens: {tfs}</Text>
           </VStack>
         </GridItem>
 
+        {/* Section for converting tokens to price */}
+        <GridItem>
+          <VStack>
+            <Text>Convert tokens to price</Text>
+            <HStack>
+              <Input
+                ref={pftRef}
+                placeholder="Enter a number of tokens"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    computePriceForTokens();
+                  }
+                }}
+              />
+              <Button
+                onClick={computePriceForTokens}
+              >Convert</Button>
+
+            </HStack>
+            <Text>Price: ${pft}</Text>
+          </VStack>
+        </GridItem>
+
+<<<<<<< HEAD
         {/* Price for tokens */}
         <GridItem>
           <VStack>
@@ -229,6 +338,12 @@ const ComputePricing = () => {
             <Text>tokens = ${pft.toLocaleString()}</Text>
           </VStack>
         </GridItem>
+=======
+
+
+
+
+>>>>>>> 40f15ee3064e10792ae81cd3679dc14af17ebc06
 
       </Grid>
 

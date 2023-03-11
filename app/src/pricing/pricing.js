@@ -7,6 +7,8 @@
  *  Mason Marker 
  */
 
+// for extracting an amount of tokens
+
 
 // listed pricing rates per OpenAI model
 const pricingPer1kTokens = {
@@ -24,28 +26,9 @@ const pricingPer1Token = {
     "davinci": pricingPer1kTokens["davinci"] / 1000
 };
 
-// rough approximation of words per single token
-const words_per_token = 0.75;
-
-// computes how many tokens are needed for a given number of words
-function tokensForWords(words) {
-    return Math.ceil(words_per_token * words);
-}
-
-// computes how many words are needed for a given number of tokens
-function wordsForTokens(tokens) {
-    return Math.ceil(tokens / words_per_token);
-}
-
-// price for words
+// price for tokens
 function priceForTokens(tokens, model) {
     return tokens * pricingPer1Token[model];
 }
 
-// price for tokens
-
-export { 
-    tokensForWords, 
-    wordsForTokens,
-    priceForTokens,
-}
+export { priceForTokens }

@@ -82,46 +82,50 @@ function App() {
   // is waiting for response
   const [waiting, setWaiting] = useState(false);
 
+  // state for bot model
+  const [model, setModel] = useState("davinci")  
+
   // state for bot response contstraints
   const [constraints, setConstraints] = useState([
-    "- don't include 'ChatGPT:'",
-    "- use the least amount of words possible"
+    "-don't include you:",
+    "-minimum tokens"
   ])
+
+  // app information / states to pass as props
+  var app = {
+
+    // conversations / messages
+    userMessages: userMessages,
+    stateAddMessage: stateAddMessage,
+    stateAddBotMessage: stateAddBotMessage,
+    botMessages: botMessages,
+    setUserMessages: setUserMessages,
+    setBotMessages: setBotMessages,
+    conversations: conversations,
+    setConversations: setConversations,
+
+    // generating conversation title
+    generating: generating,
+    setGenerating: setGenerating,
+
+    // waiting for bot response
+    waiting: waiting,
+    setWaiting: setWaiting,
+
+    // bot information
+    model: model,
+    setModel: setModel,
+    constraints: constraints,
+    setConstraints: setConstraints
+  }
+
 
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
-          <Prompt
-
-            // message / conversation states
-            userMessages={userMessages}
-            botMessages={botMessages}
-            stateAddMessage={stateAddMessage}
-            stateAddBotMessage={stateAddBotMessage}
-            conversations={conversations}
-            setConversations={setConversations}
-            generating={generating}
-            setGenerating={setGenerating}
-            waiting={waiting}
-            setWaiting={setWaiting}
-
-            // constraints
-            constraints={constraints}
-            setConstraints={setConstraints}
-          />
-          <Chat 
-            messages={userMessages} 
-            botmessages={botMessages} 
-            setUserMessages={setUserMessages}
-            setBotMessages={setBotMessages}
-            conversations={conversations} 
-            setConversations={setConversations}
-            generating={generating}
-            setGenerating={setGenerating}
-            waiting={waiting}
-            setWaiting={setWaiting}
-          />
+          <Prompt app={app}/>
+          <Chat app={app}/>
         </AppStyled>
       </Fade>
     </ChakraProvider>
