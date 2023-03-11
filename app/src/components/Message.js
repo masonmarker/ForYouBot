@@ -29,6 +29,13 @@ import {
   ModalBody,
   ModalCloseButton,
 
+  // menu
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+
   // fading
   ScaleFade,
 
@@ -126,6 +133,13 @@ const Message = (props) => {
   // useDisclosure for modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  // disclosure for menu
+  const {
+    isOpen: isOpenMenu,
+    onOpen: onOpenMenu,
+    onClose: onCloseMenu }
+    = useDisclosure();
+
   return (
     <ScaleFade ref={ref} in={inView}>
       <MessageStyled
@@ -152,6 +166,7 @@ const Message = (props) => {
           }
         }}
       >
+
         {/* message box */}
         <HStack w="100%" minHeight="2rem">
           {edit ?
@@ -190,6 +205,7 @@ const Message = (props) => {
             </HStack>
           )}
         </HStack>
+
         {/* end of message box */}
       </MessageStyled>
     </ScaleFade>
@@ -222,7 +238,17 @@ const CopyButton = (props) => {
           });
           e.stopPropagation();
         }}
+
+        // on right click, show a chakra menu with options to copy, edit, delete
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+
+        }}
       >
+
+
         <CopyIcon />
       </Button>
     </ScaleFade>

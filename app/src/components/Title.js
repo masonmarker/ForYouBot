@@ -69,6 +69,7 @@ const TitleStyled = styled.div`
     width: 100%;
     background-color: ${props => props.backgroundColor};
     transition: ${css.transition};
+    user-select: none;
 
     .buttons {
         display: flex;
