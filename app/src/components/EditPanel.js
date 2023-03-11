@@ -15,8 +15,11 @@ import styled from "styled-components";
 // Chakra components
 import {
   Text,
+  Box,
   VStack,
+  HStack,
   Button,
+  Divider,
   useDisclosure,
   Modal,
   ModalOverlay,
@@ -46,6 +49,13 @@ const SidePanelStyled = styled.div`
     right: 0;
     margin: 1rem;
   }
+
+  /* list items vertically */
+  .constraints-1 {
+    display: flex;
+    flex-direction: column;
+  }
+
 `;
 
 // 
@@ -75,7 +85,12 @@ const EditPanel = ({
           <ModalHeader>Edit Bot</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <Divider marginBottom="1rem" />
             <Text>Constraints</Text>
+            <Box className="constraints-1">
+              <Checkbox colorScheme="purple">Show work</Checkbox>
+              <Checkbox colorScheme="purple">Answer only</Checkbox>
+            </Box>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="purple" mr={3} onClick={onClose}>
