@@ -183,9 +183,10 @@ const ComputePricing = () => {
 
       <Grid
         templateColumns="repeat(2, 1fr)"
+        gap="0.5rem"
       >
 
-        <GridItem>
+        <GridItem >
           {/* Section for converting tokens to words */}
           <VStack>
             <Text>Convert tokens to words</Text>
@@ -228,7 +229,7 @@ const ComputePricing = () => {
             <Text>tokens = ${pft.toLocaleString()}</Text>
           </VStack>
         </GridItem>
-        
+
       </Grid>
 
 
