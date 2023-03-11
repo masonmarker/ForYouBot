@@ -280,7 +280,7 @@ const Prompt = ({ app }) => {
       // obtain the bot's response to the prompt
       const botResponse = testing
         ? await testBotResponse()
-        : await ask(chatLog);
+        : await ask(chatLog, app.model);
 
       // add bot response to messages
       await app.stateAddBotMessage({
@@ -320,13 +320,12 @@ const Prompt = ({ app }) => {
           await updateInfo(chatLog, newConversations[0].name);
         } else {
           var pr = `
-          create a title for the below context in one sentence, 8 words or less, and
-          do not answer the question:
-          ${chatLog}
-          `;
+create a title for the below context, one sentence, 8 words or less, and
+do not answer the question:
+${chatLog}`;
 
           // retrieve title suggestion from api
-          var response = await ask(pr);
+          var response = await ask(pr, app.model);
 
           // update info
           await updateInfo(pr, response);
