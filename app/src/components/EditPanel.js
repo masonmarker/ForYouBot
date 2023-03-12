@@ -60,7 +60,6 @@ const SidePanelStyled = styled.div`
 
 // Edit Bot modal
 const EditPanel = ({ app }) => {
-  
   // disclosure for displaying the modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -94,30 +93,18 @@ const EditPanel = ({ app }) => {
                 <Text fontSize="4rem" fontWeight="light">
                   {app.model}
                 </Text>
+
                 <HStack>
                   {/* Display attributes according to the current model */}
-                  {app.model === "davinci" && (
-                    <>
-                      <ModelAttribute title="Most Capable" color="green" />
-                      <ModelAttribute title="Most Accurate" color="green" />
-                      <ModelAttribute title="Costly" color="orange" />
-                    </>
-                  )}
-                  {app.model === "curie" && (
-                    <>
-                      <ModelAttribute title="needs testing" color="red" />
-                    </>
-                  )}
-                  {app.model === "babbage" && (
-                    <>
-                      <ModelAttribute title="needs testing" color="red" />
-                    </>
-                  )}
-                  {app.model === "ada" && (
-                    <>
-                      <ModelAttribute title="needs testing" color="red" />
-                    </>
-                  )}
+                  {app.models[app.model].attributes.map((attribute, i) => {
+                    return (
+                      <ModelAttribute
+                        key={`attribute-${attribute}`}
+                        title={attribute[0]}
+                        color={attribute[1]}
+                      />
+                    );
+                  })}
                 </HStack>
               </VStack>
               {/* Selecting model */}
@@ -126,34 +113,19 @@ const EditPanel = ({ app }) => {
                   Select Model
                 </MenuButton>
                 <MenuList>
-                  <MenuItem
-                    onClick={() => {
-                      app.setModel("davinci");
-                    }}
-                  >
-                    davinci
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      app.setModel("curie");
-                    }}
-                  >
-                    curie
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      app.setModel("babbage");
-                    }}
-                  >
-                    babbage
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      app.setModel("ada");
-                    }}
-                  >
-                    ada
-                  </MenuItem>
+                  {/* map models to MenuItem */}
+                  {Object.keys(app.models).map((model, i) => {
+                    return (
+                      <MenuItem
+                        key={`model-${model}`}
+                        onClick={() => {
+                          app.setModel(model);
+                        }}
+                      >
+                        {app.models[model].name}
+                      </MenuItem>
+                    );
+                  })}
                 </MenuList>
               </Menu>
             </VStack>

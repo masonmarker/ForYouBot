@@ -189,6 +189,7 @@ const Message = (props) => {
                     // editing text
                     var title = "Editing message: ";
 
+                    
                     if (editingText.length > 20) {
                       title += editingText.substring(0, 20) + "...";
                     } else {

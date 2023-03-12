@@ -9,7 +9,7 @@
 import { useState, useRef } from "react";
 
 // pricing functions
-import { priceForTokens } from "../pricing/pricing";
+import { priceForTokens } from "../models/models";
 
 // Chakra components
 import {

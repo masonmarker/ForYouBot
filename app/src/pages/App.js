@@ -11,6 +11,9 @@
 import Prompt from '../components/Prompt'
 import Chat from '../components/Chat'
 
+// models as appmodels
+import models from '../models/models'
+
 // importing empty conversation
 import { emptyConversation } from '../messages/messages'
 
@@ -82,8 +85,11 @@ function App() {
   // is waiting for response
   const [waiting, setWaiting] = useState(false);
 
-  // state for bot model
-  const [model, setModel] = useState("davinci")  
+  // state for bot model, using first model in models for now
+  const [model, setModel] = useState(Object.keys(models)[0])  
+
+  // state for all models
+  const [allModels, setAllModels] = useState(models)
 
   // state for bot response contstraints
   const [constraints, setConstraints] = useState([
@@ -116,7 +122,11 @@ function App() {
     model: model,
     setModel: setModel,
     constraints: constraints,
-    setConstraints: setConstraints
+    setConstraints: setConstraints,
+
+    // models
+    models: allModels,
+    setModels: setAllModels
   }
 
 

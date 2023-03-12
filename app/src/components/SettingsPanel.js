@@ -9,8 +9,8 @@
 import { useRef, useState } from "react";
 
 // pricing functions
-import { tokensForString } from "./Prompt"
-import { priceForTokens } from "../pricing/pricing"
+import { tokensForString } from "./Prompt";
+import { priceForTokens } from "../models/models";
 
 // Chakra components
 import {
@@ -52,7 +52,6 @@ import {
   MenuOptionGroup,
   MenuIcon,
   MenuCommand,
-
   Divider,
 } from "@chakra-ui/react";
 
@@ -111,14 +110,10 @@ const SettingsPanel = () => {
             {/* Button for computing pricing */}
             <VStack>
               <Text>
-                Compute pricing for
-                a certain amount of
-                words / tokens given to and receieved
-                by an AI model.
+                Compute pricing for a certain amount of words / tokens given to
+                and receieved by an AI model.
               </Text>
-              <Button onClick={onOpenComputePricing}>
-                Compute Pricing
-              </Button>
+              <Button onClick={onOpenComputePricing}>Compute Pricing</Button>
             </VStack>
             <Divider />
           </ModalBody>
@@ -130,7 +125,6 @@ const SettingsPanel = () => {
             <Button variant="ghost" onClick={onOpenHelp}>
               Help
             </Button>
-
 
             {/* Help drawer */}
             <Drawer
@@ -172,22 +166,20 @@ const SettingsPanel = () => {
   );
 };
 
-
 // computing pricing component
 // contains a dropdown for a specific OpenAI model
-// includes a state for the selected model  
+// includes a state for the selected model
 // includes an Input for the number of words / tokens
 // includes a button to compute the price
 // includes a text box to display the price
 
 const ComputePricing = () => {
-
   // tokens for string state
   const [tfs, setTfs] = useState(0);
 
   // price for tokens state
   const [pft, setPft] = useState(0);
- 
+
   // reference for tokens for string input
   const tfsRef = useRef(null);
 
@@ -203,10 +195,13 @@ const ComputePricing = () => {
   }
 
   // async function to compute price for tokens
-  function computePriceForTokens() { 
+  function computePriceForTokens() {
     // set price state
-    setPft(Math.round(priceForTokens(
-      parseInt(pftRef.current.value), selectedModel) * 1000000) / 1000000);
+    setPft(
+      Math.round(
+        priceForTokens(parseInt(pftRef.current.value), selectedModel) * 1000000
+      ) / 1000000
+    );
   }
 
   return (
@@ -221,34 +216,35 @@ const ComputePricing = () => {
               onClick={() => {
                 setSelectedModel("davinci");
               }}
-            >davinci</MenuItem>
+            >
+              davinci
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 setSelectedModel("curie");
               }}
-            >curie</MenuItem>
+            >
+              curie
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 setSelectedModel("babbage");
               }}
-            >babbage</MenuItem>
+            >
+              babbage
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 setSelectedModel("ada");
               }}
-            >ada</MenuItem>
+            >
+              ada
+            </MenuItem>
           </MenuList>
         </Menu>
-
       </VStack>
 
-
-
-      <Grid
-        templateColumns="repeat(2, 1fr)"
-        gap="1rem"
-      >
-
+      <Grid templateColumns="repeat(2, 1fr)" gap="1rem">
         {/* Section for converting a string to tokens */}
         <GridItem>
           <VStack>
@@ -263,10 +259,9 @@ const ComputePricing = () => {
                   }
                 }}
               />
-              <Button
-                onClick={async () => 
-                  await computeTokensForString()}
-              >Convert</Button>
+              <Button onClick={async () => await computeTokensForString()}>
+                Convert
+              </Button>
             </HStack>
             <Text>Number of tokens: {tfs}</Text>
           </VStack>
@@ -286,16 +281,14 @@ const ComputePricing = () => {
                   }
                 }}
               />
-              <Button
-                onClick={computePriceForTokens}
-              >Convert</Button>
+              <Button onClick={computePriceForTokens}>Convert</Button>
             </HStack>
             <Text>Price: ${pft}</Text>
           </VStack>
         </GridItem>
       </Grid>
     </VStack>
-  )
-}
+  );
+};
 
 export default SettingsPanel;
