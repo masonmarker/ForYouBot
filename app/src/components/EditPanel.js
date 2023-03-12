@@ -99,7 +99,7 @@ const EditPanel = ({ app }) => {
                   {app.models[app.model].attributes.map((attribute, i) => {
                     return (
                       <ModelAttribute
-                        key={`attribute-${attribute}`}
+                        key={`attribute-${attribute}-${i}`} 
                         title={attribute[0]}
                         color={attribute[1]}
                       />

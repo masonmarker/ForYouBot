@@ -17,7 +17,6 @@ const models = {
     attributes: [
       ["Most Capable", "green"],
       ["Most Accurate", "green"],
-      ["Most Accurate", "green"],
       ["$$", "green"],
     ],
   },

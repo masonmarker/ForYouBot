@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 // create configuration
 const configuration = new Configuration({
     apiKey: process.env.openai,
+    
 });
 
 // create openai api from the account configuration
@@ -38,17 +39,17 @@ const port = process.env.PORT || 3080;
 // post to / a function to respond to the request
 app.post("/", async (req, res) => {
     const { model, prompt, max_tokens, temperature } = req.body;
+    console.log(model)
     const response = await openai.createCompletion({
         model: model,
         prompt: prompt,
-        max_tokens: max_tokens,
         temperature: temperature,
-        stop: ["\n--next--\n"],
     });
 
+ 
     res.status(200).json({
         success: true,
-        data: response.data.choices[0].text 
+        data: response.data.choices[0].text  
     })
 });
 

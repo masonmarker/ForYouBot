@@ -67,22 +67,10 @@ async function ask(chatLog, model) {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
+    path: "/v1/chat/completions", 
 
-    // manages the actual model name
-    // model: 'text-davinci-003' if model === 'davinci'
-    // model: 'text-curie-001' if model === 'curie'
-    // model: 'text-ada-001' if model === 'ada'
-    // model: 'text-babbage-001' if model === 'babbage'
-    // use ternary operator to manage this
     body: JSON.stringify({
-      model:
-        model === "davinci"
-          ? "text-davinci-003"
-          : model === "curie"
-          ? "text-curie-001"
-          : model === "ada"
-          ? "text-ada-001"
-          : "text-babbage-001",
+      model: model,
       prompt: chatLog,
 
       // 4096 for davinci
@@ -94,7 +82,7 @@ async function ask(chatLog, model) {
     }),
   })
     .then((response) => response.json())
-    .then((data) => data.data.trim());
+    .then((data) => data.data.trim()); 
 }
 
 // asks the tokenizer for OpenAI's
@@ -108,6 +96,8 @@ async function tokensForString(string) {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
+    path: "/v1/chat/completions", 
+
     body: JSON.stringify({
       string: string,
     }),
@@ -277,7 +267,7 @@ const Prompt = ({ app }) => {
       // obtain the bot's response to the prompt
       const botResponse = testing
         ? await testBotResponse()
-        : await ask(chatLog, app.model);
+        : await ask(chatLog, app.models[app.model].name);
 
       // add bot response to messages
       await app.stateAddBotMessage({
@@ -322,7 +312,7 @@ do not answer the question:
 ${chatLog}`;
 
           // retrieve title suggestion from api
-          var response = await ask(pr, app.model);
+          var response = await ask(pr, app.models[app.model].name);
 
           // update info
           await updateInfo(pr, response);
@@ -421,8 +411,4 @@ ${chatLog}`;
 };
 
 export default Prompt;
-export { 
-  getUserChatLog, 
-  ask, 
-  tokensForString
-};
+export { getUserChatLog, ask, tokensForString };
