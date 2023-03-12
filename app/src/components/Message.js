@@ -132,6 +132,7 @@ const Message = (props) => {
 
   // function to resubmit the message
   function handleResubmit() {
+    
     // set the input's value to the message
     document.getElementById("areaRef").value = props.message;
     
