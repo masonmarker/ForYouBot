@@ -60,6 +60,7 @@ const SidePanelStyled = styled.div`
 
 // Edit Bot modal
 const EditPanel = ({ app }) => {
+  
   // disclosure for displaying the modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 

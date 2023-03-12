@@ -7,7 +7,7 @@
  */
 
 // states
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 // Chakra components
 import {
@@ -18,6 +18,7 @@ import {
   HStack,
   Button,
   Input,
+  Textarea,
 
   // modal for viewing more information about the message
   Modal,
@@ -99,7 +100,7 @@ const MessageStyled = styled(Box)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 90%;
+    width: 80%;
     word-wrap: break-word;
     white-space: pre-wrap;
   }
@@ -129,12 +130,17 @@ const Message = (props) => {
   // useDisclosure for modal
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // disclosure for menu
-  const {
-    isOpen: isOpenMenu,
-    onOpen: onOpenMenu,
-    onClose: onCloseMenu,
-  } = useDisclosure();
+  // function to resubmit the message
+  function handleResubmit() {
+    // set the input's value to the message
+    document.getElementById("areaRef").value = props.message;
+    
+    // press the submit button
+    document.getElementById("submitRef").click();
+
+    // close the modal
+    onClose();
+  }
 
   return (
     <ScaleFade ref={ref} in={inView}>
@@ -166,23 +172,14 @@ const Message = (props) => {
           ) : (
             <pre className="msg-pre-text">{props.message}</pre>
           )}
-          {showCopy && (
+          {showCopy && props.from === "user" && (
             <HStack>
-              <CopyButton message={props.message} />
+              {/* <CopyButton message={props.message} /> */}
               <ScaleFade in={showCopy}>
-                <Button size="xs" variant="ghost">
+                <Button size="xs" variant="ghost" onClick={onOpen}>
                   <EditIcon />
                 </Button>
               </ScaleFade>
-              
-              <ScaleFade in={showCopy}>
-                <Button size="xs" variant="ghost">
-                  <InfoIcon onClick={onOpenMenu}/>
-                </Button>
-              </ScaleFade>
-
-
-
 
               {/* Edit Message modal */}
               <Modal isOpen={isOpen} onClose={onClose}>
@@ -191,28 +188,24 @@ const Message = (props) => {
                   <ModalHeader>Edit Message</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
-                    <Input />
+
+
+                    <Textarea defaultValue={props.message} onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleResubmit();
+                        e.stopPropagation();
+                      }
+                    }}/>
                   </ModalBody>
 
-                  <ModalFooter></ModalFooter>
+                  <ModalFooter>
+                    <Button colorScheme="purple" onClick={handleResubmit}>
+                      Resend
+                    </Button>
+                  </ModalFooter>
                 </ModalContent>
               </Modal>
-
-              {/* More Info modal */}
-              <Modal isOpen={isOpenMenu} onClose={onCloseMenu}>
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader>Message</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-
-                  </ModalBody>
-
-                  <ModalFooter></ModalFooter>
-                </ModalContent>
-              </Modal>
-
-
             </HStack>
           )}
         </HStack>

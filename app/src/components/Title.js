@@ -201,7 +201,7 @@ const Title = ({ app }) => {
         <ModalContent>
           <ModalHeader>
             <HStack gap="0.5rem">
-              <Text>Conversations</Text>
+              <Text userSelect="none">Conversations</Text>
 
               {/* Adding a conversation */}
               <Button

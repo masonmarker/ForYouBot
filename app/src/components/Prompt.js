@@ -33,7 +33,7 @@ import styled from "styled-components";
 const maxChars = 2000;
 
 // constraints separator
-const constraintSeparator = "##LIMITS##";
+const constraintSeparator = "##RESPONSE CONSTRAINTS##";
 // --------------------------------------- //
 
 // styled Prompt
@@ -141,20 +141,17 @@ ${prompt}
 you:
 ???
 
-fill in your ???
-
-${constraintSeparator}
-`;
+fill in your ???`;
   } else {
-    chatLog += `${prompt}
-
-${constraintSeparator}
-`;
+    chatLog += prompt;
   }
 
-  // add each elements from the constraints array to the chat log
-  for (let i = 0; i < constraints.length; i++) {
-    chatLog += constraints[i] + "\n";
+  if (constraints.length > 0) {
+    chatLog += "\n\n" + constraintSeparator + "\n";
+    // add each elements from the constraints array to the chat log
+    for (let i = 0; i < constraints.length; i++) {
+      chatLog += constraints[i] + "\n";
+    }
   }
 
   console.log(chatLog);
@@ -360,13 +357,14 @@ ${chatLog}`;
     <PromptStyled>
       <HStack className="inp">
         <Textarea
+          id="areaRef"
           ref={areaRef}
           resize="none"
           colorScheme="purple"
           className="area"
           placeholder="Write a complex prompt..."
           maxLength={maxChars}
-          onKeyPress={handleEnterPress}
+          onKeyDown={handleEnterPress}
           onChange={(e) => {
             const len = e.target.value.length;
 
@@ -387,6 +385,7 @@ ${chatLog}`;
           }}
         />
         <Button
+          id="submitRef"
           ref={submitRef}
           onClick={() => {
             addMessage(
@@ -422,4 +421,8 @@ ${chatLog}`;
 };
 
 export default Prompt;
-export { getUserChatLog, ask, tokensForString };
+export { 
+  getUserChatLog, 
+  ask, 
+  tokensForString
+};

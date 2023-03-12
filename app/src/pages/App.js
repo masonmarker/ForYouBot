@@ -87,8 +87,8 @@ function App() {
 
   // state for bot response contstraints
   const [constraints, setConstraints] = useState([
-    "-don't include you:",
-    "-minimum tokens"
+    // "-don't include you:",
+    // "-minimum tokens"
   ])
 
   // app information / states to pass as props
