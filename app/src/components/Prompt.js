@@ -96,8 +96,6 @@ async function tokensForString(string) {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
-    path: "/v1/chat/completions", 
-
     body: JSON.stringify({
       string: string,
     }),
