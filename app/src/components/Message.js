@@ -132,16 +132,15 @@ const Message = (props) => {
 
   // function to resubmit the message
   function handleResubmit() {
-    
     // set the input's value to the message
     document.getElementById("areaRef").value = props.message;
-    
-    // press the submit button
-    document.getElementById("submitRef").click();
 
     // close the modal
     onClose();
   }
+
+  // is editing toast
+  const toast = useToast();
 
   return (
     <ScaleFade ref={ref} in={inView}>
@@ -177,7 +176,35 @@ const Message = (props) => {
             <HStack>
               {/* <CopyButton message={props.message} /> */}
               <ScaleFade in={showCopy}>
-                <Button size="xs" variant="ghost" onClick={onOpen}>
+                <Button
+                  size="xs"
+                  variant="ghost"
+                  onClick={(e) => {
+                    // set the input's value to the message
+                    document.getElementById("areaRef").value = props.message;
+
+                    // copy the message
+                    var editingText = document.getElementById("areaRef").value;
+
+                    // editing text
+                    var title = "Editing message: ";
+
+                    if (editingText.length > 20) {
+                      title += editingText.substring(0, 20) + "...";
+                    } else {
+                      title += editingText;
+                    }
+
+
+                    // show toast
+                    toast({
+                      title: title,
+                      status: "info",
+                      duration: 2000,
+                      isClosable: true,
+                    });
+                  }}
+                >
                   <EditIcon />
                 </Button>
               </ScaleFade>
@@ -189,15 +216,7 @@ const Message = (props) => {
                   <ModalHeader>Edit Message</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
-
-
-                    <Textarea defaultValue={props.message} onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleResubmit();
-                        e.stopPropagation();
-                      }
-                    }}/>
+                    <Textarea defaultValue={props.message} />
                   </ModalBody>
 
                   <ModalFooter>
