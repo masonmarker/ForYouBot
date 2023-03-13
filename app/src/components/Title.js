@@ -212,7 +212,7 @@ const Title = ({ app }) => {
                 onClick={() => {
                   app.setConversations([
                     ...app.conversations,
-                    emptyConversation(app.userMessages, app.botMessages),
+                    emptyConversation([], []),
                   ]);
                 }}
               >
@@ -241,7 +241,7 @@ const Title = ({ app }) => {
 
           <ModalCloseButton />
           <ModalBody fontFamily={app.settings.font}>
-            <Convos app={app} />
+            <Convos app={app} onClose1={onClose} />
           </ModalBody>
           <ModalFooter fontFamily={app.settings.font}>
             <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
