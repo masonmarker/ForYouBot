@@ -38,6 +38,7 @@ import {
 // Chakra Chevron icon
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
+
 // styled SidePanel
 // should be permanently in the bottom right corner
 const SidePanelStyled = styled.div`
@@ -88,7 +89,7 @@ const EditPanel = ({ app }) => {
 
             {/* Selecting OpenAI model */}
             <VStack gap="1rem">
-              <VStack>
+              <VStack fontFamily={app.settings.font}>
                 <Text fontWeight="bold">Active Model</Text>
                 <Text fontSize="4rem" fontWeight="light">
                   {app.model}
@@ -99,18 +100,23 @@ const EditPanel = ({ app }) => {
                   {app.models[app.model].attributes.map((attribute, i) => {
                     return (
                       <ModelAttribute
-                        key={`attribute-${attribute}-${i}`} 
+                        key={`attribute-${attribute}-${i}`}
                         // verify attribute is not undefined
                         title={attribute[0]}
                         color={attribute[1]}
+                        font={app.settings.font}
                       />
                     );
                   })}
                 </HStack>
               </VStack>
               {/* Selecting model */}
-              <Menu>
-                <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+              <Menu fontFamily={app.settings.font}>
+                <MenuButton
+                  fontFamily={app.settings.font}
+                  as={Button}
+                  rightIcon={<ChevronDownIcon />}
+                >
                   Select Model
                 </MenuButton>
                 <MenuList>
@@ -118,6 +124,7 @@ const EditPanel = ({ app }) => {
                   {Object.keys(app.models).map((model, i) => {
                     return (
                       <MenuItem
+                        fontFamily={app.settings.font}
                         key={`model-${model}`}
                         onClick={() => {
                           app.setModel(model);
@@ -133,7 +140,7 @@ const EditPanel = ({ app }) => {
 
             <Divider marginBottom="1rem" marginTop="1rem" />
             <Text fontWeight="bold">Constraints</Text>
-            <VStack align="left">
+            <VStack fontFamily={app.settings.font} align="left">
               <Checkbox colorScheme={app.settings.accent}>Show work</Checkbox>
               <Checkbox colorScheme={app.settings.accent}>Answer only</Checkbox>
             </VStack>
@@ -142,7 +149,6 @@ const EditPanel = ({ app }) => {
             <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Customize Interface</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -151,9 +157,14 @@ const EditPanel = ({ app }) => {
 };
 
 // model attribute
-const ModelAttribute = ({ title, color }) => {
+const ModelAttribute = ({ title, color, font}) => {
   return (
-    <Button colorScheme={color} cursor="default" size="xs">
+    <Button
+      fontFamily={font}
+      colorScheme={color}
+      cursor="default"
+      size="xs"
+    >
       {title}
     </Button>
   );

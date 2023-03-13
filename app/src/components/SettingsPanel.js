@@ -98,6 +98,13 @@ const SettingsPanel = ({ app }) => {
     onClose: onCloseCustomizeInterface,
   } = useDisclosure();
 
+  // customize interface font state
+  const {
+    isOpen: isOpenCustomizeInterfaceFont,
+    onOpen: onOpenCustomizeInterfaceFont,
+    onClose: onCloseCustomizeInterfaceFont,
+  } = useDisclosure();
+
   const customizeColor = () => {};
 
   return (
@@ -139,10 +146,9 @@ const SettingsPanel = ({ app }) => {
                   <MenuItem onClick={onOpenCustomizeInterface}>
                     Interface Color
                   </MenuItem>
-                  <MenuItem>Interface Font</MenuItem>
-                  <MenuItem>Mark as Draft</MenuItem>
-                  <MenuItem>Delete</MenuItem>
-                  <MenuItem>Attend a Workshop</MenuItem>
+                  <MenuItem as={Button} onClick={onOpenCustomizeInterfaceFont}>
+                    Interface Font
+                  </MenuItem>
                 </MenuList>
               </Menu>
             </VStack>
@@ -200,7 +206,9 @@ const SettingsPanel = ({ app }) => {
                 <ModalCloseButton />
                 <ModalBody>
                   <VStack>
-                    <Button colorScheme={app.settings.accent}>Interface Color</Button>
+                    <Button colorScheme={app.settings.accent}>
+                      Interface Color
+                    </Button>
                     <ChakraGrid
                       templateColumns="repeat(3, 1fr)"
                       templateRows="repeat(3, 1fr)"
@@ -210,13 +218,62 @@ const SettingsPanel = ({ app }) => {
                         (color, i) => {
                           return (
                             <ChakraGridItem key={`color-id-${i}`}>
-                              <Button colorScheme={color} onClick={() => {
-                                app.settings.setAccent(color);
-                              }}></Button>
+                              <Button
+                                colorScheme={color}
+                                onClick={() => {
+                                  app.settings.setAccent(color);
+                                }}
+                              ></Button>
                             </ChakraGridItem>
                           );
                         }
                       )}
+                    </ChakraGrid>
+                  </VStack>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+            {/* Customize interface font modal */}
+            <Modal
+              isOpen={isOpenCustomizeInterfaceFont}
+              onClose={onCloseCustomizeInterfaceFont}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader fontFamily={app.settings.font}>
+                  Customize Interface Font
+                </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <VStack fontFamily={app.settings.font}>
+                    <Button colorScheme={app.settings.accent}>
+                      Interface Font
+                    </Button>
+                    <ChakraGrid
+                      templateColumns="repeat(3, 1fr)"
+                      templateRows="repeat(3, 1fr)"
+                      gap={1}
+                    >
+                      {[
+                        "san serif",
+                        "serif",
+                        "monospace",
+                        "cursive",
+                        "fantasy",
+                      ].map((font, i) => {
+                        return (
+                          <ChakraGridItem key={`font-id-${i}`}>
+                            <Button
+                              fontFamily={font}
+                              onClick={() => {
+                                app.settings.setFont(font);
+                              }}
+                            >
+                              {font}
+                            </Button>
+                          </ChakraGridItem>
+                        );
+                      })}
                     </ChakraGrid>
                   </VStack>
                 </ModalBody>

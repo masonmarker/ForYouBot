@@ -24,7 +24,9 @@ import { useState, useRef } from 'react'
 // Chakra components
 import {
   ChakraProvider,
-  Fade
+  Fade,
+  Box,
+ 
 } from "@chakra-ui/react"
 
 // intersection observer
@@ -37,7 +39,7 @@ import styled from 'styled-components'
 import { css } from '../common/common'
 
 // styled App
-const AppStyled = styled.div`
+const AppStyled = styled(Box)`
 
   /* put input on the bottom center of the screen */
   .inp {
@@ -100,6 +102,10 @@ function App() {
   // state for app settings accent color
   const [colorScheme, setcolorScheme] = useState("purple");
 
+
+  // state for app settings font
+  const [font, setFont] = useState("sans-serif");
+
   // app information / states to pass as props
   var app = {
 
@@ -134,8 +140,12 @@ function App() {
     // app settings 
     settings: {
       accent: colorScheme,
-      setAccent: setcolorScheme
+      setAccent: setcolorScheme,
+      font: font,
+      setFont: setFont
     },
+
+    
 
     // component references
     refs: {
@@ -149,7 +159,7 @@ function App() {
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
-        <AppStyled>
+        <AppStyled fontFamily = {app.settings.font}>
           <Prompt app={app} />
           <Chat app={app} />
         </AppStyled>
