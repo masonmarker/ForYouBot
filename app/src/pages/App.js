@@ -19,7 +19,7 @@ import { emptyConversation } from '../messages/messages'
 
 // states
 import { useMessages, useConversation } from '../messages/messages'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 // Chakra components
 import {
@@ -135,7 +135,14 @@ function App() {
     settings: {
       accent: colorScheme,
       setAccent: setcolorScheme
+    },
+
+    // component references
+    refs: {
+      areaRef: useRef(null),
+      submitRef: useRef(null)
     }
+
   }
 
 
