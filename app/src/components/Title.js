@@ -56,7 +56,7 @@ import { colors, css } from "../common/common";
 
 // styled Title
 // centered horizontally
-const TitleStyled = styled.div`
+const TitleStyled = styled(Box)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,16 +132,18 @@ const Title = ({ app }) => {
       onMouseLeave={() => setHover(false)}
       // on click, open modal for changing conversation
       onClick={onOpen}
-      backgroundColor={
-        colorMode === "light" ? colors.purple : colors.lighterPurple
-      }
-      backgroundColorHover={
-        colorMode === "light" ? colors.lightPurple : colors.purple
-      }
+      // backgroundColor={
+      //   colorMode === "light" ? colors.purple : colors.lighterPurple
+      // }
+      // backgroundColorHover={
+      //   colorMode === "light" ? colors.lightPurple : colors.purple
+      // }
+    //  colorScheme={app.settings.accent}
+      h="60px"
     >
       <Button
         className="color"
-        colorScheme="purple"
+        colorScheme={app.settings.accent}
         onClick={(e) => {
           toggleColorMode();
           e.stopPropagation();
@@ -151,7 +153,7 @@ const Title = ({ app }) => {
       </Button>
       <Button
         className="clear-conversation"
-        colorScheme="purple"
+        colorScheme= {app.settings.accent}
         onClick={(e) => {
           // copy of userMessages before clearing
           const userMessagesCopy = app.userMessages;
@@ -176,7 +178,7 @@ const Title = ({ app }) => {
       </Button>
       <HStack>
         <Text
-          color={colorMode === "light" ? "white" : "black"}
+          color={colorMode === 'light' ? 'black' : 'white'}
           id="current-convo"
         >
           {app.conversations[0]
@@ -184,7 +186,7 @@ const Title = ({ app }) => {
             : "New Conversation"}
         </Text>
         {hover && (
-          <ViewIcon color={colorMode === "light" ? "white" : "black"} />
+          <ViewIcon color={colorMode === "light" ? "black" : "white"} />
         )}
         {app.generating && (
           <Fade in={app.generating}>
@@ -205,7 +207,7 @@ const Title = ({ app }) => {
 
               {/* Adding a conversation */}
               <Button
-                colorScheme="purple"
+                colorScheme={app.settings.accent}
                 size="sm"
                 onClick={() => {
                   app.setConversations([
@@ -220,7 +222,7 @@ const Title = ({ app }) => {
               {/* Clearing all conversations */}
               {app.conversations?.length > 1 && (
                 <Button
-                  colorScheme="purple"
+                  colorScheme={app.settings.accent}
                   size="sm"
                   onClick={() => {
                     app.setConversations([emptyConversation([], [])]);
@@ -241,7 +243,7 @@ const Title = ({ app }) => {
             <Convos app={app} />
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="purple" mr={3} onClick={onClose}>
+            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>
@@ -250,7 +252,7 @@ const Title = ({ app }) => {
 
       <Box className="buttons">
         <EditPanel app={app} />
-        <SettingsPanel />
+        <SettingsPanel app={app}/>
       </Box>
     </TitleStyled>
   );

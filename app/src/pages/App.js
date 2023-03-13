@@ -97,6 +97,9 @@ function App() {
     // "-minimum tokens"
   ])
 
+  // state for app settings accent color
+  const [colorScheme, setcolorScheme] = useState("purple");
+
   // app information / states to pass as props
   var app = {
 
@@ -126,7 +129,13 @@ function App() {
 
     // models
     models: allModels,
-    setModels: setAllModels
+    setModels: setAllModels,
+
+    // app settings 
+    settings: {
+      accent: colorScheme,
+      setAccent: setcolorScheme
+    }
   }
 
 

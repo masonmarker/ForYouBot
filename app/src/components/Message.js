@@ -221,7 +221,7 @@ const Message = (props) => {
                   </ModalBody>
 
                   <ModalFooter>
-                    <Button colorScheme="purple" onClick={handleResubmit}>
+                    <Button colorScheme={props.accent} onClick={handleResubmit}>
                       Resend
                     </Button>
                   </ModalFooter>

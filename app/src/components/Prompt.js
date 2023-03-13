@@ -348,7 +348,7 @@ ${chatLog}`;
           id="areaRef"
           ref={areaRef}
           resize="none"
-          colorScheme="purple"
+          colorScheme={app.settings.accent}
           className="area"
           placeholder="Write a complex prompt..."
           maxLength={maxChars}
@@ -387,7 +387,7 @@ ${chatLog}`;
         </Button>
         {/* testing checkbox */}
         <Checkbox
-          colorScheme="purple"
+          colorScheme={app.settings.accent}
           defaultChecked
           onChange={(e) => {
             setTesting(e.target.checked);
