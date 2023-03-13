@@ -67,7 +67,6 @@ async function ask(chatLog, model) {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
-    path: "/v1/chat/completions", 
 
     body: JSON.stringify({
       model: model,
@@ -82,7 +81,7 @@ async function ask(chatLog, model) {
     }),
   })
     .then((response) => response.json())
-    .then((data) => data.data.trim()); 
+    .then((data) => data.data.trim());
 }
 
 // asks the tokenizer for OpenAI's
@@ -301,7 +300,7 @@ do not answer the question:
 ${chatLog}`;
 
           // retrieve title suggestion from api
-          var response = await ask(pr, app.models[app.model].name);
+          var response = await ask(pr, app.models.davinci.name);
 
           // update info
           await updateInfo(pr, response);

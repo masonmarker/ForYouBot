@@ -143,7 +143,6 @@ function App() {
       submitRef: useRef(null),
       charLimitRef: useRef(null),
     }
-
   }
 
 
