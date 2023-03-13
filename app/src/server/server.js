@@ -24,8 +24,7 @@ app.use(bodyParser.json());
 
 // create configuration
 const configuration = new Configuration({
-    apiKey: process.env.openai,
-    
+    apiKey: process.env.openai
 });
 
 // create openai api from the account configuration
