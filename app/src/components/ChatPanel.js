@@ -122,7 +122,7 @@ const ChatPanel = ({ app }) => {
                             return (
                                 <div key={`chat-div-${index}`}>
                                     <Message
-                                        accent={app.settings.accent}
+                                        app={app}
                                         key={`user-${index}`}
                                         message={message.message}
                                         from={message.from}
@@ -130,7 +130,7 @@ const ChatPanel = ({ app }) => {
                                     />
                                     {app.botMessages[index] && (
                                         <Message
-                                            accent={app.settings.accent}
+                                            app={app}
                                             key={`bot-${index}`}
                                             message={app.botMessages[index].message}
                                             from="bot"

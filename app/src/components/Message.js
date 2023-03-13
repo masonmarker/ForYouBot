@@ -133,7 +133,7 @@ const Message = (props) => {
   // function to resubmit the message
   function handleResubmit() {
     // set the input's value to the message
-    document.getElementById("areaRef").value = props.message;
+    props.app.refs.areaRef.current.value = props.message;
 
     // close the modal
     onClose();
@@ -181,10 +181,10 @@ const Message = (props) => {
                   variant="ghost"
                   onClick={(e) => {
                     // set the input's value to the message
-                    document.getElementById("areaRef").value = props.message;
+                    props.app.refs.areaRef.current.value = props.message;
 
                     // copy the message
-                    var editingText = document.getElementById("areaRef").value;
+                    var editingText = props.app.refs.areaRef.current.value;
 
                     // editing text
                     var title = "Editing message: ";
