@@ -23,8 +23,10 @@ app.use(cors());
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
+console.log(process.env.openai)
+
 // create configuration
-const configuration = new Configuration({
+const configuration = new Configuration({ 
     apiKey: process.env.openai,
 });
 
@@ -47,7 +49,7 @@ app.post("/", async (req, res) => {
 
     res.status(200).json({
         success: true,
-        data: response.data.choices[0].text 
+        data: response.data.choices[0].text
     })
 });
 
