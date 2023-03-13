@@ -76,7 +76,6 @@ async function ask(chatLog, model) {
       // 2048 for curie
       // 2048 for ada
       // 2048 for babbage
-      max_tokens: 1000,
       temperature: 0.5,
     }),
   })
@@ -278,50 +277,50 @@ const Prompt = ({ app }) => {
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-      if (app.userMessages.length === 0 && !app.conversations[0].wasRenamed) {
-        app.setGenerating(true);
-        var newConversations = app.conversations;
-        console.log("adding title");
+//       if (app.userMessages.length === 0 && !app.conversations[0].wasRenamed) {
+//         app.setGenerating(true);
+//         var newConversations = app.conversations;
+//         console.log("adding title");
 
-        // if testing
-        if (testing) {
-          // set the name of the conversation
-          newConversations[0].name = await testResponse();
+//         // if testing
+//         if (testing) {
+//           // set the name of the conversation
+//           newConversations[0].name = await testResponse();
 
-          // setting conversations again so info can be updated
-          app.setConversations(newConversations);
+//           // setting conversations again so info can be updated
+//           app.setConversations(newConversations);
 
-          // update the conversations info
-          await updateInfo(chatLog, newConversations[0].name);
-        } else {
-          var pr = `
-create a title for the below context, one sentence, 8 words or less, and
-do not answer the question:
-${chatLog}`;
+//           // update the conversations info
+//           await updateInfo(chatLog, newConversations[0].name);
+//         } else {
+//           var pr = `
+// create a title for the below context, one sentence, 8 words or less, and
+// do not answer the question:
+// ${chatLog}`;
 
-          // retrieve title suggestion from api
-          var response = await ask(pr, app.models.davinci.name);
+//           // retrieve title suggestion from api
+//           var response = await ask(pr, app.models.davinci.name);
 
-          // update info
-          await updateInfo(pr, response);
+//           // update info
+//           await updateInfo(pr, response);
 
-          // remove surrounding quotations, if they exist
-          if (
-            (response[0] === '"' && response[response.length - 1] === '"') ||
-            (response[0] === "'" && response[response.length - 1] === "'") ||
-            (response[0] === "`" && response[response.length - 1] === "`") ||
-            (response[0] === "“" && response[response.length - 1] === "”") ||
-            (response[0] === "‘" && response[response.length - 1] === "’")
-          ) {
-            response = response.substring(1, response.length - 1);
-          }
+//           // remove surrounding quotations, if they exist
+//           if (
+//             (response[0] === '"' && response[response.length - 1] === '"') ||
+//             (response[0] === "'" && response[response.length - 1] === "'") ||
+//             (response[0] === "`" && response[response.length - 1] === "`") ||
+//             (response[0] === "“" && response[response.length - 1] === "”") ||
+//             (response[0] === "‘" && response[response.length - 1] === "’")
+//           ) {
+//             response = response.substring(1, response.length - 1);
+//           }
 
-          // set conversation name to the response
-          newConversations[0].name = response;
-        }
-        app.setConversations(newConversations);
-        app.setGenerating(false);
-      }
+//           // set conversation name to the response
+//           newConversations[0].name = response;
+//         }
+//         app.setConversations(newConversations);
+//         app.setGenerating(false);
+//       }
 
       // update info
       await updateInfo(chatLog, botResponse);

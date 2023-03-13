@@ -192,7 +192,6 @@ const Title = ({ app }) => {
           <Fade in={app.generating}>
             <Spinner
               thickness="4px"
-              color={colorMode === "light" ? "white" : "black"}
             />
           </Fade>
         )}
