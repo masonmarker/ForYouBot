@@ -11,9 +11,15 @@
 import Prompt from '../components/Prompt'
 import Chat from '../components/Chat'
 
+// models as appmodels
+import models from '../models/models'
+
+// importing empty conversation
+import { emptyConversation } from '../messages/messages'
+
 // states
 import { useMessages, useConversation } from '../messages/messages'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 // Chakra components
 import {
@@ -57,23 +63,21 @@ function App() {
   });
 
   // messages state
-  const { 
-    
+  const {
+
     // messages
-    userMessages, 
-    stateAddMessage, 
-    stateAddBotMessage, 
+    userMessages,
+    stateAddMessage,
+    stateAddBotMessage,
     botMessages,
     setUserMessages,
     setBotMessages
   } = useMessages()
 
   // conversations state with initial messages
-  const { conversations, setConversations } = useConversation([{
-    name: 'New Conversation',
-    user: userMessages,
-    bot: botMessages 
-  }])
+  const { conversations, setConversations } = useConversation([
+    emptyConversation(userMessages, botMessages)
+  ])
 
   // state for generating
   const [generating, setGenerating] = useState(false)
@@ -81,46 +85,73 @@ function App() {
   // is waiting for response
   const [waiting, setWaiting] = useState(false);
 
+  // state for bot model, using first model in models for now
+  const [model, setModel] = useState("davinci")
+
+  // state for all models
+  const [allModels, setAllModels] = useState(models)
+
   // state for bot response contstraints
   const [constraints, setConstraints] = useState([
-    "- don't include 'ChatGPT:'",
-    "- use the least amount of words possible"
+    // "-don't include you:",
+    // "-minimum tokens"
   ])
+
+  // state for app settings accent color
+  const [colorScheme, setcolorScheme] = useState("purple");
+
+  // app information / states to pass as props
+  var app = {
+
+    // conversations / messages
+    userMessages: userMessages,
+    stateAddMessage: stateAddMessage,
+    stateAddBotMessage: stateAddBotMessage,
+    botMessages: botMessages,
+    setUserMessages: setUserMessages,
+    setBotMessages: setBotMessages,
+    conversations: conversations,
+    setConversations: setConversations,
+
+    // generating conversation title
+    generating: generating,
+    setGenerating: setGenerating,
+
+    // waiting for bot response
+    waiting: waiting,
+    setWaiting: setWaiting,
+
+    // bot information
+    model: model,
+    setModel: setModel,
+    constraints: constraints,
+    setConstraints: setConstraints,
+
+    // models
+    models: allModels,
+    setModels: setAllModels,
+
+    // app settings 
+    settings: {
+      accent: colorScheme,
+      setAccent: setcolorScheme
+    },
+
+    // component references
+    refs: {
+      areaRef: useRef(null),
+      submitRef: useRef(null),
+      charLimitRef: useRef(null),
+    }
+  }
+
 
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
-          <Prompt
-
-            // message / conversation states
-            userMessages={userMessages}
-            botMessages={botMessages}
-            stateAddMessage={stateAddMessage}
-            stateAddBotMessage={stateAddBotMessage}
-            conversations={conversations}
-            setConversations={setConversations}
-            generating={generating}
-            setGenerating={setGenerating}
-            waiting={waiting}
-            setWaiting={setWaiting}
-
-            // constraints
-            constraints={constraints}
-            setConstraints={setConstraints}
-          />
-          <Chat 
-            messages={userMessages} 
-            botmessages={botMessages} 
-            setUserMessages={setUserMessages}
-            setBotMessages={setBotMessages}
-            conversations={conversations} 
-            setConversations={setConversations}
-            generating={generating}
-            setGenerating={setGenerating}
-            waiting={waiting}
-            setWaiting={setWaiting}
-          />
+          <Prompt app={app} />
+          <Chat app={app} />
         </AppStyled>
       </Fade>
     </ChakraProvider>

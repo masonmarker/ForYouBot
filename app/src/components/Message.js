@@ -7,7 +7,7 @@
  */
 
 // states
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 // Chakra components
 import {
@@ -18,18 +18,36 @@ import {
   HStack,
   Button,
   Input,
+  Textarea,
 
   // modal for viewing more information about the message
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
 
-  // Fading
+  // menu
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+
+  // fading
   ScaleFade,
+
+  // states
+  useDisclosure,
 } from "@chakra-ui/react";
 
 // intersection observer
 import { useInView } from "react-intersection-observer";
 
 // Chakra icons
-import { CopyIcon } from "@chakra-ui/icons";
+import { CopyIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -82,7 +100,7 @@ const MessageStyled = styled(Box)`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 90%;
+    width: 80%;
     word-wrap: break-word;
     white-space: pre-wrap;
   }
@@ -109,14 +127,25 @@ const Message = (props) => {
     threshold: 0,
   });
 
+  // useDisclosure for modal
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // function to resubmit the message
+  function handleResubmit() {
+    // set the input's value to the message
+    props.app.refs.areaRef.current.value = props.message;
+
+    // close the modal
+    onClose();
+  }
+
+  // is editing toast
+  const toast = useToast();
+
   return (
     <ScaleFade ref={ref} in={inView}>
       <MessageStyled
         borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
-        _hover={{
-          backgroundColor: colorMode === "light" ? colors.gray : "#4B4D52",
-          cursor: "pointer",
-        }}
         // states for displaying the copy button
         onMouseOver={() => setShowCopy(true)}
         onMouseLeave={() => setShowCopy(false)}
@@ -138,17 +167,70 @@ const Message = (props) => {
       >
         {/* message box */}
         <HStack w="100%" minHeight="2rem">
-          {edit ?
+          {edit ? (
             <Input id="input" />
-            :
+          ) : (
             <pre className="msg-pre-text">{props.message}</pre>
-          }
+          )}
           {showCopy && (
             <HStack>
-              <CopyButton message={props.message} />
+              {/* <CopyButton message={props.message} /> */}
+              <ScaleFade in={showCopy}>
+                <Button
+                  size="xs"
+                  variant="ghost"
+                  onClick={(e) => {
+                    // set the input's value to the message
+                    props.app.refs.areaRef.current.value = props.message;
+
+                    // copy the message
+                    var editingText = props.app.refs.areaRef.current.value;
+
+                    // editing text
+                    var title = "Editing message: ";
+
+                    
+                    if (editingText.length > 20) {
+                      title += editingText.substring(0, 20) + "...";
+                    } else {
+                      title += editingText;
+                    }
+
+
+                    // show toast
+                    toast({
+                      title: title,
+                      status: "info",
+                      duration: 2000,
+                      isClosable: true,
+                    });
+                  }}
+                >
+                  <EditIcon />
+                </Button>
+              </ScaleFade>
+
+              {/* Edit Message modal */}
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader>Edit Message</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Textarea defaultValue={props.message} />
+                  </ModalBody>
+
+                  <ModalFooter>
+                    <Button colorScheme={props.accent} onClick={handleResubmit}>
+                      Resend
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </HStack>
           )}
         </HStack>
+
         {/* end of message box */}
       </MessageStyled>
     </ScaleFade>
@@ -179,6 +261,11 @@ const CopyButton = (props) => {
             duration: 2000,
             isClosable: true,
           });
+          e.stopPropagation();
+        }}
+        // on right click, show a chakra menu with options to copy, edit, delete
+        onContextMenu={(e) => {
+          e.preventDefault();
           e.stopPropagation();
         }}
       >

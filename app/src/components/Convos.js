@@ -7,17 +7,29 @@
  */
 
 // React
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+
 
 // Chakra components
 import {
     Box,
     Button,
+    Divider,
     HStack,
     VStack,
     Text,
     ScaleFade,
     Input,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+
+    useDisclosure,
+
 } from "@chakra-ui/react"
 
 // Check icon
@@ -43,7 +55,6 @@ const ConvoStyled = styled(VStack)`
     border-radius: 5px;
     margin: 5px 0;
     padding: 5px;
-    cursor: pointer;
 
     .title {
         font-size: 1.2rem;
@@ -54,20 +65,7 @@ const ConvoStyled = styled(VStack)`
 `
 
 // Convos component
-const Convos = ({
-    conversations,
-    setConversations,
-    userMessages,
-    botMessages,
-    setUserMessages,
-    setBotMessages,
-    onClose
-}) => {
-
-    // use intersection observer
-    const [ref, inView] = useInView({
-        threshold: 0,
-    })
+const Convos = ({ app }) => {
 
     // are you sure state (conversation removal)
     const [areYouSure, setAreYouSure] = useState(false)
@@ -75,74 +73,130 @@ const Convos = ({
     // renaming index state
     const [renameIndex, setRenameIndex] = useState(null)
 
+    //modal state use disclosure
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    // states for displaying more of each individual conversation
+    const [moreConversation, setMoreConversation] = useState(-1)
+
+    // input value state
+    const [inputValue, setInputValue] = useState('') // input value state
+
+    // enter button reference
+    const enterButtonRef = useRef() // button ref
+
+    // rename input reference
+    const renameInput = useRef(null)
+
+    function handleKeyDown(e) {
+        if (e.key === 'Enter') {
+            enterButtonRef.current.click()
+        }
+    }
+
     // conversations format:
     // conversations[0].user[0] = {date: from: message:}
 
     return (
         <Box>
-            {conversations[0]
-                ? conversations?.map((convo, index) => (
-                    <ScaleFade in={inView} ref={ref} key={`convo-${index}`}>
+            {app.conversations[0]
+                ? app.conversations?.map((convo, index) => (
+                    <ScaleFade in={1} key={`convo-${index}`}>
                         <ConvoStyled key={`convo-${index}`}>
                             <Text className="title">{convo.name}</Text>
+                            {index === 0 &&
+                                <Button
+                                    colorScheme={app.settings.accent}
+                                    size="xs"
+                                    cursor="default"
+                                >
+                                    Currently Open</Button>
+                            }
                             <HStack>
 
                                 {/* Sets this conversation to the current conversation */}
                                 <Button onClick={() => {
 
                                     // switch the current conversation to the selected conversation
-                                    const currentConversation = conversations[0]
-                                    const newConversations = conversations
+                                    const currentConversation = app.conversations[0]
+                                    const newConversations = app.conversations
                                     newConversations[0] = convo
                                     newConversations[index] = currentConversation
-                                    setConversations(newConversations)
-                                    setUserMessages(convo.user)
-                                    setBotMessages(convo.bot)
+                                    app.setConversations(newConversations)
+                                    app.setUserMessages(convo.user)
+                                    app.setBotMessages(convo.bot)
 
                                     // close the model  
-                                    onClose()
-
+                                    // onClose1()
                                 }}>
                                     Open
                                 </Button>
 
                                 {/* Rename this conversation */}
-                                <Button index={index} onClick={(e) => {
+                                <Button onClick={(e) => {
 
-                                    // get the index of the rendering conversation
-                                    const index = e.target.getAttribute("index")
+                                    onOpen()
 
-                                    // if areYouSure is true, then the user is renaming the conversation
-                                    setAreYouSure(!areYouSure)
-
-                                    // set the renaming index
-                                    setRenameIndex(index)
-
-                                    console.log(renameIndex)
-                                }}>
-                                    {areYouSure && renameIndex === index ?
-                                        "Cancel Rename" : "Rename"}
+                                }}> Rename
                                 </Button>
+                                <Modal isOpen={isOpen} onClose={onClose}>
+                                    <ModalOverlay />
+                                    <ModalContent>
+                                        <ModalHeader>{app.conversations[index].name}</ModalHeader>
+                                        <ModalCloseButton />
+                                        <ModalBody>
+                                            <Input
+                                                ref={renameInput}
+                                                value={inputValue}
+                                                onChange={(event) => setInputValue(event.target.value)}
+                                                onKeyDown={handleKeyDown}
+                                                placeholder="New name"
+                                            />
+                                        </ModalBody>
+
+                                        <ModalFooter>
+                                            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
+                                                Close
+                                            </Button>
+                                            <Button variant="ghost" ref={enterButtonRef} onClick={
+                                                () => {
+                                                    const newConversations = app.conversations
+                                                    newConversations[index].name = renameInput.current.value
+                                                    newConversations[index].wasRenamed = true
+                                                    app.setConversations(newConversations)
+                                                    onClose()
+                                                }}>Submit</Button>
+                                        </ModalFooter>
+                                    </ModalContent>
+
+                                </Modal>
 
                                 {/* Preview this conversation */}
                                 <Button>
                                     Preview
                                 </Button>
 
+                                {/* Viewing information for the current conversation */}
+                                <Button onClick={() => {
+                                    setMoreConversation(moreConversation === index ? -1 : index)
+                                }}>
+                                    {moreConversation === index ? 'Close' : 'More'}
+                                </Button>
+
                                 {/* Remove the conversation */}
-                                {conversations?.length > 1 && <Button onClick={() => {
+                                {app.conversations?.length > 1 && <Button onClick={() => {
 
                                     // remove the conversation from the conversations array
-                                    const newConversations = conversations
+                                    const newConversations = app.conversations
                                     newConversations.splice(index, 1)
-                                    setConversations(newConversations)
+                                    app.setConversations(newConversations)
 
                                     // reset the current conversation to the user's messages
-                                    setUserMessages(newConversations[0].user)
-                                    setBotMessages(newConversations[0].bot)
+                                    app.setUserMessages(newConversations[0].user)
+                                    app.setBotMessages(newConversations[0].bot)
 
                                     // close the model
-                                    onClose()
+                                    // onClose1()
                                 }}>
                                     Remove
                                 </Button>}
@@ -159,6 +213,21 @@ const Convos = ({
                                     </Button>
                                 </HStack>
                             }
+                            {/* displaying more about the conversation requested */}
+                            {moreConversation === index &&
+                                <ScaleFade in={1}>
+                                    <VStack>
+                                        <Divider />
+                                        <Text>User Tokens: {app.conversations[moreConversation].info.userTokens}</Text>
+                                        <Text>User Expenses: ${app.conversations[moreConversation].info.userExpenses}</Text>
+                                        <Divider />
+                                        <Text>Bot Tokens: {app.conversations[moreConversation].info.botTokens}</Text>
+                                        <Text>Bot Expenses: ${app.conversations[moreConversation].info.botExpenses}</Text>
+                                        <Divider />
+                                    </VStack>
+                                </ScaleFade>
+                            }
+
 
 
                         </ConvoStyled>
@@ -167,7 +236,35 @@ const Convos = ({
                 )) :
                 <Text>No conversations</Text>
             }
+
         </Box>
+    )
+}
+
+// modal for displaying more information about a conversation
+const MoreModal = ({
+    isMoreOpen,
+    onMoreClose,
+    conversation,
+    app
+}) => {
+
+    return (
+        <Modal isOpen={isMoreOpen} onClose={onMoreClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>{conversation.name}</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Text>{JSON.stringify(conversation.info)}</Text>
+                </ModalBody>
+                <ModalFooter>
+                    <Button colorScheme={app.settings.accent} mr={3} onClick={onMoreClose}>
+                        Close
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     )
 }
 

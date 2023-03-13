@@ -58,4 +58,25 @@ function useConversation(initial) {
     }
 }
 
-export { useMessages, useConversation };
+// creates an empty conversation
+// info field contains fields regarding 
+// token information and expense information
+// based on the functions in pricing.js
+function emptyConversation(userMessages, botMessages) {
+    return {
+        name: 'New Conversation',
+        wasRenamed: false,
+        user: userMessages,
+        bot: botMessages,
+
+        // token usage / expenses so far
+        info: {
+            userTokens: 0,
+            botTokens: 0,
+            userExpenses: 0,
+            botExpenses: 0,
+        }
+    }
+}
+
+export { useMessages, useConversation, emptyConversation };

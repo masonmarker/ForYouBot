@@ -8,11 +8,14 @@
 // React
 import { useState, useRef } from "react";
 
+// pricing functions
+import { priceForTokens } from "../models/models";
+
 // Chakra components
 import {
   Button,
   Textarea,
-  Text, 
+  Text,
   HStack,
   Spinner,
   Checkbox,
@@ -25,8 +28,13 @@ import { ArrowForwardIcon } from "@chakra-ui/icons";
 // styled components
 import styled from "styled-components";
 
+// ----------- Prompt Variables ----------- //
 // max characters permitted in a single prompt
 const maxChars = 2000;
+
+// constraints separator
+const constraintSeparator = "##RESPONSE CONSTRAINTS##";
+// --------------------------------------- //
 
 // styled Prompt
 const PromptStyled = styled.div`
@@ -50,15 +58,24 @@ const PromptStyled = styled.div`
   }
 `;
 
-async function ask(chatLog) {
+// asks the OpenAI API for a response
+// based on a specific model
+async function ask(chatLog, model) {
   return await fetch("http://localhost:3080", {
-    method: "POST", 
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
     },
+
     body: JSON.stringify({
-      model: "text-davinci-003",
+      model: model,
       prompt: chatLog,
+
+      // 4096 for davinci
+      // 2048 for curie
+      // 2048 for ada
+      // 2048 for babbage
       max_tokens: 1000,
       temperature: 0.5,
     }),
@@ -67,19 +84,37 @@ async function ask(chatLog) {
     .then((data) => data.data.trim());
 }
 
+// asks the tokenizer for OpenAI's
+// token count for a given prompt.
+// this token count is used to calculate
+// the exact price of a request
+async function tokensForString(string) {
+  return await fetch("http://localhost:3080/tokenizer", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({
+      string: string,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => data.data);
+}
+
 // gets a string representation of the user's chat log
 function getUserChatLog(userMessages, botMessages, constraints, prompt) {
-
   // separator between message exchanges
   // const sep = "\n--next--\n";
 
   // string representation of the chat log context
-  var chatLog = ""
+  var chatLog = "";
 
   // add each message exchange to the chat log
   for (let i = 0; i < userMessages.length; i++) {
-    chatLog += "user:" + userMessages[i].message + "\n";
-    chatLog += "ChatGPT:" + botMessages[i].message + "\n";
+    chatLog += "user:\n" + userMessages[i].message + "\n";
+    chatLog += "you:\n" + botMessages[i].message + "\n";
     // if (i < userMessages.length - 1) {
     //   chatLog += sep;
     // }
@@ -88,20 +123,22 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
   // if there are messages in the chat log, add the context footer
   if (userMessages.length > 0) {
     chatLog += `
-user: ${prompt}
-ChatGPT: ???
-
-fill in ChatGPT's ??? given the following constraints:`
-  } else {
-    chatLog += `
+user: 
 ${prompt}
-respond given the following constraints:`;
+you:
+???
+
+fill in your ???`;
+  } else {
+    chatLog += prompt;
   }
 
-  // add each elements from the constraints array to the chat log
-  chatLog += "\n";
-  for (let i = 0; i < constraints.length; i++) {
-    chatLog += constraints[i] + "\n";
+  if (constraints.length > 0) {
+    chatLog += "\n\n" + constraintSeparator + "\n";
+    // add each elements from the constraints array to the chat log
+    for (let i = 0; i < constraints.length; i++) {
+      chatLog += constraints[i] + "\n";
+    }
   }
 
   console.log(chatLog);
@@ -116,42 +153,19 @@ respond given the following constraints:`;
 //               : messageID
 // when the enter key is pressed (without shift being held)
 // or when the submit button is pressed should the request go through
-const Prompt = ({
-  userMessages,
-  botMessages,
-  stateAddMessage,
-  stateAddBotMessage,
-  conversations,
-  setConversations,
-  generating,
-  setGenerating,
-  waiting,
-  setWaiting,
-
-  constraints,
-  setConstraints
-}) => {
+const Prompt = ({ app }) => {
   // get color mode
   const { colorMode } = useColorMode();
 
   // is testing
   const [testing, setTesting] = useState(true);
 
-  // ref for charlimit
-  const charLimitRef = useRef(null);
-
-  // ref for submit button
-  const submitRef = useRef(null);
-
-  // ref for input area
-  const areaRef = useRef(null);
-
   // handle enter press
   // should not execute if shift is also being held
   function handleEnterPress(e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      submitRef.current.click();
+      app.refs.submitRef.current.click();
     }
   }
 
@@ -168,95 +182,152 @@ const Prompt = ({
     await new Promise((resolve) => setTimeout(resolve, 750));
     return "This is a test title.";
   }
+
+  // updates the current conversation's tokens and expenses
+  async function updateInfo(userPrompt, botResponse) {
+    // compute tokens for user prompt and bot response
+    const userTokens = await tokensForString(userPrompt);
+    const botTokens = await tokensForString(botResponse);
+
+    // compute pricing for the tokens based on the current model
+    var userExpenses = priceForTokens(userTokens, app.model);
+    var botExpenses = priceForTokens(botTokens, app.model);
+
+    // round expenses to 6 decimal places
+    userExpenses = Math.round(userExpenses * 1000000) / 1000000;
+    botExpenses = Math.round(botExpenses * 1000000) / 1000000;
+
+    // increment current conversation's tokens and expenses
+    var newConversations = [...app.conversations];
+
+    // add the information
+    newConversations[0].info = {
+      botTokens: newConversations[0].info.botTokens + botTokens,
+      botExpenses: newConversations[0].info.botExpenses + botExpenses,
+      userTokens: newConversations[0].info.userTokens + userTokens,
+      userExpenses: newConversations[0].info.userExpenses + userExpenses,
+    };
+
+    // set conversations
+    app.setConversations(newConversations);
+  }
+
   // add message to messages
   async function addMessage(date, from, prompt) {
     // if prompt exists, add it to messages
     if (prompt.length > 0) {
       // add message to messages
-      await stateAddMessage({
+      await app.stateAddMessage({
         date: date,
         from: from,
         message: prompt,
       });
       // area
-      const area = areaRef.current;
+      const area = app.refs.areaRef.current;
 
       // clear prompt
       area.value = "";
 
       // reset character limit ref
-      charLimitRef.current.innerHTML = `0/${maxChars}`;
+      app.refs.charLimitRef.current.innerHTML = `0/${maxChars}`;
 
       // reset character limit color
-      charLimitRef.current.style.color =
+      app.refs.charLimitRef.current.style.color =
         colorMode === "light" ? "black" : "white";
 
       // disable prompt
       area.disabled = true;
 
       // disable submit button
-      submitRef.current.disabled = true;
+      app.refs.submitRef.current.disabled = true;
 
       // set waiting to true
-      setWaiting(true);
+      app.setWaiting(true);
 
       // get chat log
-      const chatLog = getUserChatLog(userMessages, botMessages, constraints, prompt);
+      const chatLog = getUserChatLog(
+        app.userMessages,
+        app.botMessages,
+        app.constraints,
+        prompt
+      );
+
+      // obtain the bot's response to the prompt
+      const botResponse = testing
+        ? await testBotResponse()
+        : await ask(chatLog, app.models[app.model].name);
 
       // add bot response to messages
-      await stateAddBotMessage({
+      await app.stateAddBotMessage({
         date: new Date().toLocaleTimeString(),
         from: "bot",
-        message: testing ?
-          await testBotResponse()
-          :
-          await ask(chatLog),
+        message: botResponse,
       });
 
-      // set waiting to false
-      setWaiting(false);
-
       // enable prompt
-      areaRef.current.disabled = false;
+      app.refs.areaRef.current.disabled = false;
 
       // enable submit button
-      submitRef.current.disabled = false;
+      app.refs.submitRef.current.disabled = false;
+
+      // set waiting to false
+      app.setWaiting(false);
 
       // check if the user has sent a single message
       // in this conversation,
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-      if (userMessages.length === 0) {
-        setGenerating(true);
-        var newConversations = conversations;
+      if (app.userMessages.length === 0 && !app.conversations[0].wasRenamed) {
+        app.setGenerating(true);
+        var newConversations = app.conversations;
         console.log("adding title");
 
+        // if testing
         if (testing) {
+          // set the name of the conversation
           newConversations[0].name = await testResponse();
+
+          // setting conversations again so info can be updated
+          app.setConversations(newConversations);
+
+          // update the conversations info
+          await updateInfo(chatLog, newConversations[0].name);
         } else {
+          var pr = `
+create a title for the below context, one sentence, 8 words or less, and
+do not answer the question:
+${chatLog}`;
 
           // retrieve title suggestion from api
-          var response = await ask(`
-          create a title for the below context in one sentence, 8 words or less, and
-          do not answer the question:
-          ${chatLog}
-          `);
+          var response = await ask(pr, app.models.davinci.name);
+
+          // update info
+          await updateInfo(pr, response);
 
           // remove surrounding quotations, if they exist
-          if ((response[0] === '"' && response[response.length - 1] === '"') ||
+          if (
+            (response[0] === '"' && response[response.length - 1] === '"') ||
             (response[0] === "'" && response[response.length - 1] === "'") ||
             (response[0] === "`" && response[response.length - 1] === "`") ||
             (response[0] === "“" && response[response.length - 1] === "”") ||
-            (response[0] === "‘" && response[response.length - 1] === "’")) {
+            (response[0] === "‘" && response[response.length - 1] === "’")
+          ) {
             response = response.substring(1, response.length - 1);
           }
 
-          newConversations[0].name = response
+          // set conversation name to the response
+          newConversations[0].name = response;
         }
-        setConversations(newConversations);
-        setGenerating(false);
+        app.setConversations(newConversations);
+        app.setGenerating(false);
       }
+
+      // update info
+      await updateInfo(chatLog, botResponse);
+
+      // refocus on the input area
+      app.refs.areaRef.current.focus();
     }
   }
 
@@ -264,21 +335,22 @@ const Prompt = ({
     <PromptStyled>
       <HStack className="inp">
         <Textarea
-          ref={areaRef}
-          colorScheme="purple"
+          id="areaRef"
+          ref={app.refs.areaRef}
+          resize="none"
+          colorScheme={app.settings.accent}
           className="area"
           placeholder="Write a complex prompt..."
           maxLength={maxChars}
-          onKeyPress={handleEnterPress}
+          onKeyDown={handleEnterPress}
           onChange={(e) => {
             const len = e.target.value.length;
 
             // character limit component
-            const comp = charLimitRef.current;
+            const comp = app.refs.charLimitRef.current;
 
             // set the character limit
             comp.innerHTML = len + `/${maxChars}`;
-
 
             // if the length is greater than the max
             if (len >= maxChars) {
@@ -291,20 +363,21 @@ const Prompt = ({
           }}
         />
         <Button
-          ref={submitRef}
+          id="submitRef"
+          ref={app.refs.submitRef}
           onClick={() => {
             addMessage(
               new Date().toLocaleTimeString(),
               "user",
-              areaRef.current.value
+              app.refs.areaRef.current.value
             );
           }}
         >
-          {waiting ? <Spinner /> : <ArrowForwardIcon />}
+          {app.waiting ? <Spinner /> : <ArrowForwardIcon />}
         </Button>
         {/* testing checkbox */}
         <Checkbox
-          colorScheme="purple"
+          colorScheme={app.settings.accent}
           defaultChecked
           onChange={(e) => {
             setTesting(e.target.checked);
@@ -316,7 +389,7 @@ const Prompt = ({
 
       <Text
         color={colorMode === "light" ? "black" : "white"}
-        ref={charLimitRef}
+        ref={app.refs.charLimitRef}
         className="limtext"
       >
         0/{maxChars}
@@ -326,4 +399,4 @@ const Prompt = ({
 };
 
 export default Prompt;
-export { getUserChatLog, ask };
+export { getUserChatLog, ask, tokensForString };

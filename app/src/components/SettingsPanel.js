@@ -8,18 +8,21 @@
 // React
 import { useRef, useState } from "react";
 
-// pricing
-import { tokensForWords, wordsForTokens } from "../pricing/pricing";
+// pricing functions
+import { tokensForString } from "./Prompt";
+import { priceForTokens } from "../models/models";
 
 // Chakra components
 import {
-  Box,
   Text,
   VStack,
   HStack,
   Button,
   Input,
 
+  // grid components
+  Grid,
+  GridItem,
 
   // Drawer
   Drawer,
@@ -40,17 +43,34 @@ import {
   ModalBody,
   ModalCloseButton,
 
+  // Dropdown
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuIcon,
+  MenuCommand,
   Divider,
+
+  // import grid
+  Grid as ChakraGrid,
+  GridItem as ChakraGridItem,
 } from "@chakra-ui/react";
+
+// Chakra checkicon
+import { CheckIcon } from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
+import { colors } from "./../common/common";
 
 // styled SettingsPanel
 const SettingsPanelStyled = styled.div``;
 
 // SettingsPanel component
-const SettingsPanel = () => {
+const SettingsPanel = ({ app }) => {
   // modal ref
   const finalRef = useRef(null);
 
@@ -71,11 +91,20 @@ const SettingsPanel = () => {
     onClose: onCloseComputePricing,
   } = useDisclosure();
 
+  // customize interface state
+  const {
+    isOpen: isOpenCustomizeInterface,
+    onOpen: onOpenCustomizeInterface,
+    onClose: onCloseCustomizeInterface,
+  } = useDisclosure();
+
+  const customizeColor = () => {};
+
   return (
     <SettingsPanelStyled>
       <Button
         className="button"
-        colorScheme="purple"
+        colorScheme={app.settings.accent}
         onClick={(e) => {
           onOpen();
           e.stopPropagation();
@@ -95,26 +124,37 @@ const SettingsPanel = () => {
             {/* Button for computing pricing */}
             <VStack>
               <Text>
-                Compute pricing for
-                a certain amount of
-                words / tokens given to and receieved
-                by an AI model.
+                Compute pricing for a certain amount of words / tokens given to
+                and receieved by an AI model.
               </Text>
-              <Button onClick={onOpenComputePricing}>
-                Compute Pricing
-              </Button>
+              <Button onClick={onOpenComputePricing}>Compute Pricing</Button>
             </VStack>
             <Divider />
+
+            <Divider />
+            <VStack style={{ marginTop: "10px" }}>
+              <Menu>
+                <MenuButton as={Button}>Customize Interface</MenuButton>
+                <MenuList>
+                  <MenuItem onClick={onOpenCustomizeInterface}>
+                    Interface Color
+                  </MenuItem>
+                  <MenuItem>Interface Font</MenuItem>
+                  <MenuItem>Mark as Draft</MenuItem>
+                  <MenuItem>Delete</MenuItem>
+                  <MenuItem>Attend a Workshop</MenuItem>
+                </MenuList>
+              </Menu>
+            </VStack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="purple" mr={3} onClick={onClose}>
+            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
               Close
             </Button>
             <Button variant="ghost" onClick={onOpenHelp}>
               Help
             </Button>
-
 
             {/* Help drawer */}
             <Drawer
@@ -149,6 +189,39 @@ const SettingsPanel = () => {
                 <DrawerFooter></DrawerFooter>
               </DrawerContent>
             </Drawer>
+            {/* Customize interface modal */}
+            <Modal
+              isOpen={isOpenCustomizeInterface}
+              onClose={onCloseCustomizeInterface}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Customize Interface</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <VStack>
+                    <Button colorScheme={app.settings.accent}>Interface Color</Button>
+                    <ChakraGrid
+                      templateColumns="repeat(3, 1fr)"
+                      templateRows="repeat(3, 1fr)"
+                      gap={2}
+                    >
+                      {["purple", "green", "blue", "red", "yellow", "pink"].map(
+                        (color, i) => {
+                          return (
+                            <ChakraGridItem key={`color-id-${i}`}>
+                              <Button colorScheme={color} onClick={() => {
+                                app.settings.setAccent(color);
+                              }}></Button>
+                            </ChakraGridItem>
+                          );
+                        }
+                      )}
+                    </ChakraGrid>
+                  </VStack>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -156,57 +229,129 @@ const SettingsPanel = () => {
   );
 };
 
-
 // computing pricing component
 // contains a dropdown for a specific OpenAI model
-// includes a state for the selected model  
+// includes a state for the selected model
 // includes an Input for the number of words / tokens
 // includes a button to compute the price
 // includes a text box to display the price
 
 const ComputePricing = () => {
+  // tokens for string state
+  const [tfs, setTfs] = useState(0);
 
-  // words for tokens state
-  const [wft, setWordsForTokens] = useState(0);
+  // price for tokens state
+  const [pft, setPft] = useState(0);
 
-  // tokens for words state
-  const [tfw, setTokensForWords] = useState(0);
+  // reference for tokens for string input
+  const tfsRef = useRef(null);
+
+  // reference for price for tokens input
+  const pftRef = useRef(null);
+
+  // state for selected model
+  const [selectedModel, setSelectedModel] = useState("davinci");
+
+  // async function to compute tokens for string
+  async function computeTokensForString() {
+    setTfs(await tokensForString(tfsRef.current.value));
+  }
+
+  // async function to compute price for tokens
+  function computePriceForTokens() {
+    // set price state
+    setPft(
+      Math.round(
+        priceForTokens(parseInt(pftRef.current.value), selectedModel) * 1000000
+      ) / 1000000
+    );
+  }
 
   return (
     <VStack>
+      {/* Dropdown to choose model */}
+      <VStack>
+        <Text>Selected model: {selectedModel}</Text>
+        <Menu>
+          <MenuButton as={Button}>Choose a model</MenuButton>
+          <MenuList>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("davinci");
+              }}
+            >
+              davinci
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("curie");
+              }}
+            >
+              curie
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("babbage");
+              }}
+            >
+              babbage
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setSelectedModel("ada");
+              }}
+            >
+              ada
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </VStack>
 
-      
-      {/* Section for converting tokens to words */}
-      <HStack
-      >
-        <Text>Convert tokens to words</Text>
-        <Input 
-          placeholder="Enter number of tokens" 
-          onChange={(e) => {
-            setWordsForTokens(tokensForWords(e.target.value));  
-          }}
-        />
-        <Text>tokens = {wft.toLocaleString()} words</Text>
-      </HStack>
+      <Grid templateColumns="repeat(2, 1fr)" gap="1rem">
+        {/* Section for converting a string to tokens */}
+        <GridItem>
+          <VStack>
+            <Text>Convert a string to tokens</Text>
+            <HStack>
+              <Input
+                ref={tfsRef}
+                placeholder="Enter a string"
+                onKeyPress={async (e) => {
+                  if (e.key === "Enter") {
+                    await computeTokensForString();
+                  }
+                }}
+              />
+              <Button onClick={async () => await computeTokensForString()}>
+                Convert
+              </Button>
+            </HStack>
+            <Text>Number of tokens: {tfs}</Text>
+          </VStack>
+        </GridItem>
 
-
-      {/* Section for converting words to tokens */}
-      <HStack>
-        <Text>Convert words to tokens</Text>
-        <Input
-          placeholder="Enter number of words"
-          onChange={(e) => {
-            setTokensForWords(wordsForTokens(e.target.value));
-            e.target.value = e.target.value.replace(/,/g, "");
-          }}
-        />
-        {/* format tfw to have proper number notation */}
-        <Text>words = {tfw.toLocaleString()} tokens</Text>
-      </HStack>
-
-
+        {/* Section for converting tokens to price */}
+        <GridItem>
+          <VStack>
+            <Text>Convert tokens to price</Text>
+            <HStack>
+              <Input
+                ref={pftRef}
+                placeholder="Enter a number of tokens"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    computePriceForTokens();
+                  }
+                }}
+              />
+              <Button onClick={computePriceForTokens}>Convert</Button>
+            </HStack>
+            <Text>Price: ${pft}</Text>
+          </VStack>
+        </GridItem>
+      </Grid>
     </VStack>
-  )
-}
+  );
+};
 
 export default SettingsPanel;
