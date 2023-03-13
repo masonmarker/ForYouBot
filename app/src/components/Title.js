@@ -32,6 +32,7 @@ import {
   HStack,
   Spinner,
   Fade,
+  ScaleFade,
 
   // modal for changing conversation
   Modal,
@@ -46,13 +47,16 @@ import {
 } from "@chakra-ui/react";
 
 // Chakra more icon
-import { ViewIcon, MoonIcon, SunIcon, AddIcon } from "@chakra-ui/icons";
+import { ViewIcon, MoonIcon, SunIcon, AddIcon, CheckIcon } from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
 
 // common
 import { colors, css } from "../common/common";
+
+// intersection observer
+import { useInView } from "react-intersection-observer";
 
 // styled Title
 // centered horizontally
@@ -105,6 +109,18 @@ const Title = ({ app }) => {
   // toast for clearing conversation
   const clearToast = useToast();
 
+  // intersection observer
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+
+  // are you sure for clearing all conversations modal useDisclosure
+  const {
+    isOpen: clearAreYouSure,
+    onOpen: clearAreYouSureOpen,
+    onClose: clearAreYouSureClose,
+  } = useDisclosure();
+
   // clears the current conversation
   const clearConversation = () => {
     app.conversations[0].name = "New Conversation";
@@ -151,31 +167,73 @@ const Title = ({ app }) => {
       >
         {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
       </Button>
-      <Button
-        className="clear-conversation"
-        colorScheme={app.settings.accent}
-        onClick={(e) => {
-          // copy of userMessages before clearing
-          const userMessagesCopy = app.userMessages;
+      {app.userMessages.length > 0 && (
+        <ScaleFade in={1} className="clear-conversation">
+          <Button
+            colorScheme={app.settings.accent}
+            onClick={(e) => {
+              clearAreYouSureOpen();
+              e.stopPropagation();
+            }}
+          >
+            Clear Conversation
+          </Button>
+        </ScaleFade>
+      )}
 
-          // clear conversations
-          clearConversation();
+      {/* clearAreYouSure modal */}
+      <Modal isOpen={clearAreYouSure} onClose={clearAreYouSureClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Are you sure?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            This will clear this conversation and cannot be undone.
+          </ModalBody>
 
-          // toast for clearing conversation
-          if (userMessagesCopy.length > 0) {
-            clearToast({
-              title: "Conversation Cleared",
-              status: "success",
-              duration: 3000,
-              isClosable: true,
-            });
-          }
+          <ModalFooter>
+            <Button
+              colorScheme={app.settings.accent}
+              mr={3}
+              onClick={clearAreYouSureClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              colorScheme={app.settings.accent}
+              onClick={(e) => {
+                // copy of userMessages before clearing
+                const userMessagesCopy = app.userMessages;
+                // clear all conversations
+                clearConversation();
 
-          e.stopPropagation();
-        }}
-      >
-        Clear Conversation
-      </Button>
+                // toast for clearing conversation
+                if (userMessagesCopy.length > 0) {
+                  clearToast({
+                    render: () => (
+                      <HStack>
+                        <CheckIcon />
+                        <Button
+                          color="white"
+                          p={3}
+                          colorScheme={app.settings.accent}
+                          borderRadius="md"
+                        >
+                          Conversation cleared
+                        </Button>
+                      </HStack>
+                    ),
+                  });
+                }
+                clearAreYouSureClose();
+              }}
+            >
+              Clear Conversation
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <HStack fontFamily={app.settings.font}>
         <Text
           color={colorMode === "light" ? "black" : "white"}
@@ -191,9 +249,7 @@ const Title = ({ app }) => {
         )}
         {app.generating && (
           <Fade in={app.generating}>
-            <Spinner
-              thickness="4px"
-            />
+            <Spinner thickness="4px" />
           </Fade>
         )}
       </HStack>
@@ -239,15 +295,9 @@ const Title = ({ app }) => {
             </HStack>
           </ModalHeader>
 
-          <ModalCloseButton />
-          <ModalBody fontFamily={app.settings.font}>
+          <ModalBody fontFamily={app.settings.font} pb={6}>
             <Convos app={app} onClose1={onClose} />
           </ModalBody>
-          <ModalFooter fontFamily={app.settings.font}>
-            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
 

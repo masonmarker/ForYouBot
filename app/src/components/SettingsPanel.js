@@ -116,6 +116,7 @@ const SettingsPanel = ({ app }) => {
           onOpen();
           e.stopPropagation();
         }}
+        font
       >
         Settings
       </Button>
