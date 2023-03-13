@@ -70,7 +70,7 @@ const EditPanel = ({ app }) => {
     <SidePanelStyled>
       <Button
         className="button"
-        colorScheme="purple"
+        colorScheme={app.settings.accent}
         onClick={(e) => {
           onOpen();
           e.stopPropagation();
@@ -133,12 +133,12 @@ const EditPanel = ({ app }) => {
             <Divider marginBottom="1rem" marginTop="1rem" />
             <Text fontWeight="bold">Constraints</Text>
             <VStack align="left">
-              <Checkbox colorScheme="purple">Show work</Checkbox>
-              <Checkbox colorScheme="purple">Answer only</Checkbox>
+              <Checkbox colorScheme={app.settings.accent}>Show work</Checkbox>
+              <Checkbox colorScheme={app.settings.accent}>Answer only</Checkbox>
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="purple" mr={3} onClick={onClose}>
+            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
               Close
             </Button>
             <Button variant="ghost">Customize Interface</Button>

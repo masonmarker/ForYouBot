@@ -106,7 +106,7 @@ const Convos = ({ app }) => {
                             <Text className="title">{convo.name}</Text>
                             {index === 0 &&
                                 <Button
-                                    colorScheme="green"
+                                    colorScheme={app.settings.accent}
                                     size="xs"
                                     cursor="default"
                                 >
@@ -155,7 +155,7 @@ const Convos = ({ app }) => {
                                         </ModalBody>
 
                                         <ModalFooter>
-                                            <Button colorScheme="purple" mr={3} onClick={onClose}>
+                                            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
                                                 Close
                                             </Button>
                                             <Button variant="ghost" ref={enterButtonRef} onClick={
@@ -245,7 +245,8 @@ const Convos = ({ app }) => {
 const MoreModal = ({
     isMoreOpen,
     onMoreClose,
-    conversation
+    conversation,
+    app
 }) => {
 
     return (
@@ -258,7 +259,7 @@ const MoreModal = ({
                     <Text>{JSON.stringify(conversation.info)}</Text>
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="purple" mr={3} onClick={onMoreClose}>
+                    <Button colorScheme={app.settings.accent} mr={3} onClick={onMoreClose}>
                         Close
                     </Button>
                 </ModalFooter>

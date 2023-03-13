@@ -53,6 +53,10 @@ import {
   MenuIcon,
   MenuCommand,
   Divider,
+
+  // import grid
+  Grid as ChakraGrid,
+  GridItem as ChakraGridItem,
 } from "@chakra-ui/react";
 
 // Chakra checkicon
@@ -60,12 +64,13 @@ import { CheckIcon } from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
+import { colors } from "./../common/common";
 
 // styled SettingsPanel
 const SettingsPanelStyled = styled.div``;
 
 // SettingsPanel component
-const SettingsPanel = () => {
+const SettingsPanel = ({ app }) => {
   // modal ref
   const finalRef = useRef(null);
 
@@ -86,11 +91,20 @@ const SettingsPanel = () => {
     onClose: onCloseComputePricing,
   } = useDisclosure();
 
+  // customize interface state
+  const {
+    isOpen: isOpenCustomizeInterface,
+    onOpen: onOpenCustomizeInterface,
+    onClose: onCloseCustomizeInterface,
+  } = useDisclosure();
+
+  const customizeColor = () => {};
+
   return (
     <SettingsPanelStyled>
       <Button
         className="button"
-        colorScheme="purple"
+        colorScheme={app.settings.accent}
         onClick={(e) => {
           onOpen();
           e.stopPropagation();
@@ -116,10 +130,26 @@ const SettingsPanel = () => {
               <Button onClick={onOpenComputePricing}>Compute Pricing</Button>
             </VStack>
             <Divider />
+
+            <Divider />
+            <VStack style={{ marginTop: "10px" }}>
+              <Menu>
+                <MenuButton as={Button}>Customize Interface</MenuButton>
+                <MenuList>
+                  <MenuItem onClick={onOpenCustomizeInterface}>
+                    Interface Color
+                  </MenuItem>
+                  <MenuItem>Interface Font</MenuItem>
+                  <MenuItem>Mark as Draft</MenuItem>
+                  <MenuItem>Delete</MenuItem>
+                  <MenuItem>Attend a Workshop</MenuItem>
+                </MenuList>
+              </Menu>
+            </VStack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="purple" mr={3} onClick={onClose}>
+            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
               Close
             </Button>
             <Button variant="ghost" onClick={onOpenHelp}>
@@ -159,6 +189,39 @@ const SettingsPanel = () => {
                 <DrawerFooter></DrawerFooter>
               </DrawerContent>
             </Drawer>
+            {/* Customize interface modal */}
+            <Modal
+              isOpen={isOpenCustomizeInterface}
+              onClose={onCloseCustomizeInterface}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Customize Interface</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <VStack>
+                    <Button colorScheme={app.settings.accent}>Interface Color</Button>
+                    <ChakraGrid
+                      templateColumns="repeat(3, 1fr)"
+                      templateRows="repeat(3, 1fr)"
+                      gap={2}
+                    >
+                      {["purple", "green", "blue", "red", "yellow", "pink"].map(
+                        (color, i) => {
+                          return (
+                            <ChakraGridItem key={`color-id-${i}`}>
+                              <Button colorScheme={color} onClick={() => {
+                                app.settings.setAccent(color);
+                              }}></Button>
+                            </ChakraGridItem>
+                          );
+                        }
+                      )}
+                    </ChakraGrid>
+                  </VStack>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
           </ModalFooter>
         </ModalContent>
       </Modal>
