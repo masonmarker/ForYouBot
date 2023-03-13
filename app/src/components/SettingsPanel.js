@@ -207,7 +207,9 @@ const SettingsPanel = ({ app }) => {
                 <ModalCloseButton />
                 <ModalBody>
                   <VStack>
-                    <Button>Interface Color</Button>
+                    <Button colorScheme={app.settings.accent}>
+                      Interface Color
+                    </Button>
                     <ChakraGrid
                       templateColumns="repeat(3, 1fr)"
                       templateRows="repeat(3, 1fr)"
