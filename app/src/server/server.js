@@ -44,6 +44,7 @@ app.post("/", async (req, res) => {
         model: model,
         prompt: prompt,
         temperature: temperature,
+        
     });
 
  

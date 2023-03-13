@@ -21,24 +21,39 @@ const models = {
     ],
   },
 
-  // gpt 3.5 coding model
-  code: {
-    name: "code-davinci-002",
-    description: "Optimized for code completion",
+  // gpt 3.5 latest davinci model
+  davinci: {
+    name: "text-davinci-003",
+    description:
+      "Optimized for text generation and chat. Will be updated with our latest model iteration.",
     pricePer1Token: 0.00002,
-    maxRequest: 8001,
+    maxRequest: 4096,
     attributes: [
-      ["For Coding", "green"],
-      ["Accurate", "green"],
-      ["Fast", "green"],
+      ["For Text", "green"],
+      ["Most Accurate", "green"],
       ["$$$", "orange"],
     ],
   },
-};
 
-// computes price for tokens and model
-function priceForTokens(tokens, model) {
-  return tokens * models[model].pricePer1Token;
+
+    // gpt 3.5 coding model
+    code: {
+      name: "code-davinci-002",
+      description: "Optimized for code completion",
+      pricePer1Token: 0.00002,
+      maxRequest: 8001,
+      attributes: [
+        ["For Coding", "green"],
+        ["Accurate", "green"],
+        ["Fast", "green"],
+        ["$$$", "orange"],
+      ],
+    },
+  };
+
+  // computes price for tokens and model
+  function priceForTokens(tokens, model) {
+    return tokens * models[model].pricePer1Token;
 }
 
 export default models;

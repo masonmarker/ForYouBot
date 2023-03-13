@@ -172,7 +172,7 @@ const Message = (props) => {
           ) : (
             <pre className="msg-pre-text">{props.message}</pre>
           )}
-          {showCopy && props.from === "user" && (
+          {showCopy && (
             <HStack>
               {/* <CopyButton message={props.message} /> */}
               <ScaleFade in={showCopy}>
