@@ -161,21 +161,12 @@ const Prompt = ({ app }) => {
   // is testing
   const [testing, setTesting] = useState(true);
 
-  // ref for charlimit
-  const charLimitRef = useRef(null);
-
-  // ref for submit button
-  const submitRef = useRef(null);
-
-  // ref for input area
-  const areaRef = useRef(null);
-
   // handle enter press
   // should not execute if shift is also being held
   function handleEnterPress(e) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      submitRef.current.click();
+      app.refs.submitRef.current.click();
     }
   }
 
@@ -233,23 +224,23 @@ const Prompt = ({ app }) => {
         message: prompt,
       });
       // area
-      const area = areaRef.current;
+      const area = app.refs.areaRef.current;
 
       // clear prompt
       area.value = "";
 
       // reset character limit ref
-      charLimitRef.current.innerHTML = `0/${maxChars}`;
+      app.refs.charLimitRef.current.innerHTML = `0/${maxChars}`;
 
       // reset character limit color
-      charLimitRef.current.style.color =
+      app.refs.charLimitRef.current.style.color =
         colorMode === "light" ? "black" : "white";
 
       // disable prompt
       area.disabled = true;
 
       // disable submit button
-      submitRef.current.disabled = true;
+      app.refs.submitRef.current.disabled = true;
 
       // set waiting to true
       app.setWaiting(true);
@@ -275,10 +266,10 @@ const Prompt = ({ app }) => {
       });
 
       // enable prompt
-      areaRef.current.disabled = false;
+      app.refs.areaRef.current.disabled = false;
 
       // enable submit button
-      submitRef.current.disabled = false;
+      app.refs.submitRef.current.disabled = false;
 
       // set waiting to false
       app.setWaiting(false);
@@ -337,7 +328,7 @@ ${chatLog}`;
       await updateInfo(chatLog, botResponse);
 
       // refocus on the input area
-      areaRef.current.focus();
+      app.refs.areaRef.current.focus();
     }
   }
 
@@ -346,7 +337,7 @@ ${chatLog}`;
       <HStack className="inp">
         <Textarea
           id="areaRef"
-          ref={areaRef}
+          ref={app.refs.areaRef}
           resize="none"
           colorScheme={app.settings.accent}
           className="area"
@@ -357,7 +348,7 @@ ${chatLog}`;
             const len = e.target.value.length;
 
             // character limit component
-            const comp = charLimitRef.current;
+            const comp = app.refs.charLimitRef.current;
 
             // set the character limit
             comp.innerHTML = len + `/${maxChars}`;
@@ -374,12 +365,12 @@ ${chatLog}`;
         />
         <Button
           id="submitRef"
-          ref={submitRef}
+          ref={app.refs.submitRef}
           onClick={() => {
             addMessage(
               new Date().toLocaleTimeString(),
               "user",
-              areaRef.current.value
+              app.refs.areaRef.current.value
             );
           }}
         >
@@ -399,7 +390,7 @@ ${chatLog}`;
 
       <Text
         color={colorMode === "light" ? "black" : "white"}
-        ref={charLimitRef}
+        ref={app.refs.charLimitRef}
         className="limtext"
       >
         0/{maxChars}

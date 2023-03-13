@@ -140,7 +140,8 @@ function App() {
     // component references
     refs: {
       areaRef: useRef(null),
-      submitRef: useRef(null)
+      submitRef: useRef(null),
+      charLimitRef: useRef(null),
     }
 
   }
