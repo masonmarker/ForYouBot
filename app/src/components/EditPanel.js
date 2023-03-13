@@ -100,6 +100,7 @@ const EditPanel = ({ app }) => {
                     return (
                       <ModelAttribute
                         key={`attribute-${attribute}-${i}`} 
+                        // verify attribute is not undefined
                         title={attribute[0]}
                         color={attribute[1]}
                       />

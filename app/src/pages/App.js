@@ -63,12 +63,12 @@ function App() {
   });
 
   // messages state
-  const { 
-    
+  const {
+
     // messages
-    userMessages, 
-    stateAddMessage, 
-    stateAddBotMessage, 
+    userMessages,
+    stateAddMessage,
+    stateAddBotMessage,
     botMessages,
     setUserMessages,
     setBotMessages
@@ -86,7 +86,7 @@ function App() {
   const [waiting, setWaiting] = useState(false);
 
   // state for bot model, using first model in models for now
-  const [model, setModel] = useState(Object.keys(models)[0])  
+  const [model, setModel] = useState("davinci")
 
   // state for all models
   const [allModels, setAllModels] = useState(models)
@@ -143,8 +143,8 @@ function App() {
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled>
-          <Prompt app={app}/>
-          <Chat app={app}/>
+          <Prompt app={app} />
+          <Chat app={app} />
         </AppStyled>
       </Fade>
     </ChakraProvider>

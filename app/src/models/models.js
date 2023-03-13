@@ -15,7 +15,8 @@ const models = {
     pricePer1Token: 0.000002,
     maxRequest: 4096,
     attributes: [
-      ["Most Capable", "green"],
+      ["For Text", "green"],
+      ["Highly Capable", "green"],
       ["Most Accurate", "green"],
       ["$$", "green"],
     ],
@@ -30,8 +31,9 @@ const models = {
     maxRequest: 4096,
     attributes: [
       ["For Text", "green"],
+      ["Most Powerful", "green"],
       ["Most Accurate", "green"],
-      ["$$$", "orange"],
+      ["$$$", "orange"]
     ],
   },
 
@@ -47,7 +49,7 @@ const models = {
         ["Accurate", "green"],
         ["Fast", "green"],
         ["$$$", "orange"],
-      ],
+      ]
     },
   };
 

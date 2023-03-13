@@ -57,7 +57,7 @@ const ChatPanelStyled = styled.div`
     } 
 
     .init-title {
-        font-size: 6rem;
+        font-size: 4rem;
         font-weight: 600;
         margin-top: 3rem;
     }
@@ -81,7 +81,7 @@ const ChatPanelStyled = styled.div`
         }
         .init-title {
             margin-top: 0;
-            font-size: 4rem;
+            font-size: 2rem;
         }
         .item {
             font-size: 0.8rem;
