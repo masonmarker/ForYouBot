@@ -129,7 +129,7 @@ const SettingsPanel = ({ app }) => {
             <Divider />
 
             {/* Button for computing pricing */}
-            <VStack>
+            <VStack fontFamily={app.settings.font} mb={3} mt={3}>
               <Text>
                 Compute pricing for a certain amount of words / tokens given to
                 and receieved by an AI model.
@@ -139,14 +139,15 @@ const SettingsPanel = ({ app }) => {
             <Divider />
 
             <Divider />
-            <VStack style={{ marginTop: "10px" }}>
+            <VStack mt={7} fontFamily={app.settings.font}>
               <Menu>
+                <Text>Change the interface to your preferences</Text>
                 <MenuButton as={Button}>Customize Interface</MenuButton>
                 <MenuList>
                   <MenuItem onClick={onOpenCustomizeInterface}>
                     Interface Color
                   </MenuItem>
-                  <MenuItem as={Button} onClick={onOpenCustomizeInterfaceFont}>
+                  <MenuItem onClick={onOpenCustomizeInterfaceFont}>
                     Interface Font
                   </MenuItem>
                 </MenuList>
@@ -201,33 +202,39 @@ const SettingsPanel = ({ app }) => {
               onClose={onCloseCustomizeInterface}
             >
               <ModalOverlay />
-              <ModalContent>
+              <ModalContent mt={150}>
                 <ModalHeader>Customize Interface</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <VStack>
-                    <Button colorScheme={app.settings.accent}>
-                      Interface Color
-                    </Button>
+                    <Button>Interface Color</Button>
                     <ChakraGrid
                       templateColumns="repeat(3, 1fr)"
                       templateRows="repeat(3, 1fr)"
                       gap={2}
                     >
-                      {["purple", "green", "blue", "red", "yellow", "pink"].map(
-                        (color, i) => {
-                          return (
-                            <ChakraGridItem key={`color-id-${i}`}>
-                              <Button
-                                colorScheme={color}
-                                onClick={() => {
-                                  app.settings.setAccent(color);
-                                }}
-                              ></Button>
-                            </ChakraGridItem>
-                          );
-                        }
-                      )}
+                      {[
+                        "purple",
+                        "green",
+                        "blue",
+                        "red",
+                        "yellow",
+                        "pink",
+                        "cyan",
+                        "teal",
+                        "orange",
+                      ].map((color, i) => {
+                        return (
+                          <ChakraGridItem key={`color-id-${i}`}>
+                            <Button
+                              colorScheme={color}
+                              onClick={() => {
+                                app.settings.setAccent(color);
+                              }}
+                            ></Button>
+                          </ChakraGridItem>
+                        );
+                      })}
                     </ChakraGrid>
                   </VStack>
                 </ModalBody>
@@ -239,22 +246,20 @@ const SettingsPanel = ({ app }) => {
               onClose={onCloseCustomizeInterfaceFont}
             >
               <ModalOverlay />
-              <ModalContent>
-                <ModalHeader fontFamily={app.settings.font}>
-                  Customize Interface Font
-                </ModalHeader>
+              <ModalContent mt={200}>
                 <ModalCloseButton />
                 <ModalBody>
                   <VStack fontFamily={app.settings.font}>
-                    <Button colorScheme={app.settings.accent}>
+                    <Button colorScheme={app.settings.accent} mt={5} mb={5}>
                       Interface Font
                     </Button>
                     <ChakraGrid
                       templateColumns="repeat(3, 1fr)"
                       templateRows="repeat(3, 1fr)"
-                      gap={1}
+                      gap={4}
                     >
                       {[
+                        "Arial, sans-serif",
                         "san serif",
                         "serif",
                         "monospace",
