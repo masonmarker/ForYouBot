@@ -138,7 +138,7 @@ const Title = ({ app }) => {
       // backgroundColorHover={
       //   colorMode === "light" ? colors.lightPurple : colors.purple
       // }
-    //  colorScheme={app.settings.accent}
+      //  colorScheme={app.settings.accent}
       h="60px"
     >
       <Button
@@ -153,7 +153,7 @@ const Title = ({ app }) => {
       </Button>
       <Button
         className="clear-conversation"
-        colorScheme= {app.settings.accent}
+        colorScheme={app.settings.accent}
         onClick={(e) => {
           // copy of userMessages before clearing
           const userMessagesCopy = app.userMessages;
@@ -176,10 +176,11 @@ const Title = ({ app }) => {
       >
         Clear Conversation
       </Button>
-      <HStack>
+      <HStack fontFamily={app.settings.font}>
         <Text
-          color={colorMode === 'light' ? 'black' : 'white'}
+          color={colorMode === "light" ? "black" : "white"}
           id="current-convo"
+          fontFamily={app.settings.font}
         >
           {app.conversations[0]
             ? app.conversations[0].name
@@ -202,7 +203,7 @@ const Title = ({ app }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <HStack gap="0.5rem">
+            <HStack gap="0.5rem" fontFamily={app.settings.font}>
               <Text userSelect="none">Conversations</Text>
 
               {/* Adding a conversation */}
@@ -231,6 +232,7 @@ const Title = ({ app }) => {
 
                     onClose();
                   }}
+                  fontFamily={app.settings.font}
                 >
                   Clear All
                 </Button>
@@ -239,10 +241,10 @@ const Title = ({ app }) => {
           </ModalHeader>
 
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody fontFamily={app.settings.font}>
             <Convos app={app} />
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter fontFamily={app.settings.font}>
             <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
               Close
             </Button>
@@ -252,7 +254,7 @@ const Title = ({ app }) => {
 
       <Box className="buttons">
         <EditPanel app={app} />
-        <SettingsPanel app={app}/>
+        <SettingsPanel app={app} />
       </Box>
     </TitleStyled>
   );
