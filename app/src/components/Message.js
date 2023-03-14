@@ -7,7 +7,7 @@
  */
 
 // states
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // Toast
 import Toast from "./Toast";
@@ -48,7 +48,7 @@ import {
 
 // syntax highliter  (for code mode)
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { atomDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // intersection observer
 import { useInView } from "react-intersection-observer";
@@ -147,6 +147,46 @@ const Message = (props) => {
   // is editing toast
   const toast = useToast();
 
+  // function to reach out to /program-language-detector to get the language of the
+  // message
+  async function getLanguage(message) {
+    // get the language of the message
+    const response = await fetch(
+      "http://localhost:3080/program-language-detector",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          string: message,
+        }),
+      }
+    );
+
+    // get the language
+    const { language } = await response.json();
+
+    // language in lowercase
+    const lower = language.toLowerCase();
+    console.log(lower);
+
+    // return the language
+    return lower;
+  }
+
+  // state for the language of the message
+  const [language, setLanguage] = useState("unknown");
+
+  // set the language state for this message according to getLanguage of props.message
+  useEffect(() => {
+    // get the language of the message
+    getLanguage(props.message).then((language) => {
+      // set the language state
+      setLanguage(language);
+    });
+  }, []);
+
   return (
     <ScaleFade ref={ref} in={inView}>
       <MessageStyled
@@ -172,15 +212,19 @@ const Message = (props) => {
       >
         {/* message box */}
         <HStack w="100%" minHeight="2rem">
-          {edit ? (
-            <Input id="input" />
-          ) : props.app.language !== "Choose Language" &&
-            props.from === "bot" ? (
+          {language !== "unknown" ? (
             <pre
               className="msg-pre-text"
               style={{ fontFamily: props.app.settings.font }}
             >
-              <SyntaxHighlighter language={props.app.language} style={atomDark}>
+              <SyntaxHighlighter
+                language={
+                  props.app.language === "Auto Detect"
+                    ? language
+                    : props.app.language
+                }
+                style={colorMode === 'light' ? oneLight : atomDark}
+              >
                 {props.message}
               </SyntaxHighlighter>
             </pre>

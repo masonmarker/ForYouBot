@@ -74,7 +74,7 @@ function App() {
   } = useMessages();
 
   // list of languages
-  const languages = ["Choose Language", "javascript", "java", "ruby", "python"];
+  const languages = ["Auto Detect", "javascript", "java", "ruby", "python"];
 
   // conversations state with initial messages
   const { conversations, setConversations } = useConversation([

@@ -7,6 +7,9 @@ const { encode } = require("gpt-3-encoder");
 // require openai
 const { Configuration, OpenAIApi } = require("openai");
 
+// require program-language-detector
+const { detect } = require("program-language-detector");
+
 // declare express app
 const app = express();
 
@@ -54,7 +57,7 @@ temperature: ${temperature}
     success: true,
     data: response.data.choices[0].text,
     usage: response.data.usage,
-  });
+  }); 
 });
 
 // post to /tokenizer a function to tokenize a string passed through the header
@@ -64,6 +67,17 @@ app.post("/tokenizer", async (req, res) => {
   res.status(200).json({
     success: true,
     data: response,
+  });
+});
+
+
+// post to program-language-detector to determine the programming language
+// a given string represents
+app.post("/program-language-detector", async (req, res) => {
+  const { string } = req.body;
+  return res.status(200).json({
+    success: true,
+    language: detect(string),
   });
 });
 

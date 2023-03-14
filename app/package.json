@@ -19,6 +19,7 @@
     "gpt-3-encoder": "^1.1.4",
     "openai": "^3.1.0",
     "path": "^0.12.7",
+    "program-language-detector": "^0.0.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.4.3",

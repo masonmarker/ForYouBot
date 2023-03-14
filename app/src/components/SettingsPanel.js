@@ -58,6 +58,16 @@ import {
   MenuCommand,
   Divider,
 
+  // Popover
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  Tooltip,
+
   // import grid
   Grid as ChakraGrid,
   GridItem as ChakraGridItem,
@@ -149,7 +159,21 @@ const SettingsPanel = ({ app }) => {
               color={languageIndex === i && "white"}
               key={i}
               leftIcon={languageIndex === i && <CheckIcon />}
-              rightIcon={i === 0 && <InfoIcon />}
+              rightIcon={
+                i === 0 && (
+                  <Tooltip
+
+                    borderRadius="lg"
+                    fontFamily={app.settings.font}
+                    bg="gray.100" 
+                    hasArrow
+                    label="Choosing a language enables syntax highlighting within any question or response regarding code snippets."
+                    color="black"
+                  >
+                    <InfoIcon />
+                  </Tooltip>
+                )
+              }
               onClick={(e) => {
                 // color the chosen menu item to the accent color
                 setLanguageIndex(i);
