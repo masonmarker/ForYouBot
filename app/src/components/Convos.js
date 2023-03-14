@@ -12,6 +12,9 @@ import React, { useState, useRef } from "react";
 // ask() for asking the current model
 import { ask, getUserChatLog } from "./Prompt";
 
+// Toast
+import Toast from "./Toast";
+
 // Chakra components
 import {
   Box,
@@ -30,6 +33,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 
 // Check icon
@@ -91,6 +95,9 @@ const Convos = ({ app, onClose1 }) => {
     }
   }
 
+  // Chakra toast
+  const toast = useToast();
+
   // handle renaming a conversation
   function handleRename(e) {
     // set the name of the conversation to the input value
@@ -136,13 +143,22 @@ const Convos = ({ app, onClose1 }) => {
                     // set the conversations array to the new array
                     app.setConversations(conversationsCopy);
 
-
-                  
-
-                    
-
                     // close the model
                     onClose1();
+
+                    // show toast that we opened the conversation
+                    // with this name
+                    if (index !== 0) {
+                      toast({
+                        render: () => (
+                          <Toast
+                            text={`Opened conversation: ${app.conversations[index]?.name}`}
+                            app={app}
+                          />
+                        ),
+                        duration: 2000,
+                      });
+                    }
                   }}
                 >
                   Open

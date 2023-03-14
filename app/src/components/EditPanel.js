@@ -38,7 +38,6 @@ import {
 // Chakra Chevron icon
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-
 // styled SidePanel
 // should be permanently in the bottom right corner
 const SidePanelStyled = styled.div`
@@ -82,7 +81,7 @@ const EditPanel = ({ app }) => {
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Edit Bot</ModalHeader>
+          <ModalHeader fontFamily={app.settings.font}>Edit Bot</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Divider marginBottom="1rem" />
@@ -139,14 +138,21 @@ const EditPanel = ({ app }) => {
             </VStack>
 
             <Divider marginBottom="1rem" marginTop="1rem" />
-            <Text fontWeight="bold">Constraints</Text>
+            <Text fontWeight="bold" fontFamily={app.settings.font}>
+              Constraints
+            </Text>
             <VStack fontFamily={app.settings.font} align="left">
               <Checkbox colorScheme={app.settings.accent}>Show work</Checkbox>
               <Checkbox colorScheme={app.settings.accent}>Answer only</Checkbox>
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
+            <Button
+              colorScheme={app.settings.accent}
+              mr={3}
+              onClick={onClose}
+              fontFamily={app.settings.font}
+            >
               Close
             </Button>
           </ModalFooter>
@@ -157,14 +163,9 @@ const EditPanel = ({ app }) => {
 };
 
 // model attribute
-const ModelAttribute = ({ title, color, font}) => {
+const ModelAttribute = ({ title, color, font }) => {
   return (
-    <Button
-      fontFamily={font}
-      colorScheme={color}
-      cursor="default"
-      size="xs"
-    >
+    <Button fontFamily={font} colorScheme={color} cursor="default" size="xs">
       {title}
     </Button>
   );

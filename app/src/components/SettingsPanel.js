@@ -134,7 +134,7 @@ const SettingsPanel = ({ app }) => {
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Settings</ModalHeader>
+          <ModalHeader fontFamily={app.settings.font}>Settings</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Divider />
