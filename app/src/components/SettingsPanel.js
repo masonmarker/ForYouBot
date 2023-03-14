@@ -64,7 +64,12 @@ import {
 } from "@chakra-ui/react";
 
 // Chakra checkicon
-import { CheckIcon, ChevronRightIcon, CloseIcon } from "@chakra-ui/icons";
+import {
+  CheckIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  InfoIcon,
+} from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -138,24 +143,27 @@ const SettingsPanel = ({ app }) => {
         </MenuButton>
         <MenuList maxWidth="10px">
           {/* create a list of checkmarks */}
-          {["Javascript", "Java", "Ruby", "Python"].map((language, i) => (
-            <Button
-              colorScheme={languageIndex === i && app.settings.accent}
-              color={languageIndex === i && "white"}
-              key={i}
-              leftIcon={languageIndex === i && <CheckIcon />}
-              onClick={(e) => {
-                // color the chosen menu item to the accent color
-                setLanguageIndex(i);
-                e.stopPropagation();
-              }}
-              justifyContent="flex-start"
-              textAlign="left"
-              width="100%"
-            >
-              {language}
-            </Button>
-          ))}
+          {["Choose Language", "Javascript", "Java", "Ruby", "Python"].map(
+            (language, i) => (
+              <Button
+                colorScheme={languageIndex === i && app.settings.accent}
+                color={languageIndex === i && "white"}
+                key={i}
+                leftIcon={languageIndex === i && <CheckIcon />}
+                rightIcon={i === 0 && <InfoIcon />}
+                onClick={(e) => {
+                  // color the chosen menu item to the accent color
+                  setLanguageIndex(i);
+                  e.stopPropagation();
+                }}
+                justifyContent="flex-start"
+                textAlign="left"
+                width="100%"
+              >
+                {language}
+              </Button>
+            )
+          )}
         </MenuList>
       </Menu>
 
