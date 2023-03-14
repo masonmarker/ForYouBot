@@ -251,20 +251,33 @@ const Prompt = ({ app }) => {
         prompt
       );
 
-      // obtain bot response
-      const response = await ask(chatLog, app.models[app.model].name);
+      // if testing
+      if (testing) {
+        const botResponse = await testBotResponse();
+        // add bot response to messages
+        await app.stateAddBotMessage({
+          date: new Date().toLocaleTimeString(),
+          from: "bot",
+          message: botResponse,
+        });
+        updateInfo({
+          prompt_tokens: await tokensForString(chatLog, app.model),
+          completion_tokens: await tokensForString(botResponse, app.model),
+        });
 
-      // obtain the bot's response to the prompt
-      const botResponse = testing
-        ? await testBotResponse()
-        : response.data.trim();
-
-      // add bot response to messages
-      await app.stateAddBotMessage({
-        date: new Date().toLocaleTimeString(),
-        from: "bot",
-        message: botResponse,
-      });
+        // if not testing
+      } else {
+        const response = await ask(chatLog, app.models[app.model].name);
+        const botResponse = response.data.trim();
+        const usage = response.usage;
+        // add bot response to messages
+        await app.stateAddBotMessage({
+          date: new Date().toLocaleTimeString(),
+          from: "bot",
+          message: botResponse,
+        });
+        updateInfo(usage);
+      }
 
       // enable prompt
       app.refs.areaRef.current.disabled = false;
@@ -274,59 +287,6 @@ const Prompt = ({ app }) => {
 
       // set waiting to false
       app.setWaiting(false);
-
-      // check if the user has sent a single message
-      // in this conversation,
-      // if so, set the name to "test name"
-      // set the first conversations name to that name
-      // current conversation is at index 0
-      //       if (app.userMessages.length === 0 && !app.conversations[0].wasRenamed) {
-      //         app.setGenerating(true);
-      //         var newConversations = app.conversations;
-      //         console.log("adding title");
-
-      //         // if testing
-      //         if (testing) {
-      //           // set the name of the conversation
-      //           newConversations[0].name = await testResponse();
-
-      //           // setting conversations again so info can be updated
-      //           app.setConversations(newConversations);
-
-      //           // update the conversations info
-      //           await updateInfo(chatLog, newConversations[0].name);
-      //         } else {
-      //           var pr = `
-      // create a title for the below context, one sentence, 8 words or less, and
-      // do not answer the question:
-      // ${chatLog}`;
-
-      //           // retrieve title suggestion from api
-      //           var response = await ask(pr, app.models.davinci.name);
-
-      //           // update info
-      //           await updateInfo(pr, response);
-
-      //           // remove surrounding quotations, if they exist
-      //           if (
-      //             (response[0] === '"' && response[response.length - 1] === '"') ||
-      //             (response[0] === "'" && response[response.length - 1] === "'") ||
-      //             (response[0] === "`" && response[response.length - 1] === "`") ||
-      //             (response[0] === "“" && response[response.length - 1] === "”") ||
-      //             (response[0] === "‘" && response[response.length - 1] === "’")
-      //           ) {
-      //             response = response.substring(1, response.length - 1);
-      //           }
-
-      //           // set conversation name to the response
-      //           newConversations[0].name = response;
-      //         }
-      //         app.setConversations(newConversations);
-      //         app.setGenerating(false);
-      //       }
-
-      // update info
-      updateInfo(response.usage);
 
       // refocus on the input area
       app.refs.areaRef.current.focus();

@@ -46,6 +46,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
+// syntax highliter  (for code mode)
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 // intersection observer
 import { useInView } from "react-intersection-observer";
 
@@ -60,7 +64,6 @@ import { colors, fonts } from "../common/common";
 
 // styled Message
 const MessageStyled = styled(Box)`
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -171,14 +174,20 @@ const Message = (props) => {
         <HStack w="100%" minHeight="2rem">
           {edit ? (
             <Input id="input" />
-          ) : (
+          ) : props.app.language !== "Choose Language" &&
+            props.from === "bot" ? (
             <pre
               className="msg-pre-text"
               style={{ fontFamily: props.app.settings.font }}
             >
-              {props.message}
+              <SyntaxHighlighter language={props.app.language} style={atomDark}>
+                {props.message}
+              </SyntaxHighlighter>
             </pre>
+          ) : (
+            <pre>{props.message}</pre>
           )}
+
           {showCopy && (
             <HStack>
               {/* <CopyButton message={props.message} /> */}

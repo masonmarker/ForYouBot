@@ -73,6 +73,9 @@ function App() {
     setBotMessages,
   } = useMessages();
 
+  // list of languages
+  const languages = ["Choose Language", "javascript", "java", "ruby", "python"];
+
   // conversations state with initial messages
   const { conversations, setConversations } = useConversation([
     emptyConversation(userMessages, botMessages),
@@ -104,6 +107,9 @@ function App() {
 
   // New state to check what mode the app is in, will be a list of modes
   const [mode, setMode] = useState(modes[0]);
+
+  // state to manage what langauage is being used
+  const [language, setLanguage] = useState(languages[0]);
 
   // app information / states to pass as props
   var app = {
@@ -155,6 +161,10 @@ function App() {
     modes: modes,
     mode: mode,
     setMode: setMode,
+
+    languages: languages,
+    language: language,
+    setLanguage: setLanguage,
   };
 
   return (
