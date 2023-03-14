@@ -9,6 +9,9 @@
 // states
 import { useState, useRef } from "react";
 
+// Toast
+import Toast from "./Toast";
+
 // Chakra components
 import {
   // general
@@ -57,7 +60,6 @@ import { colors, fonts } from "../common/common";
 
 // styled Message
 const MessageStyled = styled(Box)`
-  font-family: ${fonts.message};
 
   display: flex;
   flex-direction: column;
@@ -96,7 +98,7 @@ const MessageStyled = styled(Box)`
 
   /* message text style, should wrap on overflow*/
   .msg-pre-text {
-    font-family: ${fonts.message};
+    font-family: ${props => props.fontFamily};
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -170,7 +172,7 @@ const Message = (props) => {
           {edit ? (
             <Input id="input" />
           ) : (
-            <pre className="msg-pre-text">{props.message}</pre>
+            <pre className="msg-pre-text" fontFamily={props.app.settings.font}>{props.message}</pre>
           )}
           {showCopy && (
             <HStack>
@@ -199,10 +201,7 @@ const Message = (props) => {
 
                     // show toast
                     toast({
-                      title: title,
-                      status: "info",
-                      duration: 2000,
-                      isClosable: true,
+                      render: () => <Toast text={title} app={props.app}/>
                     });
                   }}
                 >
@@ -255,11 +254,7 @@ const CopyButton = (props) => {
         onClick={(e) => {
           navigator.clipboard.writeText(props.message);
           toast({
-            title: "Copied",
-            description: "Message copied to clipboard",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
+            render: () => <Toast text="Copied to clipboard" app={props.app} />,
           });
           e.stopPropagation();
         }}

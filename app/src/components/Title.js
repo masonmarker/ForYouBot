@@ -11,6 +11,9 @@
 // components
 import Convos from "./Convos";
 
+// toast
+import Toast from "./Toast"
+
 // generating a new conversation
 import { emptyConversation } from "../messages/messages";
 
@@ -47,7 +50,13 @@ import {
 } from "@chakra-ui/react";
 
 // Chakra more icon
-import { ViewIcon, MoonIcon, SunIcon, AddIcon, CheckIcon } from "@chakra-ui/icons";
+import {
+  ViewIcon,
+  MoonIcon,
+  SunIcon,
+  AddIcon,
+  CheckCircleIcon,
+} from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -210,19 +219,9 @@ const Title = ({ app }) => {
                 // toast for clearing conversation
                 if (userMessagesCopy.length > 0) {
                   clearToast({
-                    render: () => (
-                      <HStack>
-                        <CheckIcon />
-                        <Button
-                          color="white"
-                          p={3}
-                          colorScheme={app.settings.accent}
-                          borderRadius="md"
-                        >
-                          Conversation cleared
-                        </Button>
-                      </HStack>
-                    ),
+                    render: () => <Toast app={app} text="Conversation Cleared"/>,
+                    duration: 2000,
+                    isClosable: true,
                   });
                 }
                 clearAreYouSureClose();
