@@ -260,6 +260,8 @@ const Prompt = ({ app }) => {
           from: "bot",
           message: botResponse,
         });
+        // set waiting to false
+        app.setWaiting(false);
         updateInfo({
           prompt_tokens: await tokensForString(chatLog, app.model),
           completion_tokens: await tokensForString(botResponse, app.model),
@@ -276,6 +278,8 @@ const Prompt = ({ app }) => {
           from: "bot",
           message: botResponse,
         });
+        // set waiting to false
+        app.setWaiting(false);
         updateInfo(usage);
       }
 
@@ -284,9 +288,6 @@ const Prompt = ({ app }) => {
 
       // enable submit button
       app.refs.submitRef.current.disabled = false;
-
-      // set waiting to false
-      app.setWaiting(false);
 
       // refocus on the input area
       app.refs.areaRef.current.focus();
