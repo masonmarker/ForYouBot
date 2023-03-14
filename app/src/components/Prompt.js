@@ -77,6 +77,7 @@ async function ask(chatLog, model) {
       // 2048 for ada
       // 2048 for babbage
       temperature: 0.5,
+      max_tokens: 2048,
     }),
   }).then((response) => response.json());
   return response;

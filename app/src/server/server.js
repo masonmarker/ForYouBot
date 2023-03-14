@@ -34,7 +34,7 @@ const port = process.env.PORT || 3080;
 
 // post to / a function to respond to the request
 app.post("/", async (req, res) => {
-  const { model, prompt, temperature } = req.body;
+  const { model, prompt, temperature, max_tokens } = req.body;
   console.log(
     `-----------
 sending message to:
@@ -47,6 +47,7 @@ temperature: ${temperature}
     model: model,
     prompt: prompt,
     temperature: temperature,
+    max_tokens: max_tokens,
   });
 
   res.status(200).json({

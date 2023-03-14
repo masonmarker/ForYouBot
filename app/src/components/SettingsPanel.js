@@ -81,6 +81,9 @@ const SettingsPanel = ({ app }) => {
   // drawer state
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  // language index state
+  const [languageIndex, setLanguageIndex] = useState(0);
+
   // code dropdown state useDisclosure
   const {
     isOpen: isOpenDropdown,
@@ -131,20 +134,27 @@ const SettingsPanel = ({ app }) => {
             e.stopPropagation();
           }}
         >
-          Code
+          Code <ChevronRightIcon ml="2" />
         </MenuButton>
-        <MenuList>
+        <MenuList maxWidth="10px">
           {/* create a list of checkmarks */}
-          {["Javascript", "Java", "Ruby", "Python"].map((language) => (
-            <MenuItem
-              key={language}
-              icon={<ChevronRightIcon />}
+          {["Javascript", "Java", "Ruby", "Python"].map((language, i) => (
+            <Button
+              colorScheme={languageIndex === i && app.settings.accent}
+              color={languageIndex === i && "white"}
+              key={i}
+              leftIcon={languageIndex === i && <CheckIcon />}
               onClick={(e) => {
+                // color the chosen menu item to the accent color
+                setLanguageIndex(i);
                 e.stopPropagation();
               }}
+              justifyContent="flex-start"
+              textAlign="left"
+              width="100%"
             >
               {language}
-            </MenuItem>
+            </Button>
           ))}
         </MenuList>
       </Menu>
