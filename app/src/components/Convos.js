@@ -95,6 +95,9 @@ const Convos = ({ app, onClose1 }) => {
     }
   }
 
+    // removeAreYouSure useDisclosure modal
+    //const { isOpen: onOpenRemoveAreYouSure, onClose: onCloseRemoveAreYouSure } = useDisclosure();
+
   // Chakra toast
   const toast = useToast();
 
@@ -207,6 +210,13 @@ const Convos = ({ app, onClose1 }) => {
                   >
                     Remove
                   </Button>
+
+                  // <Modal isOpen={onOpenRemoveAreYouSure} onClose={onCloseRemoveAreYouSure}>
+
+                  // </Modal>
+
+
+
                 )}
               </HStack>
 
