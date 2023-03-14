@@ -194,13 +194,13 @@ const Title = ({ app }) => {
       <Modal isOpen={clearAreYouSure} onClose={clearAreYouSureClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Are you sure?</ModalHeader>
+          <ModalHeader fontFamily={app.settings.font}>Are you sure?</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody fontFamily={app.settings.font}>
             This will clear this conversation and cannot be undone.
           </ModalBody>
 
-          <ModalFooter>
+          <ModalFooter fontFamily={app.settings.font}>
             <Button
               colorScheme={app.settings.accent}
               mr={3}
@@ -220,9 +220,8 @@ const Title = ({ app }) => {
                 if (userMessagesCopy.length > 0) {
                   clearToast({
                     render: () => <Toast app={app} text="Conversation Cleared"/>,
-                    duration: 2000,
-                    isClosable: true,
-                  });
+                    duration: 1500
+                   });
                 }
                 clearAreYouSureClose();
               }}

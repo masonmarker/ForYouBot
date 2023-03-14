@@ -98,7 +98,7 @@ const MessageStyled = styled(Box)`
 
   /* message text style, should wrap on overflow*/
   .msg-pre-text {
-    font-family: ${props => props.fontFamily};
+    font-family: ${(props) => props.fontFamily};
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -172,7 +172,12 @@ const Message = (props) => {
           {edit ? (
             <Input id="input" />
           ) : (
-            <pre className="msg-pre-text" fontFamily={props.app.settings.font}>{props.message}</pre>
+            <pre
+              className="msg-pre-text"
+              style={{ fontFamily: props.app.settings.font }}
+            >
+              {props.message}
+            </pre>
           )}
           {showCopy && (
             <HStack>
@@ -191,17 +196,16 @@ const Message = (props) => {
                     // editing text
                     var title = "Editing message: ";
 
-                    
                     if (editingText.length > 20) {
                       title += editingText.substring(0, 20) + "...";
                     } else {
                       title += editingText;
                     }
 
-
                     // show toast
                     toast({
-                      render: () => <Toast text={title} app={props.app}/>
+                      render: () => <Toast text={title} app={props.app} />,
+                      duration: 1500,
                     });
                   }}
                 >
@@ -255,6 +259,7 @@ const CopyButton = (props) => {
           navigator.clipboard.writeText(props.message);
           toast({
             render: () => <Toast text="Copied to clipboard" app={props.app} />,
+            duration: 1500,
           });
           e.stopPropagation();
         }}
