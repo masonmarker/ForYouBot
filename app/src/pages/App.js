@@ -96,6 +96,9 @@ function App() {
   // state for app settings font
   const [font, setFont] = useState("sans-serif");
 
+  // New state to check what mode the app is in, will be a list of modes
+  const [mode, setMode] = useState(["standard", "code"]);
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
