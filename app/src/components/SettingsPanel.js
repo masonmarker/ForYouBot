@@ -113,6 +113,16 @@ const SettingsPanel = ({ app }) => {
         className="button"
         colorScheme={app.settings.accent}
         onClick={(e) => {
+          e.stopPropagation();
+        }}
+        mr={5}
+      >
+        Code
+      </Button>
+      <Button
+        className="button"
+        colorScheme={app.settings.accent}
+        onClick={(e) => {
           onOpen();
           e.stopPropagation();
         }}

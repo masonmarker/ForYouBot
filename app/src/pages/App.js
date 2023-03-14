@@ -1,46 +1,39 @@
 /**
  * Main App component
- * 
- * authors : 
+ *
+ * authors :
  *  Mason Marker
  *  Harris Chaudhry
  */
 
-
 // components
-import Prompt from '../components/Prompt'
-import Chat from '../components/Chat'
+import Prompt from "../components/Prompt";
+import Chat from "../components/Chat";
 
 // models as appmodels
-import models from '../models/models'
+import models from "../models/models";
 
 // importing empty conversation
-import { emptyConversation } from '../messages/messages'
+import { emptyConversation } from "../messages/messages";
 
 // states
-import { useMessages, useConversation } from '../messages/messages'
-import { useState, useRef } from 'react'
+import { useMessages, useConversation } from "../messages/messages";
+import { useState, useRef } from "react";
 
 // Chakra components
-import {
-  ChakraProvider,
-  Fade,
-  Box,
- 
-} from "@chakra-ui/react"
+import { ChakraProvider, Fade, Box } from "@chakra-ui/react";
 
 // intersection observer
-import { useInView } from 'react-intersection-observer';
+import { useInView } from "react-intersection-observer";
 
 // styled components
-import styled from 'styled-components'
+import styled from "styled-components";
 
 // common
-import { css } from '../common/common'
+import { css } from "../common/common";
 
 // styled App
 const AppStyled = styled(Box)`
-
   /* put input on the bottom center of the screen */
   .inp {
     position: fixed;
@@ -54,11 +47,10 @@ const AppStyled = styled(Box)`
   * {
     transition: ${css.transition};
   }
-`
+`;
 
 // App component
 function App() {
-
   // fading
   const { ref, inView } = useInView({
     threshold: 0,
@@ -66,49 +58,46 @@ function App() {
 
   // messages state
   const {
-
     // messages
     userMessages,
     stateAddMessage,
     stateAddBotMessage,
     botMessages,
     setUserMessages,
-    setBotMessages
-  } = useMessages()
+    setBotMessages,
+  } = useMessages();
 
   // conversations state with initial messages
   const { conversations, setConversations } = useConversation([
-    emptyConversation(userMessages, botMessages)
-  ])
+    emptyConversation(userMessages, botMessages),
+  ]);
 
   // state for generating
-  const [generating, setGenerating] = useState(false)
+  const [generating, setGenerating] = useState(false);
 
   // is waiting for response
   const [waiting, setWaiting] = useState(false);
 
   // state for bot model, using first model in models for now
-  const [model, setModel] = useState("davinci")
+  const [model, setModel] = useState("davinci");
 
   // state for all models
-  const [allModels, setAllModels] = useState(models)
+  const [allModels, setAllModels] = useState(models);
 
   // state for bot response contstraints
   const [constraints, setConstraints] = useState([
     // "-don't include you:",
     // "-minimum tokens"
-  ])
+  ]);
 
   // state for app settings accent color
   const [colorScheme, setcolorScheme] = useState("purple");
-
 
   // state for app settings font
   const [font, setFont] = useState("sans-serif");
 
   // app information / states to pass as props
   var app = {
-
     // conversations / messages
     userMessages: userMessages,
     stateAddMessage: stateAddMessage,
@@ -137,29 +126,26 @@ function App() {
     models: allModels,
     setModels: setAllModels,
 
-    // app settings 
+    // app settings
     settings: {
       accent: colorScheme,
       setAccent: setcolorScheme,
       font: font,
-      setFont: setFont
+      setFont: setFont,
     },
-
-    
 
     // component references
     refs: {
       areaRef: useRef(null),
       submitRef: useRef(null),
       charLimitRef: useRef(null),
-    }
-  }
-
+    },
+  };
 
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
-        <AppStyled fontFamily = {app.settings.font}>
+        <AppStyled fontFamily={app.settings.font}>
           <Prompt app={app} />
           <Chat app={app} />
         </AppStyled>
