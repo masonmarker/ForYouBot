@@ -95,8 +95,8 @@ const Convos = ({ app, onClose1 }) => {
     }
   }
 
-    // removeAreYouSure useDisclosure modal
-    //const { isOpen: onOpenRemoveAreYouSure, onClose: onCloseRemoveAreYouSure } = useDisclosure();
+  // removeAreYouSure useDisclosure modal
+  //const { isOpen: onOpenRemoveAreYouSure, onClose: onCloseRemoveAreYouSure } = useDisclosure();
 
   // Chakra toast
   const toast = useToast();
@@ -109,6 +109,21 @@ const Convos = ({ app, onClose1 }) => {
     app.setConversations(newConversations);
     setRenameIndex(-1);
   }
+
+  // removes a conversation
+  function handleRemove(index, convo) {
+    // remove the conversation from the conversations array
+    const newConversations = app.conversations;
+    newConversations.splice(index, 1);
+    app.setConversations(newConversations);
+
+    // reset the current conversation to the user's messages
+    app.setUserMessages(convo.user);
+    app.setBotMessages(convo.bot);
+  }
+
+  // state for a removing conversations index
+  const [removeIndex, setRemoveIndex] = useState(-1);
 
   // conversations format:
   // conversations[0].user[0] = {date: from: message:}
@@ -195,14 +210,8 @@ const Convos = ({ app, onClose1 }) => {
                 {app.conversations?.length > 1 && (
                   <Button
                     onClick={() => {
-                      // remove the conversation from the conversations array
-                      const newConversations = app.conversations;
-                      newConversations.splice(index, 1);
-                      app.setConversations(newConversations);
-
-                      // reset the current conversation to the user's messages
-                      app.setUserMessages(convo.user);
-                      app.setBotMessages(convo.bot);
+                      // set remove index
+                      setRemoveIndex(index);
 
                       // close the model
                       onClose1();
@@ -214,29 +223,31 @@ const Convos = ({ app, onClose1 }) => {
                   // <Modal isOpen={onOpenRemoveAreYouSure} onClose={onCloseRemoveAreYouSure}>
 
                   // </Modal>
-
-
-
                 )}
               </HStack>
+
+              {/* Render are you sure boxes */}
+              {removeIndex === index && <ScaleFade in={1}></ScaleFade>}
 
               {/* Render renaming components for this conversation only
                             if areYouSure */}
               {renameIndex === index && (
-                <HStack>
-                  <Input
-                    ref={renameRef}
-                    defaultValue={app.conversations[renameIndex].name}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleRename();
-                      }
-                    }}
-                  />
-                  <Button onClick={handleRename}>
-                    <CheckIcon />
-                  </Button>
-                </HStack>
+                <ScaleFade in={1}>
+                  <HStack>
+                    <Input
+                      ref={renameRef}
+                      defaultValue={app.conversations[renameIndex].name}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleRename();
+                        }
+                      }}
+                    />
+                    <Button onClick={handleRename}>
+                      <CheckIcon />
+                    </Button>
+                  </HStack>
+                </ScaleFade>
               )}
               {/* displaying more about the conversation requested */}
               {moreConversation === index && (

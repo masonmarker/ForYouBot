@@ -12,6 +12,10 @@ import { useRef, useState } from "react";
 import { tokensForString } from "./Prompt";
 import { priceForTokens } from "../models/models";
 
+// syntax highliter  (for code mode)
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
 // Chakra components
 import {
   Text,
@@ -109,16 +113,22 @@ const SettingsPanel = ({ app }) => {
 
   return (
     <SettingsPanelStyled>
-      <Button
-        className="button"
-        colorScheme={app.settings.accent}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        mr={5}
-      >
-        Code
-      </Button>
+      <SyntaxHighlighter language="javascript" style={atomDark}>
+        <Button
+          className="button"
+          colorScheme={app.settings.accent}
+          ref={app.refs.codeButtonRef}
+          onClick={(e) => {
+            app.mode === "standard"
+              ? app.setMode(app.modes[1])
+              : app.setMode(app.modes[0]);
+            e.stopPropagation();
+          }}
+          mr={5}
+        >
+          {app.mode === "code" ? "Standard" : "Code"}
+        </Button>
+      </SyntaxHighlighter>
       <Button
         className="button"
         colorScheme={app.settings.accent}
@@ -126,7 +136,6 @@ const SettingsPanel = ({ app }) => {
           onOpen();
           e.stopPropagation();
         }}
-        font
       >
         Settings
       </Button>

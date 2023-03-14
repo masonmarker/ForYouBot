@@ -12,7 +12,7 @@
 import Convos from "./Convos";
 
 // toast
-import Toast from "./Toast"
+import Toast from "./Toast";
 
 // generating a new conversation
 import { emptyConversation } from "../messages/messages";
@@ -194,7 +194,9 @@ const Title = ({ app }) => {
       <Modal isOpen={clearAreYouSure} onClose={clearAreYouSureClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader fontFamily={app.settings.font}>Are you sure?</ModalHeader>
+          <ModalHeader fontFamily={app.settings.font}>
+            Are you sure?
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody fontFamily={app.settings.font}>
             This will clear this conversation and cannot be undone.
@@ -219,9 +221,11 @@ const Title = ({ app }) => {
                 // toast for clearing conversation
                 if (userMessagesCopy.length > 0) {
                   clearToast({
-                    render: () => <Toast app={app} text="Conversation Cleared"/>,
-                    duration: 1500
-                   });
+                    render: () => (
+                      <Toast app={app} text="Conversation Cleared" />
+                    ),
+                    duration: 1500,
+                  });
                 }
                 clearAreYouSureClose();
               }}

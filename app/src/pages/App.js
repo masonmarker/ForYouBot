@@ -13,6 +13,9 @@ import Chat from "../components/Chat";
 // models as appmodels
 import models from "../models/models";
 
+// modes
+import modes from "../modes/modes";
+
 // importing empty conversation
 import { emptyConversation } from "../messages/messages";
 
@@ -21,7 +24,7 @@ import { useMessages, useConversation } from "../messages/messages";
 import { useState, useRef } from "react";
 
 // Chakra components
-import { ChakraProvider, Fade, Box } from "@chakra-ui/react";
+import { ChakraProvider, Fade, Box, Button } from "@chakra-ui/react";
 
 // intersection observer
 import { useInView } from "react-intersection-observer";
@@ -31,6 +34,9 @@ import styled from "styled-components";
 
 // common
 import { css } from "../common/common";
+
+//title
+import Title from "../components/Title";
 
 // styled App
 const AppStyled = styled(Box)`
@@ -97,7 +103,7 @@ function App() {
   const [font, setFont] = useState("sans-serif");
 
   // New state to check what mode the app is in, will be a list of modes
-  const [mode, setMode] = useState(["standard", "code"]);
+  const [mode, setMode] = useState(modes[0]);
 
   // app information / states to pass as props
   var app = {
@@ -142,16 +148,29 @@ function App() {
       areaRef: useRef(null),
       submitRef: useRef(null),
       charLimitRef: useRef(null),
+      codeButtonRef: useRef(null),
     },
+
+    // modes
+    modes: modes,
+    mode: mode,
+    setMode: setMode,
   };
 
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
-        <AppStyled fontFamily={app.settings.font}>
-          <Prompt app={app} />
-          <Chat app={app} />
-        </AppStyled>
+        {mode === "standard" ? (
+          <AppStyled fontFamily={app.settings.font}>
+            <Prompt app={app} />
+            <Chat app={app} />
+          </AppStyled>
+        ) : (
+          <>
+            <AppStyled fontFamily={app.settings.font} />
+            <Title app={app} />
+          </>
+        )}
       </Fade>
     </ChakraProvider>
   );
