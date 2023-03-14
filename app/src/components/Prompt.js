@@ -61,7 +61,7 @@ const PromptStyled = styled.div`
 // asks the OpenAI API for a response
 // based on a specific model
 async function ask(chatLog, model) {
-  return await fetch("http://localhost:3080", {
+  const response = fetch("http://localhost:3080", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -78,9 +78,8 @@ async function ask(chatLog, model) {
       // 2048 for babbage
       temperature: 0.5,
     }),
-  })
-    .then((response) => response.json())
-    .then((data) => data.data.trim());
+  }).then((response) => response.json());
+  return response;
 }
 
 // asks the tokenizer for OpenAI's
@@ -183,10 +182,10 @@ const Prompt = ({ app }) => {
   }
 
   // updates the current conversation's tokens and expenses
-  async function updateInfo(userPrompt, botResponse) {
+  function updateInfo(usage) {
     // compute tokens for user prompt and bot response
-    const userTokens = await tokensForString(userPrompt);
-    const botTokens = await tokensForString(botResponse);
+    const userTokens = usage.prompt_tokens;
+    const botTokens = usage.completion_tokens;
 
     // compute pricing for the tokens based on the current model
     var userExpenses = priceForTokens(userTokens, app.model);
@@ -251,10 +250,13 @@ const Prompt = ({ app }) => {
         prompt
       );
 
+      // obtain bot response
+      const response = await ask(chatLog, app.models[app.model].name);
+
       // obtain the bot's response to the prompt
       const botResponse = testing
         ? await testBotResponse()
-        : await ask(chatLog, app.models[app.model].name);
+        : response.data.trim();
 
       // add bot response to messages
       await app.stateAddBotMessage({
@@ -277,53 +279,53 @@ const Prompt = ({ app }) => {
       // if so, set the name to "test name"
       // set the first conversations name to that name
       // current conversation is at index 0
-//       if (app.userMessages.length === 0 && !app.conversations[0].wasRenamed) {
-//         app.setGenerating(true);
-//         var newConversations = app.conversations;
-//         console.log("adding title");
+      //       if (app.userMessages.length === 0 && !app.conversations[0].wasRenamed) {
+      //         app.setGenerating(true);
+      //         var newConversations = app.conversations;
+      //         console.log("adding title");
 
-//         // if testing
-//         if (testing) {
-//           // set the name of the conversation
-//           newConversations[0].name = await testResponse();
+      //         // if testing
+      //         if (testing) {
+      //           // set the name of the conversation
+      //           newConversations[0].name = await testResponse();
 
-//           // setting conversations again so info can be updated
-//           app.setConversations(newConversations);
+      //           // setting conversations again so info can be updated
+      //           app.setConversations(newConversations);
 
-//           // update the conversations info
-//           await updateInfo(chatLog, newConversations[0].name);
-//         } else {
-//           var pr = `
-// create a title for the below context, one sentence, 8 words or less, and
-// do not answer the question:
-// ${chatLog}`;
+      //           // update the conversations info
+      //           await updateInfo(chatLog, newConversations[0].name);
+      //         } else {
+      //           var pr = `
+      // create a title for the below context, one sentence, 8 words or less, and
+      // do not answer the question:
+      // ${chatLog}`;
 
-//           // retrieve title suggestion from api
-//           var response = await ask(pr, app.models.davinci.name);
+      //           // retrieve title suggestion from api
+      //           var response = await ask(pr, app.models.davinci.name);
 
-//           // update info
-//           await updateInfo(pr, response);
+      //           // update info
+      //           await updateInfo(pr, response);
 
-//           // remove surrounding quotations, if they exist
-//           if (
-//             (response[0] === '"' && response[response.length - 1] === '"') ||
-//             (response[0] === "'" && response[response.length - 1] === "'") ||
-//             (response[0] === "`" && response[response.length - 1] === "`") ||
-//             (response[0] === "“" && response[response.length - 1] === "”") ||
-//             (response[0] === "‘" && response[response.length - 1] === "’")
-//           ) {
-//             response = response.substring(1, response.length - 1);
-//           }
+      //           // remove surrounding quotations, if they exist
+      //           if (
+      //             (response[0] === '"' && response[response.length - 1] === '"') ||
+      //             (response[0] === "'" && response[response.length - 1] === "'") ||
+      //             (response[0] === "`" && response[response.length - 1] === "`") ||
+      //             (response[0] === "“" && response[response.length - 1] === "”") ||
+      //             (response[0] === "‘" && response[response.length - 1] === "’")
+      //           ) {
+      //             response = response.substring(1, response.length - 1);
+      //           }
 
-//           // set conversation name to the response
-//           newConversations[0].name = response;
-//         }
-//         app.setConversations(newConversations);
-//         app.setGenerating(false);
-//       }
+      //           // set conversation name to the response
+      //           newConversations[0].name = response;
+      //         }
+      //         app.setConversations(newConversations);
+      //         app.setGenerating(false);
+      //       }
 
       // update info
-      await updateInfo(chatLog, botResponse);
+      updateInfo(response.usage);
 
       // refocus on the input area
       app.refs.areaRef.current.focus();
@@ -350,15 +352,6 @@ const Prompt = ({ app }) => {
 
             // set the character limit
             comp.innerHTML = len + `/${maxChars}`;
-
-            // if the length is greater than the max
-            if (len >= maxChars) {
-              comp.style.color = "red";
-            } else if (comp.style.color === "red") {
-              comp.style.color = colorMode === "light" ? "black" : "white";
-            } else {
-              comp.style.color = colorMode === "light" ? "black" : "white";
-            }
           }}
         />
         <Button
@@ -386,11 +379,7 @@ const Prompt = ({ app }) => {
         </Checkbox>
       </HStack>
 
-      <Text
-        color={colorMode === "light" ? "black" : "white"}
-        ref={app.refs.charLimitRef}
-        className="limtext"
-      >
+      <Text ref={app.refs.charLimitRef} className="limtext">
         0/{maxChars}
       </Text>
     </PromptStyled>

@@ -52,6 +52,7 @@ temperature: ${temperature}
   res.status(200).json({
     success: true,
     data: response.data.choices[0].text,
+    usage: response.data.usage,
   });
 });
 

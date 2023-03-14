@@ -160,17 +160,10 @@ function App() {
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
-        {mode === "standard" ? (
-          <AppStyled fontFamily={app.settings.font}>
-            <Prompt app={app} />
-            <Chat app={app} />
-          </AppStyled>
-        ) : (
-          <>
-            <AppStyled fontFamily={app.settings.font} />
-            <Title app={app} />
-          </>
-        )}
+        <AppStyled fontFamily={app.settings.font}>
+          <Prompt app={app} />
+          <Chat app={app} />
+        </AppStyled>
       </Fade>
     </ChakraProvider>
   );

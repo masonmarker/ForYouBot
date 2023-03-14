@@ -56,6 +56,8 @@ import {
   SunIcon,
   AddIcon,
   CheckCircleIcon,
+  CheckIcon,
+  CloseIcon,
 } from "@chakra-ui/icons";
 
 // styled components
@@ -151,6 +153,16 @@ const Title = ({ app }) => {
     app.setConversations,
   ]);
 
+  // clear all conversations state
+  const [clearAll, setClearAll] = useState(false);
+
+  // function to remove a conversation
+  function clearAllConversations() {
+    app.setConversations([emptyConversation([], [])]);
+    app.setUserMessages([]);
+    app.setBotMessages([]);
+  }
+
   return (
     <TitleStyled
       onMouseEnter={() => setHover(true)}
@@ -171,23 +183,23 @@ const Title = ({ app }) => {
         colorScheme={app.settings.accent}
         onClick={(e) => {
           toggleColorMode();
+
           e.stopPropagation();
         }}
       >
         {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
       </Button>
       {app.userMessages.length > 0 && (
-        <ScaleFade in={1} className="clear-conversation">
-          <Button
-            colorScheme={app.settings.accent}
-            onClick={(e) => {
-              clearAreYouSureOpen();
-              e.stopPropagation();
-            }}
-          >
-            Clear Conversation
-          </Button>
-        </ScaleFade>
+        <Button
+          colorScheme={app.settings.accent}
+          className="clear-conversation"
+          onClick={(e) => {
+            clearAreYouSureOpen();
+            e.stopPropagation();
+          }}
+        >
+          Clear Conversation
+        </Button>
       )}
 
       {/* clearAreYouSure modal */}
@@ -279,20 +291,61 @@ const Title = ({ app }) => {
 
               {/* Clearing all conversations */}
               {app.conversations?.length > 1 && (
-                <Button
-                  colorScheme={app.settings.accent}
-                  size="sm"
-                  onClick={() => {
-                    app.setConversations([emptyConversation([], [])]);
-                    app.setUserMessages([]);
-                    app.setBotMessages([]);
+                <>
+                  <ScaleFade in={1}>
+                    <Button
+                      colorScheme={app.settings.accent}
+                      size="sm"
+                      onClick={() => {
+                        // set clear all state to true
+                        setClearAll(true);
+                      }}
+                      fontFamily={app.settings.font}
+                    >
+                      Clear All
+                    </Button>
+                  </ScaleFade>
+                  {clearAll && (
+                    <ScaleFade in={1}>
+                      <HStack>
+                        <Button
+                          size="xs"
+                          onClick={() => {
+                            // clear all conversations
+                            clearAllConversations();
+                            // set clear all state to false
+                            setClearAll(false);
 
-                    onClose();
-                  }}
-                  fontFamily={app.settings.font}
-                >
-                  Clear All
-                </Button>
+                            // close modal
+                            onClose();
+
+                            // toast for clearing all conversations
+                            clearToast({
+                              render: () => (
+                                <Toast
+                                  app={app}
+                                  text="All Conversations Cleared"
+                                />
+                              ),
+                              duration: 1500,
+                            });
+                          }}
+                        >
+                          <CheckIcon />
+                        </Button>
+                        <Button
+                          size="xs"
+                          onClick={() => {
+                            // set clear all state to false
+                            setClearAll(false);
+                          }}
+                        >
+                          <CloseIcon />
+                        </Button>
+                      </HStack>
+                    </ScaleFade>
+                  )}
+                </>
               )}
             </HStack>
           </ModalHeader>

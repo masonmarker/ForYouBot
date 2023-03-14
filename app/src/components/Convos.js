@@ -37,7 +37,7 @@ import {
 } from "@chakra-ui/react";
 
 // Check icon
-import { CheckIcon } from "@chakra-ui/icons";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -120,6 +120,7 @@ const Convos = ({ app, onClose1 }) => {
     // reset the current conversation to the user's messages
     app.setUserMessages(convo.user);
     app.setBotMessages(convo.bot);
+    onClose1();
   }
 
   // state for a removing conversations index
@@ -170,7 +171,7 @@ const Convos = ({ app, onClose1 }) => {
                       toast({
                         render: () => (
                           <Toast
-                            text={`Opened conversation: ${app.conversations[index]?.name}`}
+                            text={`Opened conversation: ${convo.name}`}
                             app={app}
                           />
                         ),
@@ -211,10 +212,7 @@ const Convos = ({ app, onClose1 }) => {
                   <Button
                     onClick={() => {
                       // set remove index
-                      setRemoveIndex(index);
-
-                      // close the model
-                      onClose1();
+                      setRemoveIndex(renameIndex === index ? -1 : index);
                     }}
                   >
                     Remove
@@ -227,7 +225,32 @@ const Convos = ({ app, onClose1 }) => {
               </HStack>
 
               {/* Render are you sure boxes */}
-              {removeIndex === index && <ScaleFade in={1}></ScaleFade>}
+              {removeIndex === index && (
+                <ScaleFade in={1}>
+                  <HStack>
+                    <Button
+                      onClick={() => {
+                        handleRemove(index, convo);
+                        toast({
+                          render: () => (
+                            <Toast text="Conversation removed" app={app} />
+                          ),
+                          duration: 2000,
+                        });
+                      }}
+                    >
+                      <CheckIcon />
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setRemoveIndex(-1);
+                      }}
+                    >
+                      <CloseIcon />
+                    </Button>
+                  </HStack>
+                </ScaleFade>
+              )}
 
               {/* Render renaming components for this conversation only
                             if areYouSure */}

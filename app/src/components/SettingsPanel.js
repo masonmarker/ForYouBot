@@ -64,7 +64,7 @@ import {
 } from "@chakra-ui/react";
 
 // Chakra checkicon
-import { CheckIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronRightIcon, CloseIcon } from "@chakra-ui/icons";
 
 // styled components
 import styled from "styled-components";
@@ -80,6 +80,13 @@ const SettingsPanel = ({ app }) => {
 
   // drawer state
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // code dropdown state useDisclosure
+  const {
+    isOpen: isOpenDropdown,
+    onOpen: onOpenDropdown,
+    onClose: onCloseDropdown,
+  } = useDisclosure();
 
   // help drawer state
   const {
@@ -113,22 +120,35 @@ const SettingsPanel = ({ app }) => {
 
   return (
     <SettingsPanelStyled>
-      <SyntaxHighlighter language="javascript" style={atomDark}>
-        <Button
-          className="button"
+      <Menu isOpen={isOpenDropdown} onClose={onCloseDropdown}>
+        <MenuButton
+          as={Button}
           colorScheme={app.settings.accent}
-          ref={app.refs.codeButtonRef}
+          className="button"
+          mr={3}
           onClick={(e) => {
-            app.mode === "standard"
-              ? app.setMode(app.modes[1])
-              : app.setMode(app.modes[0]);
+            onOpenDropdown();
             e.stopPropagation();
           }}
-          mr={5}
         >
-          {app.mode === "code" ? "Standard" : "Code"}
-        </Button>
-      </SyntaxHighlighter>
+          Code
+        </MenuButton>
+        <MenuList>
+          {/* create a list of checkmarks */}
+          {["Javascript", "Java", "Ruby", "Python"].map((language) => (
+            <MenuItem
+              key={language}
+              icon={<ChevronRightIcon />}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {language}
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+
       <Button
         className="button"
         colorScheme={app.settings.accent}
@@ -139,7 +159,6 @@ const SettingsPanel = ({ app }) => {
       >
         Settings
       </Button>
-
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -306,6 +325,7 @@ const SettingsPanel = ({ app }) => {
                 </ModalBody>
               </ModalContent>
             </Modal>
+            {/*Code dropdown*/}
           </ModalFooter>
         </ModalContent>
       </Modal>
