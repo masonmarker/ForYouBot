@@ -16,6 +16,9 @@ import models from "../models/models";
 // modes
 import modes from "../modes/modes";
 
+// icons
+import { userIcons, botIcons } from "../icons/icons";
+
 // importing empty conversation
 import { emptyConversation } from "../messages/messages";
 
@@ -35,8 +38,11 @@ import styled from "styled-components";
 // common
 import { css } from "../common/common";
 
-//title
+// title
 import Title from "../components/Title";
+
+// SiRobotFramework from react-icons
+import { SiRobotframework } from "react-icons/si";
 
 // styled App
 const AppStyled = styled(Box)`
@@ -111,6 +117,13 @@ function App() {
   // state to manage what langauage is being used
   const [language, setLanguage] = useState(languages[0]);
 
+  // state to manage user icon
+  const [userIcon, setUserIcon] = useState(userIcons[0]);
+
+  // state to manage bot icon
+  // default is SiRobotframework
+  const [botIcon, setBotIcon] = useState(botIcons[0]);
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
@@ -147,6 +160,14 @@ function App() {
       setAccent: setcolorScheme,
       font: font,
       setFont: setFont,
+      icons: {
+        userIcons: userIcons,
+        botIcons: botIcons,
+        userIcon: userIcon,
+        setUserIcon: setUserIcon,
+        botIcon: botIcon,
+        setBotIcon: setBotIcon,
+      }
     },
 
     // component references
@@ -162,9 +183,11 @@ function App() {
     mode: mode,
     setMode: setMode,
 
+    // needs removing
     languages: languages,
     language: language,
     setLanguage: setLanguage,
+
   };
 
   return (

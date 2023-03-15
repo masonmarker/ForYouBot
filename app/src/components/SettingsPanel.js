@@ -9,7 +9,7 @@
 import { useRef, useState } from "react";
 
 // ColorButton from Title
-import {ColorButton} from "./Title";
+import { ColorButton } from "./Title";
 
 // pricing functions
 import { tokensForString } from "./Prompt";
@@ -19,6 +19,18 @@ import { priceForTokens } from "../models/models";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
+// all robot icons from react-icons
+import {
+  AiOutlineRobot,
+  AiOutlineRobotOutlined,
+  AiOutlineRobotTwoTone,
+  AiOutlineRobotFilled,
+  AiOutlineRobotAddOutlined,
+  AiOutlineRobotAddTwoTone,
+  AiOutlineRobotAddFilled,
+  AiOutlineRobotAdd,
+} from "react-icons/ai";
+
 // Chakra components
 import {
   Text,
@@ -26,7 +38,7 @@ import {
   HStack,
   Button,
   Input,
-
+  Icon,
   // grid components
   Grid,
   GridItem,
@@ -139,6 +151,13 @@ const SettingsPanel = ({ app }) => {
     onClose: onCloseCustomizeInterfaceFont,
   } = useDisclosure();
 
+  // customize interface chat icons state
+  const {
+    isOpen: isOpenCustomizeInterfaceChatIcons,
+    onOpen: onOpenCustomizeInterfaceChatIcons,
+    onClose: onCloseCustomizeInterfaceChatIcons,
+  } = useDisclosure();
+
   const customizeColor = () => {};
 
   return (
@@ -233,6 +252,9 @@ const SettingsPanel = ({ app }) => {
                   </MenuItem>
                   <MenuItem onClick={onOpenCustomizeInterfaceFont}>
                     Interface Font
+                  </MenuItem>
+                  <MenuItem onClick={onOpenCustomizeInterfaceChatIcons}>
+                    Chat Icons
                   </MenuItem>
                 </MenuList>
               </Menu>
@@ -374,7 +396,86 @@ const SettingsPanel = ({ app }) => {
                 </ModalBody>
               </ModalContent>
             </Modal>
-            {/* Color Mode changing button*/}
+
+            {/* customize interface chat icons */}
+            <Modal
+              isOpen={isOpenCustomizeInterfaceChatIcons}
+              onClose={onCloseCustomizeInterfaceChatIcons}
+            >
+              <ModalOverlay />
+              <ModalContent mt={200}>
+                <ModalCloseButton />
+                <ModalHeader fontFamily={app.settings.font}>
+                  Chat Icons
+                </ModalHeader>
+                <ModalBody fontFamily={app.settings.font}>
+                  {/* center the 2 sections in the modal body */}
+                  <VStack>
+                    {/* 2 sections for user icon and user icon picking */}
+                    <HStack gap={4} mb={5}>
+                      {/* user icon section */}
+                      <VStack>
+                        <Text>User Icon</Text>
+                        {/* current user icon */}
+                        <Button colorScheme={app.settings.accent}>
+                          {app.settings.icons.userIcon}
+                        </Button>
+                        {/* ChakraGrid for possible user icons */}
+                        <ChakraGrid
+                          templateColumns="repeat(3, 1fr)"
+                          templateRows="repeat(2, 1fr)"
+                          gap={2}
+                        >
+                          {app.settings.icons.userIcons.map((icon, i) => {
+                            return (
+                              <ChakraGridItem key={`user-icon-id-${i}`}>
+                                <Button
+                                  onClick={() => {
+                                    app.settings.icons.setUserIcon(icon);
+                                  }}
+                                >
+                                  {/* the icon should be displayed with no margins */}
+                                  {icon}
+                                </Button>
+                              </ChakraGridItem>
+                            );
+                          })}
+                        </ChakraGrid>
+                      </VStack>
+
+                      {/* user icon picker section */}
+                      <VStack>
+                        <Text>Bot Icon</Text>
+                        {/* current bot icon */}
+                        <Button colorScheme={app.settings.accent}>
+                          {app.settings.icons.botIcon}
+                        </Button>
+                        {/* ChakraGrid for possible bot icons */}
+                        <ChakraGrid
+                          templateColumns="repeat(3, 1fr)"
+                          templateRows="repeat(2, 1fr)"
+                          gap={2}
+                        >
+                          {app.settings.icons.botIcons.map((icon, i) => {
+                            return (
+                              <ChakraGridItem key={`bot-icon-id-${i}`}>
+                                <Button
+                                  onClick={() => {
+                                    app.settings.icons.setBotIcon(icon);
+                                  }}
+                                >
+                                  {icon}
+                                </Button>
+                              </ChakraGridItem>
+                            );
+                          })}
+                        </ChakraGrid>
+                      </VStack>
+                    </HStack>
+                  </VStack>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -223,10 +223,14 @@ const Message = (props) => {
         {/* message box */}
         <HStack w="100%" minHeight="2rem">
           {/* avatar */}
-          {props.from !== "user" ? (
-            <SiRobotframework size="1.5rem" style={{ marginRight: "0.7rem" }} />
+          {props.from === "user" ? (
+            <Box ml={10} mr={5}>
+              {props.app.settings.icons.userIcon}
+            </Box>
           ) : (
-            <></>
+            <Box ml={10} mr={5}>
+              {props.app.settings.icons.botIcon}
+            </Box>
           )}
 
           {language !== "unknown" ? (
@@ -246,7 +250,7 @@ const Message = (props) => {
               </SyntaxHighlighter>
             </pre>
           ) : (
-            <pre>{props.message}</pre>
+            <pre className="msg-pre-text">{props.message}</pre>
           )}
 
           {showCopy && (
