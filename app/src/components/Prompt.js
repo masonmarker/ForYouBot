@@ -55,6 +55,7 @@ const PromptStyled = styled.div`
   .area {
     z-index: 2;
     height: 15vh;
+    
   }
 `;
 
