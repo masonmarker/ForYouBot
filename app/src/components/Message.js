@@ -172,6 +172,8 @@ const Message = (props) => {
 
     // language in lowercase
     const lower = language.toLowerCase();
+
+    // turns it to lowercase
     if (lower !== "unknown") {
       console.log(`detected language in message: ${lower}`);
     }
