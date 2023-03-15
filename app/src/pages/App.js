@@ -111,6 +111,9 @@ function App() {
   // state to manage what langauage is being used
   const [language, setLanguage] = useState(languages[0]);
 
+  // state to manage current model temperature
+  const [temperature, setTemperature] = useState(0.5);
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
@@ -164,7 +167,7 @@ function App() {
 
     // current model information
     temperature: 0.5,
-    setTemperature: 
+    setTemperature: setTemperature,
 
     languages: languages,
     language: language,

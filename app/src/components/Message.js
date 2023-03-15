@@ -48,7 +48,10 @@ import {
 
 // syntax highliter  (for code mode)
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark, oneLight } from "react-syntax-highlighter/dist/esm/styles/prism";
+import {
+  atomDark,
+  oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // intersection observer
 import { useInView } from "react-intersection-observer";
@@ -169,7 +172,10 @@ const Message = (props) => {
 
     // language in lowercase
     const lower = language.toLowerCase();
-    console.log(lower);
+
+    if (lower !== "unknown") {
+      console.log(lower);
+    }
 
     // return the language
     return lower;
@@ -218,18 +224,14 @@ const Message = (props) => {
               style={{ fontFamily: props.app.settings.font }}
             >
               <SyntaxHighlighter
-                language={
-                  props.app.language === "Auto Detect"
-                    ? language
-                    : props.app.language
-                }
-                style={colorMode === 'light' ? oneLight : atomDark}
+                language={language}
+                style={colorMode === "light" ? oneLight : atomDark}
               >
                 {props.message}
               </SyntaxHighlighter>
             </pre>
           ) : (
-            <pre>{props.message}</pre>
+            <pre className="msg-pre-text">{props.message}</pre>
           )}
 
           {showCopy && (

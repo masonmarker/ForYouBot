@@ -57,7 +57,7 @@ temperature: ${temperature}
     success: true,
     data: response.data.choices[0].text,
     usage: response.data.usage,
-  }); 
+  });
 });
 
 // post to /tokenizer a function to tokenize a string passed through the header
@@ -69,7 +69,6 @@ app.post("/tokenizer", async (req, res) => {
     data: response,
   });
 });
-
 
 // post to program-language-detector to determine the programming language
 // a given string represents

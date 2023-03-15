@@ -138,58 +138,6 @@ const SettingsPanel = ({ app }) => {
 
   return (
     <SettingsPanelStyled>
-      <Menu isOpen={isOpenDropdown} onClose={onCloseDropdown}>
-        <MenuButton
-          as={Button}
-          colorScheme={app.settings.accent}
-          className="button"
-          mr={3}
-          onClick={(e) => {
-            onOpenDropdown();
-            e.stopPropagation();
-          }}
-        >
-          Code <ChevronRightIcon ml="2" />
-        </MenuButton>
-        <MenuList maxWidth="10px">
-          {/* create a list of checkmarks */}
-          {app.languages.map((language, i) => (
-            <Button
-              colorScheme={languageIndex === i && app.settings.accent}
-              color={languageIndex === i && "white"}
-              key={i}
-              leftIcon={languageIndex === i && <CheckIcon />}
-              rightIcon={
-                i === 0 && (
-                  <Tooltip
-
-                    borderRadius="lg"
-                    fontFamily={app.settings.font}
-                    bg="gray.100" 
-                    hasArrow
-                    label="Choosing a language enables syntax highlighting within any question or response regarding code snippets."
-                    color="black"
-                  >
-                    <InfoIcon />
-                  </Tooltip>
-                )
-              }
-              onClick={(e) => {
-                // color the chosen menu item to the accent color
-                setLanguageIndex(i);
-                e.stopPropagation();
-                app.setLanguage(language);
-              }}
-              justifyContent="flex-start"
-              textAlign="left"
-              width="100%"
-            >
-              {language}
-            </Button>
-          ))}
-        </MenuList>
-      </Menu>
-
       <Button
         className="button"
         colorScheme={app.settings.accent}

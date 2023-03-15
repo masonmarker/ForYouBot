@@ -30,7 +30,7 @@ import styled from "styled-components";
 
 // ----------- Prompt Variables ----------- //
 // max characters permitted in a single prompt
-const maxChars = 2000;
+const maxChars = 5000;
 
 // constraints separator
 const constraintSeparator = "##RESPONSE CONSTRAINTS##";
@@ -103,44 +103,57 @@ async function tokensForString(string) {
 }
 
 // gets a string representation of the user's chat log
+// example exchange:
+// user: "hello"
+// bot: "hi"
+//
+// representation should contain the first exchange, and the exchange prior
+// to the last exchange
 function getUserChatLog(userMessages, botMessages, constraints, prompt) {
-  // separator between message exchanges
-  // const sep = "\n--next--\n";
-
   // string representation of the chat log context
   var chatLog = "";
 
-  // add each message exchange to the chat log
-  for (let i = 0; i < userMessages.length; i++) {
-    chatLog += "user:\n" + userMessages[i].message + "\n";
-    chatLog += "you:\n" + botMessages[i].message + "\n";
-    // if (i < userMessages.length - 1) {
-    //   chatLog += sep;
-    // }
-  }
+  // create an empty set for integers
+  var set = new Set();
 
-  // if there are messages in the chat log, add the context footer
+  // add 0 to the set
+  set.add(0);
+
   if (userMessages.length > 0) {
-    chatLog += `
-user: 
-${prompt}
-you:
-???
+    // add the most recent exchange to the set
+    set.add(Math.max(userMessages.length - 1, 0));
 
-fill in your ???`;
+    // // add the second most recent exchange to the set
+    // set.add(Math.max(userMessages.length - 2, 0));
+
+    // based on the indices in the set,
+    // add exchanges to the chat log
+    for (var i of set) {
+      // add user message
+      chatLog += "user:\n" + userMessages[i].message + "\n";
+
+      // add bot message
+      chatLog += "you:\n" + botMessages[i].message + "\n";
+    }
+
+    // add most recent user prompt
+    chatLog += "user:\n" + prompt + "\n";
+    chatLog += "you:\n???\n\n";
+    chatLog += "fill in your ???\n\n";
   } else {
-    chatLog += prompt;
+    chatLog = prompt;
   }
 
+  // add constraints, if any
   if (constraints.length > 0) {
-    chatLog += "\n\n" + constraintSeparator + "\n";
-    // add each elements from the constraints array to the chat log
-    for (let i = 0; i < constraints.length; i++) {
-      chatLog += constraints[i] + "\n";
+    chatLog += "\n" + constraintSeparator + "\n";
+    for (var constraint of constraints) {
+      chatLog += constraint + "\n";
     }
   }
 
   console.log(chatLog);
+
   return chatLog;
 }
 
@@ -269,7 +282,25 @@ const Prompt = ({ app }) => {
 
         // if not testing
       } else {
-        const response = await ask(chatLog, app.models[app.model].name);
+        // make sure the chatLog can fit in the request,
+        // in other words, make sure the tokens For the String chatLog
+        // is less that the current model's max tokens
+        // const tokens = await tokensForString(chatLog, app.model);
+        // console.log(tokens);
+        // if (tokens * 2 > app.models[app.model].maxRequest) {
+        //   setGenerating
+        //   return alert(
+        //     `Your prompt is too long. Please shorten it to ${
+        //       app.models[app.model].maxRequest
+        //     } tokens or less.`
+        //   );
+        // }
+        var response = "error caught";
+        try {
+          response = await ask(chatLog, app.models[app.model].name);
+        } catch (e) {
+          console.log("error caught" + e);
+        }
         const botResponse = response.data.trim();
         const usage = response.usage;
         // add bot response to messages

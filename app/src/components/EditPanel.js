@@ -33,6 +33,13 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+
+  // Slider
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderMark,
 } from "@chakra-ui/react";
 
 // Chakra Chevron icon
@@ -135,6 +142,41 @@ const EditPanel = ({ app }) => {
                   })}
                 </MenuList>
               </Menu>
+
+              {/* Setting model specifics */}
+              <Box fontFamily={app.settings.font}>
+                <Text size="lg">Adjust Model</Text>
+
+                {/* Slider for temperature */}
+                <HStack>
+                  <Text>Temperature</Text>
+                  <Slider
+                    aria-label="slider-ex-6"
+                    onChange={(value) => {
+                      app.setTemperature(value);
+                    }}
+                  >
+                    <SliderMark value={25}>25%</SliderMark>
+                    <SliderMark value={50}>50%</SliderMark>
+                    <SliderMark value={75}>75%</SliderMark>
+                    <SliderMark
+                      value={app.temperature}
+                      textAlign="center"
+                      bg="blue.500"
+                      color="white"
+                      mt="-10"
+                      ml="-5"
+                      w="12"
+                    >
+                      {app.temperature}%
+                    </SliderMark>
+                    <SliderTrack>
+                      <SliderFilledTrack />
+                    </SliderTrack>
+                    <SliderThumb />
+                  </Slider>
+                </HStack>
+              </Box>
             </VStack>
 
             <Divider marginBottom="1rem" marginTop="1rem" />
