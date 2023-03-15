@@ -12,6 +12,9 @@ import { useState, useRef, useEffect } from "react";
 // Toast
 import Toast from "./Toast";
 
+// SiRobotframework from react-icons
+import { SiRobotframework } from "react-icons/si";
+
 // Chakra components
 import {
   // general
@@ -219,6 +222,13 @@ const Message = (props) => {
       >
         {/* message box */}
         <HStack w="100%" minHeight="2rem">
+          {/* avatar */}
+          {props.from !== "user" ? (
+            <SiRobotframework size="1.5rem" style={{ marginRight: "0.7rem" }} />
+          ) : (
+            <></>
+          )}
+
           {language !== "unknown" ? (
             <pre
               className="msg-pre-text"
