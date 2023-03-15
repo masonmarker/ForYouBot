@@ -8,6 +8,9 @@
 // React
 import { useRef, useState } from "react";
 
+// ColorButton from Title
+import {ColorButton} from "./Title";
+
 // pricing functions
 import { tokensForString } from "./Prompt";
 import { priceForTokens } from "../models/models";
@@ -79,6 +82,8 @@ import {
   ChevronRightIcon,
   CloseIcon,
   InfoIcon,
+  SunIcon,
+  MoonIcon,
 } from "@chakra-ui/icons";
 
 // styled components
@@ -162,10 +167,9 @@ const SettingsPanel = ({ app }) => {
               rightIcon={
                 i === 0 && (
                   <Tooltip
-
                     borderRadius="lg"
                     fontFamily={app.settings.font}
-                    bg="gray.100" 
+                    bg="gray.100"
                     hasArrow
                     label="Choosing a language enables syntax highlighting within any question or response regarding code snippets."
                     color="black"
@@ -320,6 +324,10 @@ const SettingsPanel = ({ app }) => {
                     </ChakraGrid>
                   </VStack>
                 </ModalBody>
+
+                <ModalFooter>
+                  <ColorButton app={app} />
+                </ModalFooter>
               </ModalContent>
             </Modal>
             {/* Customize interface font modal */}
@@ -366,7 +374,7 @@ const SettingsPanel = ({ app }) => {
                 </ModalBody>
               </ModalContent>
             </Modal>
-            {/*Code dropdown*/}
+            {/* Color Mode changing button*/}
           </ModalFooter>
         </ModalContent>
       </Modal>
