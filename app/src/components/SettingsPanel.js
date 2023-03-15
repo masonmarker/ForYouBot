@@ -19,18 +19,6 @@ import { priceForTokens } from "../models/models";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
-// all robot icons from react-icons
-import {
-  AiOutlineRobot,
-  AiOutlineRobotOutlined,
-  AiOutlineRobotTwoTone,
-  AiOutlineRobotFilled,
-  AiOutlineRobotAddOutlined,
-  AiOutlineRobotAddTwoTone,
-  AiOutlineRobotAddFilled,
-  AiOutlineRobotAdd,
-} from "react-icons/ai";
-
 // Chakra components
 import {
   Text,

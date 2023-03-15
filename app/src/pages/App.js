@@ -41,9 +41,6 @@ import { css } from "../common/common";
 // title
 import Title from "../components/Title";
 
-// SiRobotFramework from react-icons
-import { SiRobotframework } from "react-icons/si";
-
 // styled App
 const AppStyled = styled(Box)`
   /* put input on the bottom center of the screen */

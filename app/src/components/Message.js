@@ -12,9 +12,6 @@ import { useState, useRef, useEffect } from "react";
 // Toast
 import Toast from "./Toast";
 
-// SiRobotframework from react-icons
-import { SiRobotframework } from "react-icons/si";
-
 // Chakra components
 import {
   // general
