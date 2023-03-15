@@ -74,7 +74,7 @@ function App() {
   } = useMessages();
 
   // list of languages
-  const languages = ["Auto Detect", "javascript", "java", "ruby", "python"];
+  const languages = ["Auto Detect"];
 
   // conversations state with initial messages
   const { conversations, setConversations } = useConversation([
@@ -161,6 +161,10 @@ function App() {
     modes: modes,
     mode: mode,
     setMode: setMode,
+
+    // current model information
+    temperature: 0.5,
+    setTemperature: 
 
     languages: languages,
     language: language,
