@@ -36,7 +36,7 @@ import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 
 // common
-import { css } from "../common/common";
+import { css, colors, fonts } from "../common/common";
 
 // title
 import Title from "../components/Title";
@@ -153,6 +153,9 @@ function App() {
 
     // app settings
     settings: {
+      colors: colors,
+      fonts: fonts,
+      css: css,
       accent: colorScheme,
       setAccent: setcolorScheme,
       font: font,
@@ -164,7 +167,7 @@ function App() {
         setUserIcon: setUserIcon,
         botIcon: botIcon,
         setBotIcon: setBotIcon,
-      }
+      },
     },
 
     // component references
@@ -184,7 +187,6 @@ function App() {
     languages: languages,
     language: language,
     setLanguage: setLanguage,
-
   };
 
   return (

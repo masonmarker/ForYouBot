@@ -52,10 +52,10 @@ const PromptStyled = styled.div`
     margin-bottom: 3rem;
   }
 
+  /* slight box shadow */
   .area {
     z-index: 2;
     height: 15vh;
-    
   }
 `;
 
@@ -304,6 +304,12 @@ const Prompt = ({ app }) => {
           resize="none"
           colorScheme={app.settings.accent}
           className="area"
+          boxShadow={
+            colorMode === "light"
+              ? "0px 0px 10px 0px rgba(0, 0, 0, 0.5)"
+              : "0px 0px 10px 0px rgba(255, 255, 255, 0.5)"
+          }
+          backgroundColor={colorMode === "light" ? "white" : "gray.900"}
           placeholder="Write a complex prompt..."
           maxLength={maxChars}
           onKeyDown={handleEnterPress}
