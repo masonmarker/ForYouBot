@@ -9,6 +9,7 @@
 // components
 import Prompt from "../components/Prompt";
 import Chat from "../components/Chat";
+import Bg from "../components/Bg";
 
 // models as appmodels
 import models from "../models/models";
@@ -213,11 +214,8 @@ function App() {
       <Fade in={inView} ref={ref}>
         <AppStyled fontFamily={app.settings.font}>
           <Prompt app={app} />
-          <Chat app={app}  />
-          {/* box that serves as the background of the application */}
-          <Box 
-            h="100%"
-            ></Box>
+          <Chat app={app} />
+          <Bg />
         </AppStyled>
       </Fade>
     </ChakraProvider>
