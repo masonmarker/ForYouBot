@@ -121,6 +121,12 @@ function App() {
   // default is SiRobotframework
   const [botIcon, setBotIcon] = useState(botIcons[0]);
 
+  // set the temperature
+  const [temperature, setTemperature] = useState(0.5);
+
+  // set the top p
+  const [topP, setTopP] = useState(0.5);
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
@@ -187,6 +193,13 @@ function App() {
     languages: languages,
     language: language,
     setLanguage: setLanguage,
+
+    // model information
+    temperature: temperature,
+    setTemperature: setTemperature,
+    topP: topP,
+    setTopP: setTopP,
+
   };
 
   return (
