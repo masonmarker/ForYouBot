@@ -122,10 +122,10 @@ function App() {
   const [botIcon, setBotIcon] = useState(botIcons[0]);
 
   // set the temperature
-  const [temperature, setTemperature] = useState(0.5);
+  const [temperature, setTemperature] = useState(50);
 
   // set the top p
-  const [topP, setTopP] = useState(0.5);
+  const [topP, setTopP] = useState(50);
 
   // app information / states to pass as props
   var app = {

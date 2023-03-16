@@ -143,7 +143,6 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt) {
     // add most recent user prompt
     chatLog += "user:\n" + prompt + "\n";
     chatLog += "you:\n???\n\n";
-    chatLog += "fill in your ???\n\n";
   } else {
     chatLog = prompt;
   }
