@@ -59,7 +59,7 @@ import {
 import { useInView } from "react-intersection-observer";
 
 // Chakra icons
-import { CopyIcon, EditIcon } from "@chakra-ui/icons";
+import { CopyIcon, EditIcon, RepeatIcon } from "@chakra-ui/icons";
 
 // BsLightningCharge from react-icons/bs
 import { BsLightningCharge } from "react-icons/bs";
@@ -315,7 +315,7 @@ const Message = (props) => {
                         render: () => (
                           <Toast text="Copied to clipboard" app={props.app} />
                         ),
-                        duration: 1500,
+                        duration: 2000,
                       });
                     }}
 
@@ -323,6 +323,28 @@ const Message = (props) => {
                     <HStack>
                       <CopyIcon />
                       <Text>Copy</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      // set the input's value to the message
+                      props.app.refs.areaRef.current.value = props.message;
+
+                      // press the submit button
+                      props.app.refs.submitRef.current.click();
+
+                      // show toast
+                      toast({
+                        render: () => (
+                          <Toast text="Resubmitted message" app={props.app} />
+                        ),
+                        duration: 1500,
+                      });
+                    }}
+                  >
+                    <HStack>
+                      <RepeatIcon />
+                      <Text>Resubmit</Text>
                     </HStack>
                   </MenuItem>
                 </MenuList>
