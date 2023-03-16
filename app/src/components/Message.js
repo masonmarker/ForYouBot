@@ -238,11 +238,10 @@ const Message = (props) => {
               <SyntaxHighlighter
                 style={colorMode === "light" ? oneLight : atomDark}
                 language={language}
-                showLineNumbers={true}
                 wrapLines={true}
                 wrapLongLines={true}
                 lineProps={{
-                  style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
+                  style: { wordBreak: "break-word", whiteSpace: "pre-wrap" },
                 }}
               >
                 {props.message}

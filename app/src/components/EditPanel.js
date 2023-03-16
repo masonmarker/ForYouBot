@@ -144,7 +144,7 @@ const EditPanel = ({ app }) => {
                 >
                   Select Model
                 </MenuButton>
-                <MenuList>
+                <MenuList zIndex={2}>
                   {/* map models to MenuItem */}
                   {Object.keys(app.models).map((model, i) => {
                     return (
@@ -258,7 +258,6 @@ const CheckOption = ({ app, state, setState }) => {
               <SyntaxHighlighter
                 style={colorMode === "light" ? oneLight : atomDark}
                 language="java"
-                showLineNumbers={true}
                 wrapLines={true}
                 wrapLongLines={true}
                 lineProps={{

@@ -283,7 +283,9 @@ const Convos = ({ app, onClose1 }) => {
                     </Text>
                     <Text>
                       User Expenses: $
-                      {app.conversations[moreConversation].info.userExpenses}
+                      {app.conversations[
+                        moreConversation
+                      ].info.userExpenses.toFixed(6)}
                     </Text>
                     <Divider />
                     <Text>
@@ -292,7 +294,22 @@ const Convos = ({ app, onClose1 }) => {
                     </Text>
                     <Text>
                       Bot Expenses: $
-                      {app.conversations[moreConversation].info.botExpenses}
+                      {app.conversations[
+                        moreConversation
+                      ].info.botExpenses.toFixed(6)}
+                    </Text>
+                    <Divider />
+                    <Text>
+                      Total Tokens:{" "}
+                      {app.conversations[moreConversation].info.userTokens +
+                        app.conversations[moreConversation].info.botTokens}
+                    </Text>
+                    <Text>
+                      Total Expenses: $
+                      {(
+                        app.conversations[moreConversation].info.userExpenses +
+                        app.conversations[moreConversation].info.botExpenses
+                      ).toFixed(6)}
                     </Text>
                     <Divider />
                   </VStack>
