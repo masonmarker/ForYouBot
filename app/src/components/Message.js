@@ -264,7 +264,7 @@ const Message = (props) => {
             </pre>
           )}
 
-          {showCopy &&
+          {showCopy && !props.app.waiting &&
             <Box>
               <Menu computePositionOnMount isLazy>
                 <MenuButton

@@ -218,6 +218,8 @@ function App() {
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
         <AppStyled fontFamily={app.settings.font}>
+          {/* Title for switching conversations */}
+          <Title app={app} />
           <Prompt app={app} />
           <Chat app={app} />
           <Bg />

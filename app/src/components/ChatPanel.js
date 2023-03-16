@@ -109,8 +109,6 @@ const ChatPanel = ({ app }) => {
         colorMode === "light" ? colors.lightGray : colors.darkGray
       }
     >
-      {/* Title for switching conversations */}
-      <Title app={app} />
 
       {/* Chat History */}
 

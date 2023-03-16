@@ -104,7 +104,7 @@ const EditPanel = ({ app }) => {
       >
         Edit Bot
       </Button>
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} isLazy>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontFamily={app.settings.font}>Edit Bot</ModalHeader>
