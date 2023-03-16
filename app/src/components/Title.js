@@ -180,7 +180,7 @@ const Title = ({ app }) => {
     >
       {/* color button */}
       <ColorButton app={app} />
-      {app.userMessages.length > 0 && (
+      {app.userMessages.length > 0 && !app.waiting && (
         <Button
           colorScheme={app.settings.accent}
           className="clear-conversation"

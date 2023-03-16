@@ -62,7 +62,6 @@ const PromptStyled = styled.div`
 // asks the OpenAI API for a response
 // based on a specific model
 async function ask(chatLog, app) {
-  console.log(app.temperature);
   const response = fetch("http://localhost:3080", {
     method: "POST",
     headers: {
