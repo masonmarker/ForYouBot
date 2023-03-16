@@ -108,7 +108,7 @@ function App() {
   const [colorScheme, setcolorScheme] = useState("purple");
 
   // state for app settings font
-  const [font, setFont] = useState("sans-serif");
+  const [font, setFont] = useState(fonts.main);
 
   // New state to check what mode the app is in, will be a list of modes
   const [mode, setMode] = useState(modes[0]);

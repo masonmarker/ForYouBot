@@ -19,8 +19,17 @@ export const colors = {
 
 // fonts
 export const fonts = {
-    main: "Inter, sans-serif",
-    message: "monospace"
+    main: `-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
+    message: "monospace",
+    all: [
+        `-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
+        "Arial, sans-serif",
+        "san serif",
+        "serif",
+        "monospace",
+        "cursive",
+        "fantasy",
+    ]
 }
 
 export const css = {

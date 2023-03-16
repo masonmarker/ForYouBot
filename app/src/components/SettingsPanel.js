@@ -8,6 +8,9 @@
 // React
 import { useRef, useState } from "react";
 
+// common fonts
+import { fonts } from "./../common/common";
+
 // ColorButton from Title
 import { ColorButton } from "./Title";
 
@@ -146,7 +149,7 @@ const SettingsPanel = ({ app }) => {
     onClose: onCloseCustomizeInterfaceChatIcons,
   } = useDisclosure();
 
-  const customizeColor = () => {};
+  const customizeColor = () => { };
 
   return (
     <SettingsPanelStyled>
@@ -306,14 +309,7 @@ const SettingsPanel = ({ app }) => {
                       templateRows="repeat(3, 1fr)"
                       gap={4}
                     >
-                      {[
-                        "Arial, sans-serif",
-                        "san serif",
-                        "serif",
-                        "monospace",
-                        "cursive",
-                        "fantasy",
-                      ].map((font, i) => {
+                      {fonts.all.map((font, i) => {
                         return (
                           <ChakraGridItem key={`font-id-${i}`}>
                             <Button
@@ -322,7 +318,7 @@ const SettingsPanel = ({ app }) => {
                                 app.settings.setFont(font);
                               }}
                             >
-                              {font}
+                              {font !== fonts.main ? font : "default"}
                             </Button>
                           </ChakraGridItem>
                         );

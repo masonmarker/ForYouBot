@@ -341,7 +341,7 @@ const Prompt = ({ app }) => {
               ? "0px 0px 10px 0px rgba(0, 0, 0, 0.5)"
               : "0px 0px 10px 0px rgba(255, 255, 255, 0.5)"
           }
-          backgroundColor={colorMode === "light" ? "gray.100" : "gray.900"}
+          backgroundColor={colorMode === "light" ? "gray.100" : "gray.800"}
           placeholder="Write a complex prompt..."
           maxLength={maxChars}
           onKeyDown={handleEnterPress}

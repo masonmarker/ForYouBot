@@ -195,8 +195,18 @@ const EditPanel = ({ app }) => {
               Constraints
             </Text>
             <VStack fontFamily={app.settings.font} align="left">
-              <Checkbox colorScheme={app.settings.accent}>Show work</Checkbox>
-              <Checkbox colorScheme={app.settings.accent}>Answer only</Checkbox>
+              <CheckOption
+                title="Show Work"
+                app={app}
+                state={app.constraints.showWork}
+                setState={app.constraints.showWork}
+              />
+              <CheckOption
+                title="Answer Only"
+                app={app}
+                state={app.constraints.answerOnly}
+                setState={app.settings.setAnswerOnly}
+              />
             </VStack>
 
             {/* Additional options */}
@@ -206,9 +216,32 @@ const EditPanel = ({ app }) => {
             </Text>
             <VStack fontFamily={app.settings.font} align="left">
               <CheckOption
+                title="Code Detection"
                 app={app}
                 state={app.settings.codeDetection}
                 setState={app.settings.setCodeDetection}
+                body={
+                  <VStack>
+                    <Text>
+                      Example style of a message with 'Code Detections' checked:
+                    </Text>
+                    <SyntaxHighlighter
+                      style={colorMode === "light" ? oneLight : atomDark}
+                      language="java"
+                      wrapLines={true}
+                      wrapLongLines={true}
+                      lineProps={{
+                        style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
+                      }}
+                    >
+                      System.out.println("Hello, World!");
+                    </SyntaxHighlighter>
+                    <Text>
+                      Java was the detected programming language, therefore, <br />
+                      the snippet was provided syntax highlighting.
+                    </Text>
+                  </VStack>
+                }
               />
             </VStack>
             <Divider marginBottom="1rem" marginTop="4rem" />
@@ -230,7 +263,7 @@ const EditPanel = ({ app }) => {
 };
 
 // Menu displaying information about the current option
-const CheckOption = ({ app, state, setState }) => {
+const CheckOption = ({ title, app, state, setState, body }) => {
   // color mode Chakra
   const { colorMode } = useColorMode();
 
@@ -243,7 +276,7 @@ const CheckOption = ({ app, state, setState }) => {
           setState(e.target.checked);
         }}
       >
-        Code Detections
+        {title}
       </Checkbox>
       <Menu>
         <MenuButton as={Button} h={6} minW={6} p={0}>
@@ -251,26 +284,7 @@ const CheckOption = ({ app, state, setState }) => {
         </MenuButton>
         <MenuList>
           <MenuItem>
-            <VStack>
-              <Text>
-                Example style of a message with 'Code Detections' checked:
-              </Text>
-              <SyntaxHighlighter
-                style={colorMode === "light" ? oneLight : atomDark}
-                language="java"
-                wrapLines={true}
-                wrapLongLines={true}
-                lineProps={{
-                  style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
-                }}
-              >
-                System.out.println("Hello, World!");
-              </SyntaxHighlighter>
-              <Text>
-                Java was the detected programming language, therefore, <br/>
-                the snippet was provided syntax highlighting.
-              </Text>
-            </VStack>
+            {body}
           </MenuItem>
         </MenuList>
       </Menu>
