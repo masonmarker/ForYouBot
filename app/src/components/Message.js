@@ -249,7 +249,14 @@ const Message = (props) => {
               </SyntaxHighlighter>
             </pre>
           ) : (
-            <pre className="msg-pre-text">{props.message}</pre>
+            <pre
+              className="msg-pre-text"
+              style={{
+                fontFamily: props.app.settings.font,
+              }}
+            >
+              {props.message}
+            </pre>
           )}
 
           {showCopy && (

@@ -42,8 +42,8 @@ app.post("/", async (req, res) => {
     `-----------
 sending message to:
 model: ${model}
-prompt: ${prompt}
 temperature: ${temperature}
+top_p: ${top_p}
 ------------`
   );
   const response = await openai.createCompletion({
