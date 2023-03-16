@@ -43,6 +43,7 @@ import Title from "../components/Title";
 
 // styled App
 const AppStyled = styled(Box)`
+
   /* put input on the bottom center of the screen */
   .inp {
     position: fixed;
@@ -212,7 +213,11 @@ function App() {
       <Fade in={inView} ref={ref}>
         <AppStyled fontFamily={app.settings.font}>
           <Prompt app={app} />
-          <Chat app={app} />
+          <Chat app={app}  />
+          {/* box that serves as the background of the application */}
+          <Box 
+            h="100%"
+            ></Box>
         </AppStyled>
       </Fade>
     </ChakraProvider>
