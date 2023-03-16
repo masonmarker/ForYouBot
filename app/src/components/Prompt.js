@@ -231,9 +231,9 @@ const Prompt = ({ app }) => {
       // reset character limit ref
       app.refs.charLimitRef.current.innerHTML = `0/${maxChars}`;
 
-      // reset character limit color
-      app.refs.charLimitRef.current.style.color =
-        colorMode === "light" ? "black" : "white";
+      // // reset character limit color
+      // app.refs.charLimitRef.current.style.color =
+      //   colorMode === "light" ? "black" : "white";
 
       // disable prompt
       area.disabled = true;
@@ -309,7 +309,7 @@ const Prompt = ({ app }) => {
               ? "0px 0px 10px 0px rgba(0, 0, 0, 0.5)"
               : "0px 0px 10px 0px rgba(255, 255, 255, 0.5)"
           }
-          backgroundColor={colorMode === "light" ? "white" : "gray.900"}
+          backgroundColor={colorMode === "light" ? "gray.100" : "gray.900"}
           placeholder="Write a complex prompt..."
           maxLength={maxChars}
           onKeyDown={handleEnterPress}

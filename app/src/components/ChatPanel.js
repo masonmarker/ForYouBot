@@ -21,6 +21,7 @@ import {
   Fade,
   Text,
   VStack,
+  HStack,
   ScaleFade,
 
   // grid components
@@ -139,13 +140,11 @@ const ChatPanel = ({ app }) => {
               );
             })}
             {app.waiting && (
-              <Fade in={app.waiting}>
-                <Spinner
-                  thickness="4px"
-                  colorScheme={app.settings.accent}
-                  margin="1rem"
-                />
-              </Fade>
+              <ScaleFade in={app.waiting}>
+                <HStack ml={75} mt={5} mb={5} gap={6}>
+                  <Spinner thickness="4px" colorScheme={app.settings.accent} />
+                </HStack>
+              </ScaleFade>
             )}
             <div ref={bottomRef} />
           </div>
