@@ -173,8 +173,9 @@ const Message = (props) => {
     // language in lowercase
     const lower = language.toLowerCase();
 
+    // turns it to lowercase
     if (lower !== "unknown") {
-      console.log(lower);
+      console.log(`detected language in message: ${lower}`);
     }
 
     // return the language
@@ -218,13 +219,28 @@ const Message = (props) => {
       >
         {/* message box */}
         <HStack w="100%" minHeight="2rem">
+          {/* avatar */}
+          {props.from === "user" ? (
+            <Box ml={10} mr={5}>
+              {props.app.settings.icons.userIcon}
+            </Box>
+          ) : (
+            <Box ml={10} mr={5}>
+              {props.app.settings.icons.botIcon}
+            </Box>
+          )}
+
           {language !== "unknown" ? (
             <pre
               className="msg-pre-text"
               style={{ fontFamily: props.app.settings.font }}
             >
               <SyntaxHighlighter
-                language={language}
+                language={
+                  props.app.language === "Auto Detect"
+                    ? language
+                    : props.app.language
+                }
                 style={colorMode === "light" ? oneLight : atomDark}
               >
                 {props.message}

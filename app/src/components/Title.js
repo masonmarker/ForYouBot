@@ -178,17 +178,8 @@ const Title = ({ app }) => {
       //  colorScheme={app.settings.accent}
       h="60px"
     >
-      <Button
-        className="color"
-        colorScheme={app.settings.accent}
-        onClick={(e) => {
-          toggleColorMode();
-
-          e.stopPropagation();
-        }}
-      >
-        {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-      </Button>
+      {/* color button */}
+      <ColorButton app={app} />
       {app.userMessages.length > 0 && (
         <Button
           colorScheme={app.settings.accent}
@@ -364,4 +355,25 @@ const Title = ({ app }) => {
   );
 };
 
+// button to change the color mode of the application
+const ColorButton = ({ app }) => {
+  // use Chakra color mode
+  const { colorMode, toggleColorMode } = useColorMode();
+
+  return (
+    <Button
+      className="color"
+      colorScheme={app.settings.accent}
+      onClick={(e) => {
+        toggleColorMode();
+
+        e.stopPropagation();
+      }}
+    >
+      {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+    </Button>
+  );
+};
+
+export { ColorButton };
 export default Title;
