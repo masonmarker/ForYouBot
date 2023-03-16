@@ -241,7 +241,7 @@ const Message = (props) => {
                 <Button
                   size="xs"
                   variant="ghost"
-                  onClick={(e) => {
+                  onClick={() => {
                     // set the input's value to the message
                     props.app.refs.areaRef.current.value = props.message;
 

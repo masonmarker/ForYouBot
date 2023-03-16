@@ -12,6 +12,10 @@ import { useRef } from "react";
 // styled components
 import styled from "styled-components";
 
+// import skeleton loading
+
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 // Chakra components
 import {
   Text,
@@ -33,6 +37,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useColorMode,
 
   // Slider
   Slider,
@@ -69,6 +74,9 @@ const SidePanelStyled = styled.div`
 const EditPanel = ({ app }) => {
   // disclosure for displaying the modal
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // color mode Chakra
+  const { colorMode } = useColorMode();
 
   // modal reference
   const finalRef = useRef(null);
@@ -143,43 +151,35 @@ const EditPanel = ({ app }) => {
                 </MenuList>
               </Menu>
 
-              {/* Setting model specifics */}
-              <Box fontFamily={app.settings.font}>
-                <Text size="lg">Adjust Model</Text>
+              <Divider marginBottom="1rem" marginTop="1rem" />
 
-                {/* Slider for temperature */}
-                <HStack>
-                  <Text>Temperature</Text>
-                  <Slider
-                    aria-label="slider-ex-6"
-                    onChange={(value) => {
-                      app.setTemperature(value);
-                    }}
-                  >
-                    <SliderMark value={25}>25%</SliderMark>
-                    <SliderMark value={50}>50%</SliderMark>
-                    <SliderMark value={75}>75%</SliderMark>
-                    <SliderMark
-                      value={app.temperature}
-                      textAlign="center"
-                      bg="blue.500"
-                      color="white"
-                      mt="-10"
-                      ml="-5"
-                      w="12"
-                    >
-                      {app.temperature}%
-                    </SliderMark>
-                    <SliderTrack>
-                      <SliderFilledTrack />
-                    </SliderTrack>
-                    <SliderThumb />
-                  </Slider>
-                </HStack>
-              </Box>
+              {/* Setting model specifics */}
+              <Text size="lg" fontWeight="bold">
+                Adjust Model
+              </Text>
+
+              {/* Slider for temperature */}
+              <AdjustSlider
+                app={app}
+                title="Temperature"
+                sub1="predictable"
+                sub2="random"
+                state={app.temperature}
+                setState={app.setTemperature}
+              />
+
+              {/* Slider for top p */}
+              <AdjustSlider
+                app={app}
+                title="Top P"
+                sub1="lower probability mass"
+                sub2="higher probability mass"
+                state={app.topP}
+                setState={app.setTopP}
+              />
             </VStack>
 
-            <Divider marginBottom="1rem" marginTop="1rem" />
+            <Divider marginBottom="1rem" marginTop="4rem" />
             <Text fontWeight="bold" fontFamily={app.settings.font}>
               Constraints
             </Text>
@@ -201,6 +201,63 @@ const EditPanel = ({ app }) => {
         </ModalContent>
       </Modal>
     </SidePanelStyled>
+  );
+};
+
+// slider for adjusting models
+const AdjustSlider = ({ app, title, sub1, sub2, state, setState }) => {
+  // color mode Chakra
+  const { colorMode } = useColorMode();
+
+  return (
+    <HStack>
+      <Box w="100%">
+        <Text>{title}</Text>
+        <Slider
+          w={300}
+          aria-label="slider-ex-6"
+          onChange={(val) => setState(val)}
+          colorScheme={app.settings.accent}
+          value={state}
+        >
+          <SliderMark fontSize="sm" value={3}>
+            {sub1}
+          </SliderMark>
+          <SliderMark fontSize="sm" value={82}>
+            {sub2}
+          </SliderMark>
+          <SliderTrack>
+            <SliderFilledTrack />
+          </SliderTrack>
+          <SliderThumb />
+        </Slider>
+      </Box>
+      {/* Animation  */}
+      <Box w="80px" h="50px" fontFamily={app.settings.font} fontWeight="bold">
+        <CircularProgressbar
+          styles={buildStyles({
+            trailColor: colorMode === "light" ? "white" : "black",
+
+            // pathColor should be red but with a log of alpha of app temperature
+            pathColor: `rgba(255, 0, 0, ${state / 100})`,
+
+            textColor: colorMode === "light" ? "black" : "white",
+            textSize: "23px",
+
+            // How long animation takes to go from one percentage to another, in seconds
+            pathTransitionDuration: 0.2,
+
+            // circle thickness
+            strokeWidth: 10,
+
+            // Whether to use rounded or flat corners on the ends - can use 'butt' or 'round'
+          })}
+          value={state}
+          text={state / 100}
+          counterClockwise
+        />
+      </Box>
+    </HStack>
   );
 };
 

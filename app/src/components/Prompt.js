@@ -60,7 +60,8 @@ const PromptStyled = styled.div`
 
 // asks the OpenAI API for a response
 // based on a specific model
-async function ask(chatLog, model) {
+async function ask(chatLog, app) {
+  console.log(app.temperature);
   const response = fetch("http://localhost:3080", {
     method: "POST",
     headers: {
@@ -69,15 +70,17 @@ async function ask(chatLog, model) {
     },
 
     body: JSON.stringify({
-      model: model,
+      model: app.models[app.model].name,
       prompt: chatLog,
 
       // 4096 for davinci
       // 2048 for curie
       // 2048 for ada
       // 2048 for babbage
-      temperature: 0.5,
-      max_tokens: 2048,
+      temperature: app.temperature / 100,
+      // top p\
+      top_p: app.topP / 100,
+      max_tokens: 1000,
     }),
   }).then((response) => response.json());
   return response;
@@ -297,7 +300,7 @@ const Prompt = ({ app }) => {
         // }
         var response = "error caught";
         try {
-          response = await ask(chatLog, app.models[app.model].name);
+          response = await ask(chatLog, app);
         } catch (e) {
           console.log("error caught" + e);
         }

@@ -114,6 +114,9 @@ function App() {
   // state to manage current model temperature
   const [temperature, setTemperature] = useState(0.5);
 
+  // state to manage current model topP
+  const [topP, setTopP] = useState(0.5);
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
@@ -166,8 +169,10 @@ function App() {
     setMode: setMode,
 
     // current model information
-    temperature: 0.5,
+    temperature: temperature,
     setTemperature: setTemperature,
+    topP: topP,
+    setTopP: setTopP,
 
     languages: languages,
     language: language,
