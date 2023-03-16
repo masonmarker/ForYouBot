@@ -9,6 +9,9 @@
 // React
 import { useRef } from "react";
 
+// import message
+import Message from "./Message";
+
 // styled components
 import styled from "styled-components";
 
@@ -45,10 +48,18 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderMark,
+  Tooltip,
 } from "@chakra-ui/react";
 
 // Chakra Chevron icon
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, InfoIcon } from "@chakra-ui/icons";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+
+// atom dark and lightOne
+import {
+  atomDark,
+  oneLight,
+} from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // styled SidePanel
 // should be permanently in the bottom right corner
@@ -187,6 +198,20 @@ const EditPanel = ({ app }) => {
               <Checkbox colorScheme={app.settings.accent}>Show work</Checkbox>
               <Checkbox colorScheme={app.settings.accent}>Answer only</Checkbox>
             </VStack>
+
+            {/* Additional options */}
+            <Divider marginBottom="1rem" marginTop="4rem" />
+            <Text fontWeight="bold" fontFamily={app.settings.font}>
+              Additional Options
+            </Text>
+            <VStack fontFamily={app.settings.font} align="left">
+              <CheckOption
+                app={app}
+                state={app.settings.codeDetection}
+                setState={app.settings.setCodeDetection}
+              />
+            </VStack>
+            <Divider marginBottom="1rem" marginTop="4rem" />
           </ModalBody>
           <ModalFooter>
             <Button
@@ -201,6 +226,56 @@ const EditPanel = ({ app }) => {
         </ModalContent>
       </Modal>
     </SidePanelStyled>
+  );
+};
+
+// Menu displaying information about the current option
+const CheckOption = ({ app, state, setState }) => {
+  // color mode Chakra
+  const { colorMode } = useColorMode();
+
+  return (
+    <HStack fontFamily={app.settings.font}>
+      <Checkbox
+        colorScheme={app.settings.accent}
+        isChecked={state}
+        onChange={(e) => {
+          setState(e.target.checked);
+        }}
+      >
+        Code Detections
+      </Checkbox>
+      <Menu>
+        <MenuButton as={Button} h={6} minW={6} p={0}>
+          <InfoIcon />
+        </MenuButton>
+        <MenuList>
+          <MenuItem>
+            <VStack>
+              <Text>
+                Example style of a message with 'Code Detections' checked:
+              </Text>
+              <SyntaxHighlighter
+                style={colorMode === "light" ? oneLight : atomDark}
+                language="java"
+                showLineNumbers={true}
+                wrapLines={true}
+                wrapLongLines={true}
+                lineProps={{
+                  style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
+                }}
+              >
+                System.out.println("Hello, World!");
+              </SyntaxHighlighter>
+              <Text>
+                Java was the detected programming language, therefore, <br/>
+                the snippet was provided syntax highlighting.
+              </Text>
+            </VStack>
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </HStack>
   );
 };
 

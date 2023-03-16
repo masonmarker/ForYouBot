@@ -127,6 +127,9 @@ function App() {
   // set the top p
   const [topP, setTopP] = useState(50);
 
+  // managing code detection
+  const [codeDetection, setCodeDetection] = useState(true);
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
@@ -166,6 +169,8 @@ function App() {
       setAccent: setcolorScheme,
       font: font,
       setFont: setFont,
+      codeDetection: codeDetection,
+      setCodeDetection: setCodeDetection,
       icons: {
         userIcons: userIcons,
         botIcons: botIcons,

@@ -217,20 +217,19 @@ const SettingsPanel = ({ app }) => {
           <ModalHeader fontFamily={app.settings.font}>Settings</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Divider />
+            <Divider mb={3} />
 
             {/* Button for computing pricing */}
-            <VStack fontFamily={app.settings.font} mb={3} mt={3}>
+            <VStack fontFamily={app.settings.font}>
               <Text>
                 Compute pricing for a certain amount of words / tokens given to
                 and receieved by an AI model.
               </Text>
               <Button onClick={onOpenComputePricing}>Compute Pricing</Button>
             </VStack>
-            <Divider />
+            <Divider mt={3} mb={3} />
 
-            <Divider />
-            <VStack mt={7} fontFamily={app.settings.font}>
+            <VStack fontFamily={app.settings.font}>
               <Menu>
                 <Text>Change the interface to your preferences</Text>
                 <MenuButton as={Button}>Customize Interface</MenuButton>
@@ -247,6 +246,7 @@ const SettingsPanel = ({ app }) => {
                 </MenuList>
               </Menu>
             </VStack>
+
           </ModalBody>
 
           <ModalFooter>

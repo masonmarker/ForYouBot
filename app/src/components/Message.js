@@ -195,7 +195,7 @@ const Message = (props) => {
   }, []);
 
   return (
-    <ScaleFade ref={ref} in={inView}>
+    <ScaleFade ref={ref} in={inView} {...props}>
       <MessageStyled
         borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
         // states for displaying the copy button
@@ -230,18 +230,20 @@ const Message = (props) => {
             </Box>
           )}
 
-          {language !== "unknown" ? (
+          {language !== "unknown" && props.app.settings.codeDetection ? (
             <pre
               className="msg-pre-text"
               style={{ fontFamily: props.app.settings.font }}
             >
               <SyntaxHighlighter
-                language={
-                  props.app.language === "Auto Detect"
-                    ? language
-                    : props.app.language
-                }
                 style={colorMode === "light" ? oneLight : atomDark}
+                language={language}
+                showLineNumbers={true}
+                wrapLines={true}
+                wrapLongLines={true}
+                lineProps={{
+                  style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
+                }}
               >
                 {props.message}
               </SyntaxHighlighter>
