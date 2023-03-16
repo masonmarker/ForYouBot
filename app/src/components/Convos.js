@@ -12,6 +12,9 @@ import React, { useState, useRef } from "react";
 // ask() for asking the current model
 import { ask, getUserChatLog } from "./Prompt";
 
+// Message component
+import Message from "./Message";
+
 // Toast
 import Toast from "./Toast";
 
@@ -64,6 +67,12 @@ const ConvoStyled = styled(VStack)`
     font-weight: bold;
     margin: 0.5rem;
   }
+
+  .prev-message {
+    border: 1px solid black;
+    padding: 0.5rem;
+    border-radius: 5px;
+  }
 `;
 
 // Convos component
@@ -115,16 +124,20 @@ const Convos = ({ app, onClose1 }) => {
     // remove the conversation from the conversations array
     const newConversations = app.conversations;
     newConversations.splice(index, 1);
-    app.setConversations(newConversations);
 
     // reset the current conversation to the user's messages
-    app.setUserMessages(convo.user);
-    app.setBotMessages(convo.bot);
+    app.setUserMessages(app.conversations[0].user);
+    app.setBotMessages(app.conversations[0].bot);
+    app.setConversations(newConversations);
+
     onClose1();
   }
 
   // state for a removing conversations index
   const [removeIndex, setRemoveIndex] = useState(-1);
+
+  // state for previewing a conversation
+  const [previewIndex, setPreviewIndex] = useState(-1);
 
   // conversations format:
   // conversations[0].user[0] = {date: from: message:}
@@ -135,7 +148,11 @@ const Convos = ({ app, onClose1 }) => {
         app.conversations?.map((convo, index) => (
           <ScaleFade in={1} key={`convo-${index}`}>
             <ConvoStyled key={`convo-${index}`}>
-              <Text className="title">{convo.name}</Text>
+              <HStack>
+                <Button colorScheme={app.settings.accent} size="xs" cursor="default">{index + 1}</Button>
+                <Text className="title">{convo.name}</Text>
+
+              </HStack>
               {index === 0 && (
                 <Button
                   colorScheme={app.settings.accent}
@@ -194,7 +211,13 @@ const Convos = ({ app, onClose1 }) => {
                 </Button>
 
                 {/* Preview this conversation */}
-                <Button>Preview</Button>
+                <Button
+                  onClick={() => {
+                    // set the preview index to this conversation
+                    setPreviewIndex(previewIndex === index ? -1 : index);
+                  }}
+
+                >{previewIndex === index ? "Close" : "Preview"}</Button>
 
                 {/* Viewing information for the current conversation */}
                 <Button
@@ -315,6 +338,31 @@ const Convos = ({ app, onClose1 }) => {
                   </VStack>
                 </ScaleFade>
               )}
+              {/* Preview of 
+               conversation */}
+              {previewIndex === index && (
+                <ScaleFade in={1}>
+                  <HStack>
+                    {app.conversations[previewIndex].bot.map((botMessage, i) => {
+                      return (
+                        <Box
+                          key={`preview-${i}`}
+                        >
+                          <HStack className="prev-message">
+                            {app.settings.icons.userIcon}
+                            <Text>{app.conversations[previewIndex].user[i].message}</Text>
+                          </HStack>
+                          <HStack className="prev-message">
+                            {app.settings.icons.botIcon}
+                            <Text>{botMessage.message}</Text>
+                          </HStack>
+                        </Box>
+                      );
+                    })}
+                  </HStack>
+                </ScaleFade>
+              )}
+
             </ConvoStyled>
           </ScaleFade>
         ))

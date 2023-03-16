@@ -42,6 +42,14 @@ const PromptStyled = styled.div`
   flex-direction: column;
   align-items: center;
   z-index: 1;
+  width: 100%;
+
+  .inp {
+    outline: 3px solid red;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
 
   .limtext {
     position: fixed;
