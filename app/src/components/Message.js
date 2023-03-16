@@ -18,6 +18,7 @@ import {
   useColorMode,
   useToast,
   Box,
+  Text,
   HStack,
   Button,
   Input,
@@ -44,6 +45,7 @@ import {
 
   // states
   useDisclosure,
+  Fade,
 } from "@chakra-ui/react";
 
 // syntax highliter  (for code mode)
@@ -57,7 +59,10 @@ import {
 import { useInView } from "react-intersection-observer";
 
 // Chakra icons
-import { CopyIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
+import { CopyIcon, EditIcon } from "@chakra-ui/icons";
+
+// BsLightningCharge from react-icons/bs
+import { BsLightningCharge } from "react-icons/bs";
 
 // styled components
 import styled from "styled-components";
@@ -72,6 +77,7 @@ const MessageStyled = styled(Box)`
   align-items: flex-start;
   width: 100%;
   padding: 1rem;
+  overflow: hidden;
   /*border-top: 1px solid ${(props) => props.borderColor};*/
 
   /* message box */
@@ -258,59 +264,72 @@ const Message = (props) => {
             </pre>
           )}
 
-          {showCopy && (
-            <HStack>
-              {/* <CopyButton message={props.message} /> */}
-              <ScaleFade in={showCopy}>
-                <Button
-                  size="xs"
+          {showCopy &&
+            <Box>
+              <Menu computePositionOnMount isLazy>
+                <MenuButton
+                  as={Button}
+                  size="sm"
                   variant="ghost"
-                  onClick={() => {
-                    // set the input's value to the message
-                    props.app.refs.areaRef.current.value = props.message;
-
-                    // copy the message
-                    var editingText = props.app.refs.areaRef.current.value;
-
-                    // editing text
-                    var title = "Editing message: ";
-
-                    if (editingText.length > 20) {
-                      title += editingText.substring(0, 20) + "...";
-                    } else {
-                      title += editingText;
-                    }
-
-                    // show toast
-                    toast({
-                      render: () => <Toast text={title} app={props.app} />,
-                      duration: 1500,
-                    });
-                  }}
                 >
-                  <EditIcon />
-                </Button>
-              </ScaleFade>
+                  <BsLightningCharge />
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    onClick={() => {
+                      // set the input's value to the message
+                      props.app.refs.areaRef.current.value = props.message;
 
-              {/* Edit Message modal */}
-              <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                  <ModalHeader>Edit Message</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <Textarea defaultValue={props.message} />
-                  </ModalBody>
+                      // copy the message
+                      var editingText = props.app.refs.areaRef.current.value;
 
-                  <ModalFooter>
-                    <Button colorScheme={props.accent} onClick={handleResubmit}>
-                      Resend
-                    </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
-            </HStack>
-          )}
+                      // editing text
+                      var title = "Editing message: ";
+
+                      if (editingText.length > 20) {
+                        title += editingText.substring(0, 20) + "...";
+                      } else {
+                        title += editingText;
+                      }
+
+                      // show toast
+                      toast({
+                        render: () => <Toast text={title} app={props.app} />,
+                        duration: 1500,
+                      });
+                    }}
+                  >
+                    <HStack>
+                      <EditIcon />
+                      <Text>Edit</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+
+                    onClick={() => {
+                      // copy props.message to clipbooard
+                      navigator.clipboard.writeText(props.message);
+
+                      // show toast
+                      toast({
+                        render: () => (
+                          <Toast text="Copied to clipboard" app={props.app} />
+                        ),
+                        duration: 1500,
+                      });
+                    }}
+
+                  >
+                    <HStack>
+                      <CopyIcon />
+                      <Text>Copy</Text>
+                    </HStack>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+          }
+
         </HStack>
 
         {/* end of message box */}

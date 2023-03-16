@@ -77,7 +77,6 @@ const TitleStyled = styled(Box)`
   align-items: center;
   height: 10%;
   width: 100%;
-  background-color: ${(props) => props.backgroundColor};
   transition: ${css.transition};
   user-select: none;
 

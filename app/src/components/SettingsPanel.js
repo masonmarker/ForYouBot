@@ -24,6 +24,7 @@ import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // Chakra components
 import {
+  Box,
   Text,
   VStack,
   HStack,
@@ -458,39 +459,41 @@ const ComputePricing = () => {
       {/* Dropdown to choose model */}
       <VStack>
         <Text>Selected model: {selectedModel}</Text>
-        <Menu>
-          <MenuButton as={Button}>Choose a model</MenuButton>
-          <MenuList>
-            <MenuItem
-              onClick={() => {
-                setSelectedModel("davinci");
-              }}
-            >
-              davinci
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setSelectedModel("curie");
-              }}
-            >
-              curie
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setSelectedModel("babbage");
-              }}
-            >
-              babbage
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setSelectedModel("ada");
-              }}
-            >
-              ada
-            </MenuItem>
-          </MenuList>
-        </Menu>
+        <Box>
+          <Menu>
+            <MenuButton as={Button}>Choose a model</MenuButton>
+            <MenuList>
+              <MenuItem
+                onClick={() => {
+                  setSelectedModel("davinci");
+                }}
+              >
+                davinci
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setSelectedModel("curie");
+                }}
+              >
+                curie
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setSelectedModel("babbage");
+                }}
+              >
+                babbage
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setSelectedModel("ada");
+                }}
+              >
+                ada
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
       </VStack>
 
       <Grid templateColumns="repeat(2, 1fr)" gap="1rem">

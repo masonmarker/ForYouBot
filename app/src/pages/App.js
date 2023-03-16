@@ -45,6 +45,8 @@ import Title from "../components/Title";
 // styled App
 const AppStyled = styled(Box)`
 
+  overflow: hidden;
+
   /* put input on the bottom center of the screen */
   .inp {
     position: fixed;
@@ -66,6 +68,9 @@ function App() {
   const { ref, inView } = useInView({
     threshold: 0,
   });
+
+  document.body.style.overflow = "hidden"
+
 
   // messages state
   const {

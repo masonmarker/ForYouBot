@@ -200,12 +200,37 @@ const EditPanel = ({ app }) => {
                 app={app}
                 state={app.constraints.showWork}
                 setState={app.constraints.showWork}
+                body={
+                  <VStack>
+                    <Text>
+                      When checked, the bot will provide the reasoning / work<br />
+                      behind its answer.
+                    </Text>
+                    <CheckDisables
+                      app={app}
+                      disables={["Answer Only"]}
+                    />
+                  </VStack>
+                }
               />
               <CheckOption
                 title="Answer Only"
                 app={app}
                 state={app.constraints.answerOnly}
                 setState={app.settings.setAnswerOnly}
+                body={
+                  <VStack>
+                    <Text>
+                      When checked, the bot will only answer the question<br />
+                      and not provide any additional information.
+                    </Text>
+                    <CheckDisables
+                      app={app}
+                      disables={["Show Work"]}
+                    />
+                  </VStack>
+                }
+
               />
             </VStack>
 
@@ -259,6 +284,34 @@ const EditPanel = ({ app }) => {
         </ModalContent>
       </Modal>
     </SidePanelStyled>
+  );
+};
+
+// list of other checkboxes that a checkbox would disable
+// upon its selection
+const CheckDisables = ({ disables, app }) => {
+
+  // use color mode
+  const { colorMode } = useColorMode();
+
+  return (
+    <VStack
+      p={4}
+      margin={4}
+      borderRadius="lg"
+      bg={colorMode === 'light' ? 'white' : 'black'}
+    >
+      <Text>
+        This checkbox disables the following options:
+      </Text>
+      {disables.map((disabling, i) => {
+        return (
+          <Checkbox key={`disabling-${disabling + i}`} isDisabled>
+            {disabling}
+          </Checkbox>
+        );
+      })}
+    </VStack>
   );
 };
 
