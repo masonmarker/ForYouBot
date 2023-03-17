@@ -20,6 +20,7 @@ import {
   Box,
   Text,
   HStack,
+  VStack,
   Button,
   Input,
   Textarea,
@@ -39,6 +40,7 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Divider,
 
   // fading
   ScaleFade,
@@ -59,10 +61,16 @@ import {
 import { useInView } from "react-intersection-observer";
 
 // Chakra icons
-import { CopyIcon, EditIcon, RepeatIcon } from "@chakra-ui/icons";
+import { CopyIcon, EditIcon, RepeatIcon, QuestionOutlineIcon, ChevronRightIcon, ViewIcon } from "@chakra-ui/icons";
 
 // BsLightningCharge from react-icons/bs
 import { BsLightningCharge } from "react-icons/bs";
+
+// ImFileText2 from react-icons/im
+import { ImFileText2 } from "react-icons/im";
+
+// VscDebugContinueSmall from react-icons/vsc
+import { VscDebugContinueSmall } from "react-icons/vsc";
 
 // styled components
 import styled from "styled-components";
@@ -266,7 +274,11 @@ const Message = (props) => {
 
           {showCopy && !props.app.waiting &&
             <Box>
-              <Menu computePositionOnMount isLazy>
+              <Menu
+                colorScheme={props.app.settings.accent}
+                placement="bottom"
+                computePositionOnMount
+                isLazy>
                 <MenuButton
                   as={Button}
                   size="sm"
@@ -275,78 +287,225 @@ const Message = (props) => {
                   <BsLightningCharge />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem
-                    onClick={() => {
-                      // set the input's value to the message
-                      props.app.refs.areaRef.current.value = props.message;
+                  <VStack align="left" gap={0}>
+                    <Text fontWeight="bold" align="center">
+                      Basic Actions
+                    </Text>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => {
+                        // set the input's value to the message
+                        props.app.refs.areaRef.current.value = props.message;
 
-                      // copy the message
-                      var editingText = props.app.refs.areaRef.current.value;
+                        // copy the message
+                        var editingText = props.app.refs.areaRef.current.value;
 
-                      // editing text
-                      var title = "Editing message: ";
+                        // editing text
+                        var title = "Editing message: ";
 
-                      if (editingText.length > 20) {
-                        title += editingText.substring(0, 20) + "...";
-                      } else {
-                        title += editingText;
-                      }
+                        if (editingText.length > 20) {
+                          title += editingText.substring(0, 20) + "...";
+                        } else {
+                          title += editingText;
+                        }
 
-                      // show toast
-                      toast({
-                        render: () => <Toast text={title} app={props.app} />,
-                        duration: 1500,
-                      });
-                    }}
-                  >
-                    <HStack>
-                      <EditIcon />
-                      <Text>Edit</Text>
-                    </HStack>
-                  </MenuItem>
-                  <MenuItem
+                        // show toast
+                        toast({
+                          render: () => <Toast text={title} app={props.app} />,
+                          duration: 1500,
+                        });
+                      }}
+                    >
+                      <HStack>
+                        <EditIcon />
+                        <Text>Edit</Text>
+                      </HStack>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
 
-                    onClick={() => {
-                      // copy props.message to clipbooard
-                      navigator.clipboard.writeText(props.message);
+                      onClick={() => {
+                        // copy props.message to clipbooard
+                        navigator.clipboard.writeText(props.message);
 
-                      // show toast
-                      toast({
-                        render: () => (
-                          <Toast text="Copied to clipboard" app={props.app} />
-                        ),
-                        duration: 2000,
-                      });
-                    }}
+                        // show toast
+                        toast({
+                          render: () => (
+                            <Toast text="Copied to clipboard" app={props.app} />
+                          ),
+                          duration: 2000,
+                        });
+                      }}
 
-                  >
-                    <HStack>
-                      <CopyIcon />
-                      <Text>Copy</Text>
-                    </HStack>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      // set the input's value to the message
-                      props.app.refs.areaRef.current.value = props.message;
+                    >
+                      <HStack>
+                        <CopyIcon />
+                        <Text>Copy</Text>
+                      </HStack>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
 
-                      // press the submit button
-                      props.app.refs.submitRef.current.click();
+                      onClick={() => {
+                        // set the input's value to the message
+                        props.app.refs.areaRef.current.value = props.message;
 
-                      // show toast
-                      toast({
-                        render: () => (
-                          <Toast text="Resubmitted message" app={props.app} />
-                        ),
-                        duration: 1500,
-                      });
-                    }}
-                  >
-                    <HStack>
-                      <RepeatIcon />
-                      <Text>Resubmit</Text>
-                    </HStack>
-                  </MenuItem>
+                        // press the submit button
+                        props.app.refs.submitRef.current.click();
+
+                        // show toast
+                        toast({
+                          render: () => (
+                            <Toast text="Resubmitted message" app={props.app} />
+                          ),
+                          duration: 1500,
+                        });
+                      }}
+                    >
+                      <HStack>
+                        <RepeatIcon />
+                        <Text>Resubmit</Text>
+                      </HStack>
+                    </Button>
+
+                    {/* Divider for submenus */}
+                    <Divider />
+                    <Text fontWeight="bold" align="center">Other Actions</Text>
+                    {/* SubMenu for text actions */}
+                    <Menu
+                      colorScheme={props.app.settings.accent}
+                      placement="bottom-start"
+                      computePositionOnMount
+                      isLazy
+                    >
+                      <MenuButton
+                        size="sm"
+
+                        variant="ghost"
+                        as={Button}
+                        align="center"
+                        rightIcon={<ChevronRightIcon />}
+                      >
+                        <HStack align="center">
+                          <ImFileText2
+                            style={{
+                              color: colorMode === "light" ? "black" : "white",
+                            }}
+                          />
+                          <Text>Text</Text>
+                        </HStack>
+                      </MenuButton>
+
+                      {/* Additional text operations */}
+                      <MenuList>
+                        <VStack align="left">
+                          <Button
+                            size="sm"
+
+                            variant="ghost"
+                            onClick={() => {
+                              // input to ask the bot
+                              var input = `Elaborate on this:\n${props.message}`;
+
+                              // set the input's value to the message
+                              props.app.refs.areaRef.current.value = input;
+
+                              // press the submit button
+                              props.app.refs.submitRef.current.click();
+
+                              // show toast
+                              toast({
+                                render: () => (
+                                  <Toast
+                                    text="Elaboration Requested"
+                                    app={props.app}
+                                  />
+                                ),
+                                duration: 1500,
+                              });
+                            }}
+                          >
+                            <HStack>
+                              <ViewIcon />
+                              <Text>Elaborate</Text>
+                            </HStack>
+                          </Button>
+
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              // prepare message to send
+                              var input = `Continue this:\n${props.message}`;
+
+                              // set the input's value to the message
+                              props.app.refs.areaRef.current.value = input;
+
+                              // press the submit button
+                              props.app.refs.submitRef.current.click();
+
+                              // show toast
+                              toast({
+                                render: () => (
+                                  <Toast
+                                    text="Continuation Requested"
+                                    app={props.app}
+                                  />
+                                ),
+                                duration: 1500,
+                              });
+                            }}
+                          >
+                            <HStack>
+                              <VscDebugContinueSmall />
+                              <Text>Continue</Text>
+                            </HStack>
+                          </Button>
+
+                          {/* Menu for Summmarizing Text */}
+                          <Menu
+                            colorScheme={props.app.settings.accent}
+                            placement="bottom-start"
+                            computePositionOnMount
+                            isLazy
+                          >
+                            <MenuButton
+                              size="sm"
+                              variant="ghost"
+                              as={Button}
+                              align="center"
+                              rightIcon={<ChevronRightIcon />}
+                            >
+                              <HStack align="center">
+                                <ImFileText2
+                                  style={{
+                                    color:
+                                      colorMode === "light" ? "black" : "white",
+                                  }}
+                                />
+                                <Text>Summarize</Text>
+                              </HStack>
+                            </MenuButton>
+                            <MenuList>
+                              <VStack align="center">
+                                <Text>Summarize message to:</Text>
+                                <Input w="50%" placeholder="10"/>
+                              </VStack>
+                            </MenuList>
+                          </Menu>
+
+
+
+                        </VStack>
+                      </MenuList>
+                    </Menu>
+
+                    {/* SubMenu for Math / Coding */}
+
+                  </VStack>
                 </MenuList>
               </Menu>
             </Box>
@@ -356,7 +515,7 @@ const Message = (props) => {
 
         {/* end of message box */}
       </MessageStyled>
-    </ScaleFade>
+    </ScaleFade >
   );
 };
 
