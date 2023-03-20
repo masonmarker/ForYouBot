@@ -119,6 +119,7 @@ const ChatPanel = ({ app }) => {
               return (
                 <div key={`chat-div-${index}`}>
                   <Message
+                    messageIndex={index}
                     app={app}
                     key={`user-${index}`}
                     message={message.message}
@@ -127,6 +128,7 @@ const ChatPanel = ({ app }) => {
                   />
                   {app.botMessages[index] && (
                     <Message
+                      messageIndex={index}
                       app={app}
                       key={`bot-${index}`}
                       message={app.botMessages[index].message}

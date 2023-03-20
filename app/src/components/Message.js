@@ -9,6 +9,9 @@
 // states
 import { useState, useRef, useEffect } from "react";
 
+// actionmodal components
+import TextActions from "./actionmodals/TextActions";
+
 // Toast
 import Toast from "./Toast";
 
@@ -19,6 +22,7 @@ import {
   useToast,
   Box,
   Text,
+  Stack,
   HStack,
   VStack,
   Button,
@@ -41,6 +45,14 @@ import {
   MenuItem,
   MenuDivider,
   Divider,
+
+  // radio group for choosing between
+  // characters, words, sentences, and lines
+  // when summarizing or expanding
+  RadioGroup,
+  Radio,
+
+
 
   // fading
   ScaleFade,
@@ -208,8 +220,42 @@ const Message = (props) => {
     });
   }, []);
 
+  // state for message expansion or summarization
+  const [actionLimit, setActionLimit] = useState("characters");
+
+  // state for action limit value
+  const [actionLimitValue, setActionLimitValue] = useState(100);
+
+  // state for action or more or or less value
+  const [orActionLimit, setOrActionLimit] = useState("less");
+
+
+  // function to determine if this message has been remembered
+  // by the bot or not
+  // message is remembered if its index is 0, or between 
+  // app.userMessages.length - app.prevMessageCount and app.userMessages.length
+  function isRemembered() {
+    // get the index of the message
+    const index = props.messageIndex;
+
+    // if the index is 0, or between app.userMessages.length - app.prevMessageCount and app.userMessages.length
+    if (
+      index === 0 ||
+      (index >= props.app.userMessages.length - props.app.prevMessageCount &&
+        index < props.app.userMessages.length)
+    ) {
+      // return true
+      return true;
+    }
+
+    // return false
+    return false;
+
+
+  }
+
   return (
-    <ScaleFade ref={ref} in={inView} {...props}>
+    <ScaleFade ref={ref} in={inView}>
       <MessageStyled
         borderColor={colorMode === "light" ? colors.darkGray : colors.lightGray}
         // states for displaying the copy button
@@ -276,9 +322,12 @@ const Message = (props) => {
             <Box>
               <Menu
                 colorScheme={props.app.settings.accent}
-                placement="bottom"
                 computePositionOnMount
-                isLazy>
+                isLazy
+                preventOverflow
+              // should be able to reach the menu no matter
+              // the placement without it disappearing
+              >
                 <MenuButton
                   as={Button}
                   size="sm"
@@ -374,135 +423,22 @@ const Message = (props) => {
                     {/* Divider for submenus */}
                     <Divider />
                     <Text fontWeight="bold" align="center">Other Actions</Text>
-                    {/* SubMenu for text actions */}
-                    <Menu
-                      colorScheme={props.app.settings.accent}
-                      placement="bottom-start"
-                      computePositionOnMount
-                      isLazy
+                    {/* Modal for text actions */}
+                    <TextActions
+                      app={props.app}
+                      message={props.message}
+                      messageIndex={props.messageIndex}
+                      actionLimit={actionLimit}
+                      setActionLimit={setActionLimit}
+                      orActionLimit={orActionLimit}
+                      setOrActionLimit={setOrActionLimit}
+                      from={props.from}
+                      isRemembered={props.isRemembered}
+                      actionLimitValue={actionLimitValue}
+                      setActionLimitValue={setActionLimitValue}
                     >
-                      <MenuButton
-                        size="sm"
 
-                        variant="ghost"
-                        as={Button}
-                        align="center"
-                        rightIcon={<ChevronRightIcon />}
-                      >
-                        <HStack align="center">
-                          <ImFileText2
-                            style={{
-                              color: colorMode === "light" ? "black" : "white",
-                            }}
-                          />
-                          <Text>Text</Text>
-                        </HStack>
-                      </MenuButton>
-
-                      {/* Additional text operations */}
-                      <MenuList>
-                        <VStack align="left">
-                          <Button
-                            size="sm"
-
-                            variant="ghost"
-                            onClick={() => {
-                              // input to ask the bot
-                              var input = `Elaborate on this:\n${props.message}`;
-
-                              // set the input's value to the message
-                              props.app.refs.areaRef.current.value = input;
-
-                              // press the submit button
-                              props.app.refs.submitRef.current.click();
-
-                              // show toast
-                              toast({
-                                render: () => (
-                                  <Toast
-                                    text="Elaboration Requested"
-                                    app={props.app}
-                                  />
-                                ),
-                                duration: 1500,
-                              });
-                            }}
-                          >
-                            <HStack>
-                              <ViewIcon />
-                              <Text>Elaborate</Text>
-                            </HStack>
-                          </Button>
-
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => {
-                              // prepare message to send
-                              var input = `Continue this:\n${props.message}`;
-
-                              // set the input's value to the message
-                              props.app.refs.areaRef.current.value = input;
-
-                              // press the submit button
-                              props.app.refs.submitRef.current.click();
-
-                              // show toast
-                              toast({
-                                render: () => (
-                                  <Toast
-                                    text="Continuation Requested"
-                                    app={props.app}
-                                  />
-                                ),
-                                duration: 1500,
-                              });
-                            }}
-                          >
-                            <HStack>
-                              <VscDebugContinueSmall />
-                              <Text>Continue</Text>
-                            </HStack>
-                          </Button>
-
-                          {/* Menu for Summmarizing Text */}
-                          <Menu
-                            colorScheme={props.app.settings.accent}
-                            placement="bottom-start"
-                            computePositionOnMount
-                            isLazy
-                          >
-                            <MenuButton
-                              size="sm"
-                              variant="ghost"
-                              as={Button}
-                              align="center"
-                              rightIcon={<ChevronRightIcon />}
-                            >
-                              <HStack align="center">
-                                <ImFileText2
-                                  style={{
-                                    color:
-                                      colorMode === "light" ? "black" : "white",
-                                  }}
-                                />
-                                <Text>Summarize</Text>
-                              </HStack>
-                            </MenuButton>
-                            <MenuList>
-                              <VStack align="center">
-                                <Text>Summarize message to:</Text>
-                                <Input w="50%" placeholder="10"/>
-                              </VStack>
-                            </MenuList>
-                          </Menu>
-
-
-
-                        </VStack>
-                      </MenuList>
-                    </Menu>
-
+                    </TextActions>
                     {/* SubMenu for Math / Coding */}
 
                   </VStack>

@@ -137,6 +137,9 @@ function App() {
   // managing code detection
   const [codeDetection, setCodeDetection] = useState(true);
 
+  // state for number of previous messages to remember for context
+  const [prevMessageCount, setPrevMessageCount] = useState(1);
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
@@ -148,6 +151,10 @@ function App() {
     setBotMessages: setBotMessages,
     conversations: conversations,
     setConversations: setConversations,
+
+    // previous messages
+    prevMessageCount: prevMessageCount,
+    setPrevMessageCount: setPrevMessageCount,
 
     // generating conversation title
     generating: generating,

@@ -120,19 +120,24 @@ async function tokensForString(string) {
 //
 // representation should contain the first exchange, and the exchange prior
 // to the last exchange
-function getUserChatLog(userMessages, botMessages, constraints, prompt) {
+function getUserChatLog(userMessages, botMessages, constraints, prompt, app) {
   // string representation of the chat log context
   var chatLog = "";
 
   // create an empty set for integers
-  var set = new Set();
+  var set = [];
 
   // add 0 to the set
-  set.add(0);
-
+  set.push(0);
+  
   if (userMessages.length > 0) {
     // add the most recent exchange to the set
-    set.add(Math.max(userMessages.length - 1, 0));
+    for (var i = 1; i < app.prevMessageCount + 1; i++) {
+      const toAdd = Math.max(userMessages.length - i, 0);
+      if (!set.includes(toAdd)) {
+        set.push(toAdd);
+      }
+    }
 
     // // add the second most recent exchange to the set
     // set.add(Math.max(userMessages.length - 2, 0));
@@ -271,7 +276,8 @@ const Prompt = ({ app }) => {
         app.userMessages,
         app.botMessages,
         app.constraints,
-        prompt
+        prompt,
+        app
       );
 
       // if testing
