@@ -134,6 +134,7 @@ const Title = ({ app }) => {
   // clears the current conversation
   const clearConversation = () => {
     app.conversations[0].name = "New Conversation";
+    app.conversations[0].importantIndices = new Set();
     app.setConversations(app.conversations);
     app.setUserMessages([]);
     app.setBotMessages([]);

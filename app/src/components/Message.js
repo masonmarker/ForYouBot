@@ -52,8 +52,6 @@ import {
   RadioGroup,
   Radio,
 
-
-
   // fading
   ScaleFade,
 
@@ -73,7 +71,15 @@ import {
 import { useInView } from "react-intersection-observer";
 
 // Chakra icons
-import { CopyIcon, EditIcon, RepeatIcon, QuestionOutlineIcon, ChevronRightIcon, ViewIcon } from "@chakra-ui/icons";
+import {
+  CopyIcon,
+  EditIcon,
+  RepeatIcon,
+  QuestionOutlineIcon,
+  ChevronRightIcon,
+  ViewIcon,
+  StarIcon,
+} from "@chakra-ui/icons";
 
 // BsLightningCharge from react-icons/bs
 import { BsLightningCharge } from "react-icons/bs";
@@ -229,30 +235,30 @@ const Message = (props) => {
   // state for action or more or or less value
   const [orActionLimit, setOrActionLimit] = useState("less");
 
-
   // function to determine if this message has been remembered
   // by the bot or not
-  // message is remembered if its index is 0, or between 
+  // message is remembered if its index is 0, or between
   // app.userMessages.length - app.prevMessageCount and app.userMessages.length
   function isRemembered() {
     // get the index of the message
     const index = props.messageIndex;
 
     // if the index is 0, or between app.userMessages.length - app.prevMessageCount and app.userMessages.length
-    if (
+    return (
       index === 0 ||
       (index >= props.app.userMessages.length - props.app.prevMessageCount &&
         index < props.app.userMessages.length)
-    ) {
-      // return true
-      return true;
-    }
-
-    // return false
-    return false;
-
-
+    );
   }
+
+  // function to determine if this message has been marked as important
+  // by the user or not
+  function isImportant() {
+    return props.app.conversations[0].importantIndices.has(props.messageIndex);
+  }
+
+  // ref for menuButton
+  const menuButtonRef = useRef();
 
   return (
     <ScaleFade ref={ref} in={inView}>
@@ -282,7 +288,14 @@ const Message = (props) => {
           {/* avatar */}
           {props.from === "user" ? (
             <Box ml={10} mr={5}>
-              {props.app.settings.icons.userIcon}
+              <VStack>
+                {isImportant() && (
+                  <VStack>
+                    <StarIcon />
+                  </VStack>
+                )}
+                {props.app.settings.icons.userIcon}
+              </VStack>
             </Box>
           ) : (
             <Box ml={10} mr={5}>
@@ -318,17 +331,18 @@ const Message = (props) => {
             </pre>
           )}
 
-          {showCopy && !props.app.waiting &&
+          {showCopy && !props.app.waiting && (
             <Box>
               <Menu
                 colorScheme={props.app.settings.accent}
                 computePositionOnMount
                 isLazy
                 preventOverflow
-              // should be able to reach the menu no matter
-              // the placement without it disappearing
+                // should be able to reach the menu no matter
+                // the placement without it disappearing
               >
                 <MenuButton
+                  ref={menuButtonRef}
                   as={Button}
                   size="sm"
                   variant="ghost"
@@ -374,7 +388,6 @@ const Message = (props) => {
                     <Button
                       variant="ghost"
                       size="sm"
-
                       onClick={() => {
                         // copy props.message to clipbooard
                         navigator.clipboard.writeText(props.message);
@@ -387,7 +400,6 @@ const Message = (props) => {
                           duration: 2000,
                         });
                       }}
-
                     >
                       <HStack>
                         <CopyIcon />
@@ -397,7 +409,6 @@ const Message = (props) => {
                     <Button
                       variant="ghost"
                       size="sm"
-
                       onClick={() => {
                         // set the input's value to the message
                         props.app.refs.areaRef.current.value = props.message;
@@ -420,9 +431,49 @@ const Message = (props) => {
                       </HStack>
                     </Button>
 
+                    {/* Marking a message as important
+                    this can be done by marking if props.app.messageIndex === app.conversations[0].importantIndices */}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      colorScheme={isImportant() && props.app.settings.accent}
+                      onClick={() => {
+                        // if the message is already important, remove it
+                        if (isImportant()) {
+                          props.app.conversations[0].importantIndices.delete(
+                            props.messageIndex
+                          );
+                        } else {
+                          // else add it
+                          props.app.conversations[0].importantIndices.add(
+                            props.messageIndex
+                          );
+                        }
+                        // set conversations
+                        props.app.setConversations(props.app.conversations);
+
+                        // set user and bot messages
+                        props.app.setUserMessages(props.app.userMessages);
+                        props.app.setBotMessages(props.app.botMessages);
+
+                        console.log(
+                          props.app.conversations[0].importantIndices
+                        );
+                      }}
+                    >
+                      <HStack>
+                        <StarIcon />
+                        <Text>
+                          {isImportant() ? "Unmark" : "Mark"} as important
+                        </Text>
+                      </HStack>
+                    </Button>
+
                     {/* Divider for submenus */}
                     <Divider />
-                    <Text fontWeight="bold" align="center">Other Actions</Text>
+                    <Text fontWeight="bold" align="center">
+                      Other Actions
+                    </Text>
                     {/* Modal for text actions */}
                     <TextActions
                       app={props.app}
@@ -436,22 +487,18 @@ const Message = (props) => {
                       isRemembered={props.isRemembered}
                       actionLimitValue={actionLimitValue}
                       setActionLimitValue={setActionLimitValue}
-                    >
-
-                    </TextActions>
+                    />
                     {/* SubMenu for Math / Coding */}
-
                   </VStack>
                 </MenuList>
               </Menu>
             </Box>
-          }
-
+          )}
         </HStack>
 
         {/* end of message box */}
       </MessageStyled>
-    </ScaleFade >
+    </ScaleFade>
   );
 };
 

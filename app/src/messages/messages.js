@@ -65,6 +65,7 @@ function emptyConversation(userMessages, botMessages) {
     wasRenamed: false,
     user: userMessages,
     bot: botMessages,
+    importantIndices: new Set(),
 
     // token usage / expenses so far
     info: {

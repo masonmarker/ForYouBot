@@ -139,6 +139,12 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt, app) {
       }
     }
 
+    // add indices from the importantIndices state in app
+    for (var i of app.conversations[0].importantIndices) {
+      set.push(i);
+    }
+
+
     // // add the second most recent exchange to the set
     // set.add(Math.max(userMessages.length - 2, 0));
 
