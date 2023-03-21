@@ -469,9 +469,13 @@ const Message = (props) => {
                         // close the menu
                         menuButtonRef.current.click();
 
+                        // close the menu
+                        menuButtonRef.current.click();
+
                         console.log(
                           props.app.conversations[0].importantIndices
                         );
+
                       }}
                     >
                       <HStack>
