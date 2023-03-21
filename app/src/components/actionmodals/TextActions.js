@@ -29,6 +29,17 @@ import {
     VStack,
     HStack,
     Text,
+
+    // Table
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
 } from "@chakra-ui/react";
 
 // Chakra icons
@@ -82,7 +93,7 @@ const TextActions = ({ thisMessage }) => {
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Statistics message={thisMessage.message} />
+                        <Statistics message={thisMessage.message} app={thisMessage.app} />
                     </ModalBody>
                     <ModalFooter>
                         <Button
@@ -102,7 +113,7 @@ const TextActions = ({ thisMessage }) => {
 
 
 // statistics of the message
-const Statistics = ({ message }) => {
+const Statistics = ({ message, app }) => {
 
     // intersection observer
     const { ref, inView } = useInView({
@@ -113,23 +124,38 @@ const Statistics = ({ message }) => {
     const { colorMode } = useColorMode();
 
     // function to count words
-    const countWords = (str) => {
-        return str.split(" ").filter(function (n) { return n != "" }).length;
+    // from http://www.mediacollege.com/internet/javascript/text/count-words.html
+    function countWords(s) {
+        s = s.replace(/(^\s*)|(\s*$)/gi, "");//exclude  start and end white-space
+        s = s.replace(/[ ]{2,}/gi, " ");//2 or more space to 1
+        s = s.replace(/\n /, "\n"); // exclude newline with a start spacing
+        return s.split(' ').filter(function (str) { return str != ""; }).length;
     }
 
     return (
-        <ScaleFade in={inView} ref={ref}>
-            <VStack
-                border={`1 px solid ${colorMode === 'light' ? 'black' : 'white'}`}
-            >
-                {/* Character count */}
-                <Text>characters: {message.length}</Text>
-                {/* Word count */}
-                <Text>words: {countWords(message)}</Text>
-                {/* Sentence count, including all punctuation */}
-                <Text>sentence count: {message.split(/[.!?]/).filter(sentence => sentence).length}</Text>
-            </VStack>
-        </ScaleFade>
+        <VStack>
+            {/* Recreate the above texts but using Chakra's table */}
+            <TableContainer ref={ref}>
+                <Table 
+                colorScheme={app.settings.accent}
+                variant="simple">
+                    <Thead>
+                        <Tr>
+                            <Th>characters</Th>
+                            <Th>words</Th>
+                            <Th>sentence count</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        <Tr>
+                            <Td>{message.length}</Td>
+                            <Td>{countWords(message)}</Td>
+                            <Td>{message.split(/[.!?]/).filter(sentence => sentence).length}</Td>
+                        </Tr>
+                    </Tbody>
+                </Table>
+            </TableContainer>
+        </VStack>
     );
 };
 
