@@ -10,6 +10,7 @@
 import Prompt from "../components/Prompt";
 import Chat from "../components/Chat";
 import Bg from "../components/Bg";
+import Toast from "../components/Toast";
 
 // models as appmodels
 import models from "../models/models";
@@ -28,7 +29,7 @@ import { useMessages, useConversation } from "../messages/messages";
 import { useState, useRef } from "react";
 
 // Chakra components
-import { ChakraProvider, Fade, Box, Button } from "@chakra-ui/react";
+import { ChakraProvider, Fade, Box, useToast } from "@chakra-ui/react";
 
 // intersection observer
 import { useInView } from "react-intersection-observer";
@@ -140,6 +141,12 @@ function App() {
   // state for number of previous messages to remember for context
   const [prevMessageCount, setPrevMessageCount] = useState(1);
 
+  // areaRef
+  const areaRef = useRef(null);
+
+  // Chakra toast
+  const toast = useToast();
+
   // app information / states to pass as props
   var app = {
     // conversations / messages
@@ -204,7 +211,7 @@ function App() {
 
     // component references
     refs: {
-      areaRef: useRef(null),
+      areaRef: areaRef,
       submitRef: useRef(null),
       charLimitRef: useRef(null),
       codeButtonRef: useRef(null),
@@ -226,12 +233,46 @@ function App() {
     topP: topP,
     setTopP: setTopP,
 
-  };
+    // functions 
+    shortenText: (prefix, editingText) => {
+
+      // copy the message
+      var editingText = areaRef.current.value;
+
+      // editing text
+      var title = prefix;
+
+      if (editingText.length > 20) {
+        title += editingText.substring(0, 20) + "...";
+      } else {
+        title += editingText;
+      }
+
+      return title;
+    },
+
+    // function to handle Crtl-C
+    handleCrtlC: (e) => {
+
+      // if ctrl-v and the user has highlighted text
+      if (e.ctrlKey && e.key === "c" && window.getSelection().toString()) {
+        // display toast
+        toast({
+          render: () => (
+            <Toast text="Text copied" app={app} />
+          ),
+          duration: 1500,
+        });
+      }
+    }
+
+  }
+
 
   return (
     <ChakraProvider>
       <Fade in={inView} ref={ref}>
-        <AppStyled fontFamily={app.settings.font}>
+        <AppStyled fontFamily={app.settings.font} onKeyDown={app.handleCrtlC}>
           {/* Title for switching conversations */}
           <Title app={app} />
           <Prompt app={app} />

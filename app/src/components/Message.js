@@ -361,17 +361,8 @@ const Message = (props) => {
                         // set the input's value to the message
                         props.app.refs.areaRef.current.value = props.message;
 
-                        // copy the message
-                        var editingText = props.app.refs.areaRef.current.value;
-
-                        // editing text
-                        var title = "Editing message: ";
-
-                        if (editingText.length > 20) {
-                          title += editingText.substring(0, 20) + "...";
-                        } else {
-                          title += editingText;
-                        }
+                        // shorten the text
+                        const title = props.app.shortenText("Editing message: ", props.message);
 
                         // show toast
                         toast({
@@ -395,7 +386,7 @@ const Message = (props) => {
                         // show toast
                         toast({
                           render: () => (
-                            <Toast text="Copied to clipboard" app={props.app} />
+                            <Toast text="Message copied to clipboard" app={props.app} />
                           ),
                           duration: 2000,
                         });

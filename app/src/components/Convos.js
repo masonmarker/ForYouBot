@@ -185,10 +185,11 @@ const Convos = ({ app, onClose1 }) => {
                     // show toast that we opened the conversation
                     // with this name
                     if (index !== 0) {
+
                       toast({
                         render: () => (
                           <Toast
-                            text={`Opened conversation: ${convo.name}`}
+                            text="Opened conversation"
                             app={app}
                           />
                         ),
@@ -253,10 +254,14 @@ const Convos = ({ app, onClose1 }) => {
                   <HStack>
                     <Button
                       onClick={() => {
+
+                        // remove the conversation
                         handleRemove(index, convo);
+
+                        // show toast
                         toast({
                           render: () => (
-                            <Toast text="Conversation removed" app={app} />
+                            <Toast text="Removed conversation" app={app} />
                           ),
                           duration: 2000,
                         });
