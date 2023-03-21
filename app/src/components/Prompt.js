@@ -125,29 +125,28 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt, app) {
   var chatLog = "";
 
   // create an empty set for integers
-  var remembered = [];
+  var remembered = new Set();
 
   // add 0 to the set
-  remembered.push(0);
-  
+  remembered.add(0);
+
   if (userMessages.length > 0) {
     // add the most recent exchange to the set
     for (var i = 1; i < app.prevMessageCount + 1; i++) {
       const toAdd = Math.max(userMessages.length - i, 0);
-      if (!remembered.includes(toAdd)) {
-        remembered.push(toAdd);
-      }
+      remembered.add(toAdd);
     }
 
     // add indices from the importantIndices state in app
     for (var i of app.conversations[0].importantIndices) {
-      remembered.push(i);
+      remembered.add(i);
     }
+
+    // convert set to array
+    remembered = Array.from(remembered);
 
     // sort the remembered array
     remembered.sort((a, b) => a - b);
-    
-
 
     // // add the second most recent exchange to the set
     // set.add(Math.max(userMessages.length - 2, 0));

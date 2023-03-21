@@ -291,20 +291,7 @@ const Message = (props) => {
           {/* avatar */}
           {props.from === "user" ? (
             <Box ml={10} mr={5}>
-              <VStack>
-                {props.app.settings.icons.userIcon}
-
-                {isImportant() && (
-                  <VStack>
-                    <Button
-                      size="xs"
-                      colorScheme={props.app.settings.accent}
-                    >
-                      Important
-                    </Button>
-                  </VStack>
-                )}
-              </VStack>
+              {props.app.settings.icons.userIcon}
             </Box>
           ) : (
             <Box ml={10} mr={5}>
@@ -348,8 +335,8 @@ const Message = (props) => {
                 computePositionOnMount
                 isLazy
                 preventOverflow
-              // should be able to reach the menu no matter
-              // the placement without it disappearing
+                // should be able to reach the menu no matter
+                // the placement without it disappearing
               >
                 <MenuButton
                   ref={menuButtonRef}
@@ -460,7 +447,9 @@ const Message = (props) => {
                           );
                         }
                         // set conversations
-                        props.app.setConversations([...props.app.conversations]);
+                        props.app.setConversations([
+                          ...props.app.conversations,
+                        ]);
 
                         // set user and bot messages
                         props.app.setUserMessages([...props.app.userMessages]);
@@ -468,14 +457,6 @@ const Message = (props) => {
 
                         // close the menu
                         menuButtonRef.current.click();
-
-                        // close the menu
-                        menuButtonRef.current.click();
-
-                        console.log(
-                          props.app.conversations[0].importantIndices
-                        );
-
                       }}
                     >
                       <HStack>
@@ -513,9 +494,37 @@ const Message = (props) => {
           )}
         </HStack>
 
+        {/* Section for additional message information */}
+        <AdditionalInfo isImportant={isImportant} from={props.from} />
+
         {/* end of message box */}
       </MessageStyled>
     </ScaleFade>
+  );
+};
+
+// additional information for the current message
+const AdditionalInfo = ({ isImportant, from }) => {
+  // margin style for children
+  const marginStyles = {
+    marginTop: "0.5rem",
+    marginLeft: "5rem",
+  };
+
+  return (
+    <HStack>
+      {/* important */}
+      {isImportant() && from === "user" && (
+        <Button
+          size="xs"
+          colorScheme="red"
+          style={marginStyles}
+          cursor="default"
+        >
+          Important
+        </Button>
+      )}
+    </HStack>
   );
 };
 
