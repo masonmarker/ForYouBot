@@ -235,6 +235,9 @@ const Message = (props) => {
   // state for action or more or or less value
   const [orActionLimit, setOrActionLimit] = useState("less");
 
+  // ref for important label
+  const importantRef = useRef();
+
   // function to determine if this message has been remembered
   // by the bot or not
   // message is remembered if its index is 0, or between
@@ -289,12 +292,18 @@ const Message = (props) => {
           {props.from === "user" ? (
             <Box ml={10} mr={5}>
               <VStack>
+                {props.app.settings.icons.userIcon}
+
                 {isImportant() && (
                   <VStack>
-                    <StarIcon />
+                    <Button
+                      size="xs"
+                      colorScheme={props.app.settings.accent}
+                    >
+                      Important
+                    </Button>
                   </VStack>
                 )}
-                {props.app.settings.icons.userIcon}
               </VStack>
             </Box>
           ) : (
@@ -335,11 +344,12 @@ const Message = (props) => {
             <Box>
               <Menu
                 colorScheme={props.app.settings.accent}
+                placement="bottom-end"
                 computePositionOnMount
                 isLazy
                 preventOverflow
-                // should be able to reach the menu no matter
-                // the placement without it disappearing
+              // should be able to reach the menu no matter
+              // the placement without it disappearing
               >
                 <MenuButton
                   ref={menuButtonRef}
@@ -450,11 +460,14 @@ const Message = (props) => {
                           );
                         }
                         // set conversations
-                        props.app.setConversations(props.app.conversations);
+                        props.app.setConversations([...props.app.conversations]);
 
                         // set user and bot messages
-                        props.app.setUserMessages(props.app.userMessages);
-                        props.app.setBotMessages(props.app.botMessages);
+                        props.app.setUserMessages([...props.app.userMessages]);
+                        props.app.setBotMessages([...props.app.botMessages]);
+
+                        // close the menu
+                        menuButtonRef.current.click();
 
                         console.log(
                           props.app.conversations[0].importantIndices
