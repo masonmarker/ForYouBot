@@ -5,12 +5,16 @@
  *  Mason Marker
  */
 
+// react useEffect
+import { useEffect } from "react";
+
 // import Toast
 import Toast from "../Toast";
 
 // Chakra components
 import {
     Box,
+    ScaleFade,
     Button,
     Modal,
     ModalBody,
@@ -35,6 +39,9 @@ import { ImFileText2 } from "react-icons/im";
 
 // VscDebugContinueSmall icon
 import { VscDebugContinueSmall } from "react-icons/vsc";
+
+// react intersection observer
+import { useInView } from "react-intersection-observer";
 
 // TextActions component
 const TextActions = ({
@@ -86,7 +93,7 @@ const TextActions = ({
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        
+                        <Statistics message={message} />
                     </ModalBody>
                     <ModalFooter>
                         <Button
@@ -103,5 +110,33 @@ const TextActions = ({
         </VStack>
     );
 };
+
+
+// statistics of the message
+const Statistics = ({ message }) => {
+
+    // intersection observer
+    const { ref, inView } = useInView({
+        threshold: 0,
+    });
+
+    return (
+        <ScaleFade in={inView} ref={ref}>
+            <VStack>
+
+                {/* Character count */}
+                <Text>characters: {message.length}</Text>
+
+                {/* Word count */}
+                <Text>words: {message.split(" ").length}</Text>
+
+                {/* Sentence count, including all punctuation */}
+                <Text>sentence count: {message.split(/[.!?]/).filter(sentence => sentence).length}</Text>
+
+
+            </VStack>
+        </ScaleFade>
+    );
+}
 
 export default TextActions;

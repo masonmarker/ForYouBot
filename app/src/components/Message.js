@@ -79,6 +79,7 @@ import {
   ChevronRightIcon,
   ViewIcon,
   StarIcon,
+  InfoIcon,
 } from "@chakra-ui/icons";
 
 // BsLightningCharge from react-icons/bs
@@ -335,8 +336,8 @@ const Message = (props) => {
                 computePositionOnMount
                 isLazy
                 preventOverflow
-                // should be able to reach the menu no matter
-                // the placement without it disappearing
+              // should be able to reach the menu no matter
+              // the placement without it disappearing
               >
                 <MenuButton
                   ref={menuButtonRef}
@@ -351,6 +352,8 @@ const Message = (props) => {
                     <Text fontWeight="bold" align="center">
                       Basic Actions
                     </Text>
+
+
                     <Button
                       size="sm"
                       variant="ghost"
@@ -446,17 +449,27 @@ const Message = (props) => {
                             props.messageIndex
                           );
                         }
-                        // set conversations
-                        props.app.setConversations([
-                          ...props.app.conversations,
-                        ]);
 
-                        // set user and bot messages
-                        props.app.setUserMessages([...props.app.userMessages]);
-                        props.app.setBotMessages([...props.app.botMessages]);
+                        // re-render message components
+                        props.app.reRender();
 
                         // close the menu
                         menuButtonRef.current.click();
+
+                        // show toast
+                        toast({
+                          render: () => (
+                            <Toast
+                              text={
+                                isImportant()
+                                  ? "Message marked as important"
+                                  : "Message unmarked as important"
+                              }
+                              app={props.app}
+                            />
+                          ),
+                          duration: 1500,
+                        });
                       }}
                     >
                       <HStack>

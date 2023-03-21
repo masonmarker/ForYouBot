@@ -152,6 +152,13 @@ function App() {
     conversations: conversations,
     setConversations: setConversations,
 
+    // re-rendering all message related components
+    reRender: () => {
+      setUserMessages([...userMessages]);
+      setBotMessages([...botMessages]);
+      setConversations([...conversations]);
+    },
+
     // previous messages
     prevMessageCount: prevMessageCount,
     setPrevMessageCount: setPrevMessageCount,
