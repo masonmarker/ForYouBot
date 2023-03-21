@@ -44,19 +44,8 @@ import { VscDebugContinueSmall } from "react-icons/vsc";
 import { useInView } from "react-intersection-observer";
 
 // TextActions component
-const TextActions = ({
-    app,
-    actionLimit,
-    setActionLimit,
-    orActionLimit,
-    setOrActionLimit,
-    message,
-    from,
-    messageIndex,
-    isRemembered,
-    actionLimitValue,
-    setActionLimitValue
-}) => {
+// thisMessage contains information about the accessing message
+const TextActions = ({ thisMessage }) => {
 
     // Chakra color mode
     const { colorMode } = useColorMode();
@@ -93,11 +82,11 @@ const TextActions = ({
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Statistics message={message} />
+                        <Statistics message={thisMessage.message} />
                     </ModalBody>
                     <ModalFooter>
                         <Button
-                            colorScheme={app.settings.accent}
+                            colorScheme={thisMessage.app.settings.accent}
                             mr={3}
                             onClick={onClose}
                         >
@@ -120,23 +109,28 @@ const Statistics = ({ message }) => {
         threshold: 0,
     });
 
+    // Chakra useColorMode
+    const { colorMode } = useColorMode();
+
+    // function to count words
+    const countWords = (str) => {
+        return str.split(" ").filter(function (n) { return n != "" }).length;
+    }
+
     return (
         <ScaleFade in={inView} ref={ref}>
-            <VStack>
-
+            <VStack
+                border={`1 px solid ${colorMode === 'light' ? 'black' : 'white'}`}
+            >
                 {/* Character count */}
                 <Text>characters: {message.length}</Text>
-
                 {/* Word count */}
-                <Text>words: {message.split(" ").length}</Text>
-
+                <Text>words: {countWords(message)}</Text>
                 {/* Sentence count, including all punctuation */}
                 <Text>sentence count: {message.split(/[.!?]/).filter(sentence => sentence).length}</Text>
-
-
             </VStack>
         </ScaleFade>
     );
-}
+};
 
 export default TextActions;

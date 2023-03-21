@@ -264,6 +264,32 @@ const Message = (props) => {
   // ref for menuButton
   const menuButtonRef = useRef();
 
+  // message attributes for actions
+  // app={props.app}
+  // message={props.message}
+  // messageIndex={props.messageIndex}
+  // actionLimit={actionLimit}
+  // setActionLimit={setActionLimit}
+  // orActionLimit={orActionLimit}
+  // setOrActionLimit={setOrActionLimit}
+  // from={props.from}
+  // isRemembered={props.isRemembered}
+  // actionLimitValue={actionLimitValue}
+  // setActionLimitValue={setActionLimitValue}
+  const thisMessage = {
+    message: props.message, 
+    messageIndex: props.messageIndex,
+    actionLimit: actionLimit,
+    setActionLimit: setActionLimit,
+    orActionLimit: orActionLimit,
+    setOrActionLimit: setOrActionLimit,
+    from: props.from,
+    isRemembered: isRemembered(),
+    actionLimitValue: actionLimitValue,
+    setActionLimitValue: setActionLimitValue,
+    app: props.app
+  }
+
   return (
     <ScaleFade ref={ref} in={inView}>
       <MessageStyled
@@ -301,10 +327,7 @@ const Message = (props) => {
           )}
 
           {language !== "unknown" && props.app.settings.codeDetection ? (
-            <pre
-              className="msg-pre-text"
-              style={{ fontFamily: props.app.settings.font }}
-            >
+            <MessagePre app={props.app} message={props.message}>
               <SyntaxHighlighter
                 style={colorMode === "light" ? oneLight : atomDark}
                 language={language}
@@ -316,16 +339,9 @@ const Message = (props) => {
               >
                 {props.message}
               </SyntaxHighlighter>
-            </pre>
+            </MessagePre>
           ) : (
-            <pre
-              className="msg-pre-text"
-              style={{
-                fontFamily: props.app.settings.font,
-              }}
-            >
-              {props.message}
-            </pre>
+            <MessagePre app={props.app} message={props.message} />
           )}
 
           {showCopy && !props.app.waiting && (
@@ -336,6 +352,7 @@ const Message = (props) => {
                 computePositionOnMount
                 isLazy
                 preventOverflow
+                closeOnBlur={false}
               // should be able to reach the menu no matter
               // the placement without it disappearing
               >
@@ -441,7 +458,7 @@ const Message = (props) => {
                           );
                         }
 
-                        // re-render message components
+                        // re-render message / conversation components
                         props.app.reRender();
 
                         // close the menu
@@ -478,17 +495,7 @@ const Message = (props) => {
                     </Text>
                     {/* Modal for text actions */}
                     <TextActions
-                      app={props.app}
-                      message={props.message}
-                      messageIndex={props.messageIndex}
-                      actionLimit={actionLimit}
-                      setActionLimit={setActionLimit}
-                      orActionLimit={orActionLimit}
-                      setOrActionLimit={setOrActionLimit}
-                      from={props.from}
-                      isRemembered={props.isRemembered}
-                      actionLimitValue={actionLimitValue}
-                      setActionLimitValue={setActionLimitValue}
+                      thisMessage={thisMessage}
                     />
                     {/* SubMenu for Math / Coding */}
                   </VStack>
@@ -504,6 +511,21 @@ const Message = (props) => {
         {/* end of message box */}
       </MessageStyled>
     </ScaleFade>
+  );
+};
+
+// actual message <pre>
+const MessagePre = (props) => {
+  return (
+    <pre
+      className="msg-pre-text"
+      style={{
+        fontFamily: props.app.settings.font,
+      }}
+    >
+      {props.message && props.message}
+      {props.children}
+    </pre>
   );
 };
 
