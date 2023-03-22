@@ -14,15 +14,21 @@ export const colors = {
     darkGray: "#171923",
     purple: "#805AD5",
     lightPurple: "#9f7aea",
-    lighterPurple: "#d6bcfa"
+    lighterPurple: "#d6bcfa",
+    panelColor: (colorMode) => {
+        return colorMode === "light" ? "gray.100" : "gray.800"
+    }
 }
+
+// Chakra default font
+const chakra = `-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`
 
 // fonts
 export const fonts = {
-    main: `-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
+    main: chakra,
     message: "monospace",
     all: [
-        `-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
+        chakra,
         "Arial, sans-serif",
         "san serif",
         "serif",

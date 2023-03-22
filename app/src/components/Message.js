@@ -277,7 +277,7 @@ const Message = (props) => {
   // actionLimitValue={actionLimitValue}
   // setActionLimitValue={setActionLimitValue}
   const thisMessage = {
-    message: props.message, 
+    message: props.message,
     messageIndex: props.messageIndex,
     actionLimit: actionLimit,
     setActionLimit: setActionLimit,
@@ -287,7 +287,10 @@ const Message = (props) => {
     isRemembered: isRemembered(),
     actionLimitValue: actionLimitValue,
     setActionLimitValue: setActionLimitValue,
-    app: props.app
+    app: props.app,
+
+    // close the action menu
+    onClose: onClose,
   }
 
   return (
@@ -590,3 +593,4 @@ const CopyButton = (props) => {
 };
 
 export default Message;
+export { MessagePre };

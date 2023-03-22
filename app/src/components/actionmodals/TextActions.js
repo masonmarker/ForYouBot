@@ -5,11 +5,17 @@
  *  Mason Marker
  */
 
+// components
+import MessagePre from "./../Message"
+
 // react useEffect
 import { useEffect } from "react";
 
 // import Toast
 import Toast from "../Toast";
+
+// import common
+import { colors } from "../../common/common";
 
 // Chakra components
 import {
@@ -82,35 +88,46 @@ const TextActions = ({ thisMessage }) => {
                     </Text>
                 </HStack>
             </Button>
-            <Modal
-                isOpen={isOpen}
-                onClose={onClose}
-            >
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>
-                        Text Actions
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Statistics message={thisMessage.message} app={thisMessage.app} />
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button
-                            colorScheme={thisMessage.app.settings.accent}
-                            mr={3}
-                            onClick={onClose}
-                        >
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
 
-            </Modal>
+            {/* modal for text information and actions */}
+            <TextModal isOpen={isOpen} onClose={onClose} thisMessage={thisMessage} />
+
         </VStack>
     );
 };
 
+// modal for text information and actions
+const TextModal = ({ isOpen, onClose, thisMessage }) => {
+    return (
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
+        >
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>
+                    Text
+                </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <MessagePreview thisMessage={thisMessage} />
+                    <Statistics message={thisMessage.message} app={thisMessage.app} />
+                    <SummarizationExpansion thisMessage={thisMessage} />
+                </ModalBody>
+                <ModalFooter>
+                    <Button
+                        colorScheme={thisMessage.app.settings.accent}
+                        mr={3}
+                        onClick={onClose}
+                    >
+                        Close
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+
+        </Modal>
+    );
+};
 
 // statistics of the message
 const Statistics = ({ message, app }) => {
@@ -136,14 +153,15 @@ const Statistics = ({ message, app }) => {
         <VStack>
             {/* Recreate the above texts but using Chakra's table */}
             <TableContainer ref={ref}>
-                <Table 
-                colorScheme={app.settings.accent}
-                variant="simple">
+                <Table
+                    colorScheme={app.settings.accent}
+                    variant="simple"
+                >
                     <Thead>
                         <Tr>
                             <Th>characters</Th>
                             <Th>words</Th>
-                            <Th>sentence count</Th>
+                            <Th>sentences</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -159,4 +177,40 @@ const Statistics = ({ message, app }) => {
     );
 };
 
+// Message Preview panel
+const MessagePreview = ({ thisMessage }) => {
+
+    // Chakra useColorMode
+    const { colorMode } = useColorMode();
+
+    return (
+        <VStack
+            align="left"
+            backgroundColor={colors.panelColor(colorMode)}
+            borderRadius="md"
+            borderWidth="1px"
+            p={4}
+        >
+            <HStack>
+                {thisMessage.from === 'user' ?
+                    thisMessage.app.settings.icons.userIcon :
+                    thisMessage.app.settings.icons.botIcon
+                }
+                <pre style={{ fontFamily: thisMessage.app.settings.font }}>
+                    {thisMessage.app.shortenText("", thisMessage.message)}
+                </pre>
+            </HStack>
+
+        </VStack >
+    );
+};
+
+// Summarization and Expansion Menus
+const SummarizationExpansion = ({ thisMessage }) => {
+    return (
+        <HStack>
+
+        </HStack>
+    );
+};
 export default TextActions;

@@ -236,9 +236,6 @@ function App() {
     // functions 
     shortenText: (prefix, editingText) => {
 
-      // copy the message
-      var editingText = areaRef.current.value;
-
       // editing text
       var title = prefix;
 
