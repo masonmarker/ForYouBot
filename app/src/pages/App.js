@@ -234,13 +234,13 @@ function App() {
     setTopP: setTopP,
 
     // functions 
-    shortenText: (prefix, editingText) => {
+    shortenText: (prefix, editingText, limit) => {
 
       // editing text
       var title = prefix;
 
-      if (editingText.length > 20) {
-        title += editingText.substring(0, 20) + "...";
+      if (editingText.length > limit) {
+        title += editingText.substring(0, limit) + "...";
       } else {
         title += editingText;
       }
@@ -261,6 +261,16 @@ function App() {
           duration: 1500,
         });
       }
+    },
+
+    // show themed toast
+    showToast: (text, duration) => {
+      toast({
+        render: () => (
+          <Toast text={text} app={app} />
+        ),
+        duration: duration,
+      });
     }
 
   }

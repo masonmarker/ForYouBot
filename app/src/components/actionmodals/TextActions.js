@@ -191,13 +191,21 @@ const MessagePreview = ({ thisMessage }) => {
             borderWidth="1px"
             p={4}
         >
-            <HStack>
+            <HStack w="fit-content">
                 {thisMessage.from === 'user' ?
                     thisMessage.app.settings.icons.userIcon :
                     thisMessage.app.settings.icons.botIcon
                 }
-                <pre style={{ fontFamily: thisMessage.app.settings.font }}>
-                    {thisMessage.app.shortenText("", thisMessage.message)}
+                <pre style={{
+                    fontFamily: thisMessage.app.settings.font,
+                    // word break and wrap
+                    whiteSpace: "pre-wrap",
+                    wordWrap: "break-word",
+                    width: "40%"
+
+
+                }}>
+                    {thisMessage.app.shortenText("", thisMessage.message, 100)}
                 </pre>
             </HStack>
 

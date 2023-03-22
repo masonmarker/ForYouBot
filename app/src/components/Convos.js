@@ -182,19 +182,13 @@ const Convos = ({ app, onClose1 }) => {
                     // close the model
                     onClose1();
 
+                    // shorten text
+                    const title = app.shortenText("Opened conversation: ", app.conversations[0].name, 20);
+
                     // show toast that we opened the conversation
                     // with this name
                     if (index !== 0) {
-
-                      toast({
-                        render: () => (
-                          <Toast
-                            text="Opened conversation"
-                            app={app}
-                          />
-                        ),
-                        duration: 2000,
-                      });
+                      app.showToast(title, 2000)
                     }
                   }}
                 >
@@ -258,13 +252,11 @@ const Convos = ({ app, onClose1 }) => {
                         // remove the conversation
                         handleRemove(index, convo);
 
+                        // shortened text
+                        const title = app.shortenText("Removed conversation: ", convo.name, 20);
+
                         // show toast
-                        toast({
-                          render: () => (
-                            <Toast text="Removed conversation" app={app} />
-                          ),
-                          duration: 2000,
-                        });
+                        app.showToast(title, 2000)
                       }}
                     >
                       <CheckIcon />

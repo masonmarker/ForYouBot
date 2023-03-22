@@ -382,13 +382,10 @@ const Message = (props) => {
                         props.app.refs.areaRef.current.value = props.message;
 
                         // shorten the text
-                        const title = props.app.shortenText("Editing message: ", props.message);
+                        const title = props.app.shortenText("Editing message: ", props.message, 20);
 
                         // show toast
-                        toast({
-                          render: () => <Toast text={title} app={props.app} />,
-                          duration: 1500,
-                        });
+                        props.app.showToast(title, 1500);
                       }}
                     >
                       <HStack>
@@ -403,13 +400,11 @@ const Message = (props) => {
                         // copy props.message to clipbooard
                         navigator.clipboard.writeText(props.message);
 
+                        // shortened text
+                        const title = props.app.shortenText("Copied message: ", props.message, 20);
+
                         // show toast
-                        toast({
-                          render: () => (
-                            <Toast text="Message copied to clipboard" app={props.app} />
-                          ),
-                          duration: 2000,
-                        });
+                        props.app.showToast(title, 2000);
                       }}
                     >
                       <HStack>
@@ -427,13 +422,11 @@ const Message = (props) => {
                         // press the submit button
                         props.app.refs.submitRef.current.click();
 
+                        // shortened text
+                        const title = props.app.shortenText("Resubmitted message: ", props.message, 20);
+
                         // show toast
-                        toast({
-                          render: () => (
-                            <Toast text="Resubmitted message" app={props.app} />
-                          ),
-                          duration: 1500,
-                        });
+                        props.app.showToast(title, 1500);
                       }}
                     >
                       <HStack>
@@ -574,10 +567,8 @@ const CopyButton = (props) => {
         backgroundColor="transparent"
         onClick={(e) => {
           navigator.clipboard.writeText(props.message);
-          toast({
-            render: () => <Toast text="Copied to clipboard" app={props.app} />,
-            duration: 1500,
-          });
+          const title = props.app.shortenText("Copied message: ", props.message, 20);
+          props.app.showToast(title, 1500)
           e.stopPropagation();
         }}
         // on right click, show a chakra menu with options to copy, edit, delete
