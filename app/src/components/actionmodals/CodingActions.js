@@ -8,6 +8,7 @@
 
 // components
 import ActionModal from "./ActionModal";
+import ModalOpenButton from "./ModalOpenButton";
 
 // import Chakra components
 import {
@@ -36,28 +37,17 @@ import { BiCodeAlt } from "react-icons/bi";
 
 // Coding Actions
 const CodingActions = ({ thisMessage }) => {
-  // Chakra color mode
-  const { colorMode } = useColorMode();
-
-  // Chakra toast
-  const toast = useToast();
 
   // handle modal disclosure
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <VStack align="left">
-      <Button
-        size="xs"
-        variant="ghost"
-        rightIcon={<ChevronRightIcon />}
-        onClick={onOpen}
-      >
-        <HStack>
-          <BiCodeAlt />
-          <Text>Coding</Text>
-        </HStack>
-      </Button>
+      <ModalOpenButton
+        name="Coding"
+        icon={<BiCodeAlt />}
+        onOpen={onOpen}
+      />
 
       {/* modal for text information and actions */}
       <CodingModal

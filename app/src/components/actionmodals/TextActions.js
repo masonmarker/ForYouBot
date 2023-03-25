@@ -8,6 +8,7 @@
 // components
 import MessagePre from "./../Message";
 import ActionModal from "./ActionModal";
+import ModalOpenButton from "./ModalOpenButton";
 
 // react useEffect
 import { useEffect } from "react";
@@ -75,20 +76,17 @@ const TextActions = ({ thisMessage }) => {
 
   return (
     <VStack align="left">
-      <Button
-        size="xs"
-        variant="ghost"
-        rightIcon={<ChevronRightIcon />}
-        onClick={onOpen}
-      >
-        <HStack>
-          <ImFileText2 />
-          <Text>Text</Text>
-        </HStack>
-      </Button>
+      <ModalOpenButton
+        name="Text"
+        icon={<ImFileText2 />}
+        onOpen={onOpen}
+      />
 
       {/* modal for text information and actions */}
-      <TextModal isOpen={isOpen} onClose={onClose} thisMessage={thisMessage} />
+      <TextModal 
+        isOpen={isOpen} 
+        onClose={onClose} 
+        thisMessage={thisMessage} />
     </VStack>
   );
 };
