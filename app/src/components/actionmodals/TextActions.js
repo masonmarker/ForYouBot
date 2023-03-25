@@ -7,6 +7,7 @@
 
 // components
 import MessagePre from "./../Message";
+import ActionModal from "./ActionModal";
 
 // react useEffect
 import { useEffect } from "react";
@@ -75,7 +76,7 @@ const TextActions = ({ thisMessage }) => {
   return (
     <VStack align="left">
       <Button
-        size="sm"
+        size="xs"
         variant="ghost"
         rightIcon={<ChevronRightIcon />}
         onClick={onOpen}
@@ -92,32 +93,22 @@ const TextActions = ({ thisMessage }) => {
   );
 };
 
+
 // modal for text information and actions
 const TextModal = ({ isOpen, onClose, thisMessage }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Text</ModalHeader>
-        <ModalBody>
-          <Text>
-            Perform various text-based actions and bot request resubmissions.
-          </Text>
-          <MessagePreview thisMessage={thisMessage} />
-          <Statistics message={thisMessage.message} app={thisMessage.app} />
-          <SummarizationExpansion thisMessage={thisMessage} />
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            colorScheme={thisMessage.app.settings.accent}
-            mr={3}
-            onClick={onClose}
-          >
-            Close
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <ActionModal
+      isOpen={isOpen}
+      onClose={onClose}
+      thisMessage={thisMessage}
+      header="Text"
+      desc="Perform various text-based actions and bot request resubmissions."
+
+    >
+      <MessagePreview thisMessage={thisMessage} />
+      <Statistics message={thisMessage.message} app={thisMessage.app} />
+      <SummarizationExpansion thisMessage={thisMessage} />
+    </ActionModal>
   );
 };
 

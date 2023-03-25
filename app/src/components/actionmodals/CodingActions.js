@@ -6,6 +6,9 @@
  *  Harris Chaudhry
  */
 
+// components
+import ActionModal from "./ActionModal";
+
 // import Chakra components
 import {
   useColorMode,
@@ -45,7 +48,7 @@ const CodingActions = ({ thisMessage }) => {
   return (
     <VStack align="left">
       <Button
-        size="sm"
+        size="xs"
         variant="ghost"
         rightIcon={<ChevronRightIcon />}
         onClick={onOpen}
@@ -69,29 +72,16 @@ const CodingActions = ({ thisMessage }) => {
 // modal for coding information and actions
 const CodingModal = ({ isOpen, onClose, thisMessage }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Coding</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <VStack align="left">
-            <Text>
-                Make quicker and more concise requests regarding a program.
-            </Text>
-          </VStack>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            colorScheme={thisMessage.app.settings.accent}
-            mr={3}
-            onClick={onClose}
-          >
-            Close
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <ActionModal
+      isOpen={isOpen}
+      onClose={onClose}
+      thisMessage={thisMessage}
+      header="Coding"
+      desc="Make quicker and more concise requests regarding a program."
+    >
+
+    </ActionModal>
+
   );
 };
 
