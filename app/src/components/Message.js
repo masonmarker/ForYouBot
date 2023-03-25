@@ -494,10 +494,11 @@ const MessageBox = ({ thisMessage }) => {
               <Text fontWeight="bold" align="center">
                 Other Actions
               </Text>
-              {/* Modal for text actions */}
+              {/* text actions */}
               <TextActions thisMessage={thisMessage} />
-              {/* SubMenu for Math / Coding */}
+              {/* coding actionss */}
               <CodingActions thisMessage={thisMessage} />
+              {/* Submenu for ___ */}
             </VStack>
           </MenuList>
         </Menu>
