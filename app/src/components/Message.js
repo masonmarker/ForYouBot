@@ -11,6 +11,8 @@ import { useState, useRef, useEffect } from "react";
 
 // actionmodal components
 import TextActions from "./actionmodals/TextActions";
+import CodingActions from "./actionmodals/CodingActions";
+
 
 // Toast
 import Toast from "./Toast";
@@ -225,7 +227,6 @@ const Message = (props) => {
       // set the language state
       setLanguage(language);
     });
-
   }, []);
 
   // state for message expansion or summarization
@@ -292,7 +293,7 @@ const Message = (props) => {
 
     // close the action menu
     onClose: onClose,
-  }
+  };
 
   return (
     <ScaleFade ref={ref} in={inView}>
@@ -357,8 +358,8 @@ const Message = (props) => {
                 isLazy
                 preventOverflow
                 closeOnBlur={false}
-              // should be able to reach the menu no matter
-              // the placement without it disappearing
+                // should be able to reach the menu no matter
+                // the placement without it disappearing
               >
                 <MenuButton
                   ref={menuButtonRef}
@@ -374,7 +375,6 @@ const Message = (props) => {
                       Basic Actions
                     </Text>
 
-
                     <Button
                       size="sm"
                       variant="ghost"
@@ -383,7 +383,11 @@ const Message = (props) => {
                         props.app.refs.areaRef.current.value = props.message;
 
                         // shorten the text
-                        const title = props.app.shortenText("Editing message: ", props.message, 20);
+                        const title = props.app.shortenText(
+                          "Editing message: ",
+                          props.message,
+                          20
+                        );
 
                         // show toast
                         props.app.showToast(title, 1500);
@@ -402,7 +406,11 @@ const Message = (props) => {
                         navigator.clipboard.writeText(props.message);
 
                         // shortened text
-                        const title = props.app.shortenText("Copied message: ", props.message, 20);
+                        const title = props.app.shortenText(
+                          "Copied message: ",
+                          props.message,
+                          20
+                        );
 
                         // show toast
                         props.app.showToast(title, 2000);
@@ -424,7 +432,11 @@ const Message = (props) => {
                         props.app.refs.submitRef.current.click();
 
                         // shortened text
-                        const title = props.app.shortenText("Resubmitted message: ", props.message, 20);
+                        const title = props.app.shortenText(
+                          "Resubmitted message: ",
+                          props.message,
+                          20
+                        );
 
                         // show toast
                         props.app.showToast(title, 1500);
@@ -491,10 +503,9 @@ const Message = (props) => {
                       Other Actions
                     </Text>
                     {/* Modal for text actions */}
-                    <TextActions
-                      thisMessage={thisMessage}
-                    />
+                    <TextActions thisMessage={thisMessage} />
                     {/* SubMenu for Math / Coding */}
+                    <CodingActions thisMessage={thisMessage} />
                   </VStack>
                 </MenuList>
               </Menu>
@@ -568,8 +579,12 @@ const CopyButton = (props) => {
         backgroundColor="transparent"
         onClick={(e) => {
           navigator.clipboard.writeText(props.message);
-          const title = props.app.shortenText("Copied message: ", props.message, 20);
-          props.app.showToast(title, 1500)
+          const title = props.app.shortenText(
+            "Copied message: ",
+            props.message,
+            20
+          );
+          props.app.showToast(title, 1500);
           e.stopPropagation();
         }}
         // on right click, show a chakra menu with options to copy, edit, delete

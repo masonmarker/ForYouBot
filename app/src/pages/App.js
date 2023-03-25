@@ -43,9 +43,6 @@ import { css, colors, fonts } from "../common/common";
 // title
 import Title from "../components/Title";
 
-// detecting element overflow
-import detectElementOverflow from 'detect-element-overflow';
-
 // styled App
 const AppStyled = styled(Box)`
 
@@ -275,9 +272,6 @@ function App() {
         app.showToast(title, 1500);
       }
     },
-
-    // is chat overflowing?
-    chatOverflow: (chatref, chatparentref) => detectElementOverflow(chatref, chatparentref),
 
     // show themed toast
     showToast: (text, duration) => {

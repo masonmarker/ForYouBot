@@ -75,7 +75,7 @@ const ChatPanelStyled = styled(Box)`
   @media (max-width: 887px) {
     .grid {
       grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr 1fr; 
+      grid-template-rows: 1fr 1fr 1fr;
     }
     .init-title {
       margin-top: 0;
@@ -102,7 +102,6 @@ const ChatPanel = ({ app }) => {
     bottomRef.current.scrollIntoView();
   }, [app.userMessages, app.botMessages, app.waiting]);
 
-
   // logging chat overflow
   // useEffect(() => {
   //   app.chatOverflow = overflow;
@@ -116,18 +115,13 @@ const ChatPanel = ({ app }) => {
         colorMode === "light" ? colors.lightGray : colors.darkGray
       }
     >
-
       {/* Chat History */}
 
       {app.userMessages.length > 0 ? (
-        <Box className="chat"
+        <Box
+          className="chat"
           ref={app.refs.chatRef}
           // ref={ref}
-          onClick={() => console.log(app.chatOverflow(app.refs.chatRef, app.refs.chatParentRef).overflowTop[0])}
-          style={{
-            WebkitMaskImage: app.chatOverflow(app.refs.chatRef, app.refs.chatParentRef) && "linear-gradient(to top, black 0%, black 90%, transparent 100%)"
-          }}
-
         >
           <div id="chat">
             {app.userMessages.map((message, index) => {
