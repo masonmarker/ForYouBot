@@ -105,10 +105,6 @@ const TextModal = ({ isOpen, onClose, thisMessage }) => {
         >
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>
-                    Text
-                </ModalHeader>
-                <ModalCloseButton />
                 <ModalBody>
                     <MessagePreview thisMessage={thisMessage} />
                     <Statistics message={thisMessage.message} app={thisMessage.app} />
@@ -150,30 +146,32 @@ const Statistics = ({ message, app }) => {
     }
 
     return (
-        <VStack>
-            {/* Recreate the above texts but using Chakra's table */}
-            <TableContainer ref={ref}>
-                <Table
-                    colorScheme={app.settings.accent}
-                    variant="simple"
-                >
-                    <Thead>
-                        <Tr>
-                            <Th>characters</Th>
-                            <Th>words</Th>
-                            <Th>sentences</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        <Tr>
-                            <Td>{message.length}</Td>
-                            <Td>{countWords(message)}</Td>
-                            <Td>{message.split(/[.!?]/).filter(sentence => sentence).length}</Td>
-                        </Tr>
-                    </Tbody>
-                </Table>
-            </TableContainer>
-        </VStack>
+        <Box>
+            <VStack>
+                {/* Recreate the above texts but using Chakra's table */}
+                <TableContainer ref={ref}>
+                    <Table
+                        colorScheme={app.settings.accent}
+                        variant="simple"
+                    >
+                        <Thead>
+                            <Tr>
+                                <Th>characters</Th>
+                                <Th>words</Th>
+                                <Th>sentences</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            <Tr>
+                                <Td>{message.length}</Td>
+                                <Td>{countWords(message)}</Td>
+                                <Td>{message.split(/[.!?]/).filter(sentence => sentence).length}</Td>
+                            </Tr>
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            </VStack>
+        </Box>
     );
 };
 
@@ -184,32 +182,33 @@ const MessagePreview = ({ thisMessage }) => {
     const { colorMode } = useColorMode();
 
     return (
-        <VStack
-            align="left"
-            backgroundColor={colors.panelColor(colorMode)}
-            borderRadius="md"
-            borderWidth="1px"
-            p={4}
-        >
-            <HStack w="fit-content">
-                {thisMessage.from === 'user' ?
-                    thisMessage.app.settings.icons.userIcon :
-                    thisMessage.app.settings.icons.botIcon
-                }
-                <pre style={{
-                    fontFamily: thisMessage.app.settings.font,
-                    // word break and wrap
-                    whiteSpace: "pre-wrap",
-                    wordWrap: "break-word",
-                    width: "40%"
+        <Box>
+            {thisMessage.from === 'user' ?
+                <Box m={3}>{thisMessage.app.settings.icons.userIcon}</Box> :
+                <Box m={3}>{thisMessage.app.settings.icons.userIcon}</Box>
+            }
+            <VStack
+                align="left"
+                backgroundColor={colors.panelColor(colorMode)}
+                borderRadius="md"
+                borderWidth="1px"
+                p={4}
+                mt={3}
+                gap={6}
+            >
+                <HStack gap={4} w={500}>
+                    <pre style={{
+                        fontFamily: "inherit",
+                        whiteSpace: "pre-wrap",
+                        wordWrap: "break-word",
+                        width: "60%"
+                    }}>
+                        {thisMessage.app.shortenText("", thisMessage.message, 150)}
+                    </pre>
+                </HStack>
 
-
-                }}>
-                    {thisMessage.app.shortenText("", thisMessage.message, 100)}
-                </pre>
-            </HStack>
-
-        </VStack >
+            </VStack >
+        </Box>
     );
 };
 

@@ -225,6 +225,7 @@ const Message = (props) => {
       // set the language state
       setLanguage(language);
     });
+
   }, []);
 
   // state for message expansion or summarization

@@ -20,6 +20,7 @@ import {
   Spinner,
   Checkbox,
   useColorMode,
+  ScaleFade
 } from "@chakra-ui/react";
 
 // Chakra icons
@@ -45,19 +46,19 @@ const PromptStyled = styled.div`
   width: 100%;
 
   .inp {
-    outline: 3px solid red;
     position: absolute;
     bottom: 0;
     left: 0;
   }
 
   .limtext {
+    font-size: 0.8rem;
     position: fixed;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 80%;
-    margin-bottom: 3rem;
+    margin-bottom: 3.2rem;
   }
 
   /* slight box shadow */
@@ -265,7 +266,7 @@ const Prompt = ({ app }) => {
       area.value = "";
 
       // reset character limit ref
-      app.refs.charLimitRef.current.innerHTML = `0/${maxChars}`;
+      app.refs.charLimitRef.current.innerHTML = `0/${maxChars} chars`;
 
       // // reset character limit color
       // app.refs.charLimitRef.current.style.color =
@@ -375,7 +376,7 @@ const Prompt = ({ app }) => {
             const comp = app.refs.charLimitRef.current;
 
             // set the character limit
-            comp.innerHTML = len + `/${maxChars}`;
+            comp.innerHTML = len + `/${maxChars} chars`;
           }}
         />
         <Button
@@ -403,9 +404,19 @@ const Prompt = ({ app }) => {
         </Checkbox>
       </HStack>
 
-      <Text ref={app.refs.charLimitRef} className="limtext">
-        0/{maxChars}
-      </Text>
+      <HStack className="limtext">
+        <Text ref={app.refs.charLimitRef}>
+          0/{maxChars} chars
+        </Text>
+        {app.waiting &&
+
+          <ScaleFade in={1}>
+            <Text>
+              Waiting for response...
+            </Text>
+          </ScaleFade>}
+      </HStack>
+
     </PromptStyled>
   );
 };

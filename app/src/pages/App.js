@@ -43,6 +43,9 @@ import { css, colors, fonts } from "../common/common";
 // title
 import Title from "../components/Title";
 
+// detecting element overflow
+import detectElementOverflow from 'detect-element-overflow';
+
 // styled App
 const AppStyled = styled(Box)`
 
@@ -215,6 +218,10 @@ function App() {
       submitRef: useRef(null),
       charLimitRef: useRef(null),
       codeButtonRef: useRef(null),
+
+      // for detecting overflow
+      chatRef: useRef(null),
+      chatParentRef: useRef(null),
     },
 
     // modes
@@ -251,17 +258,26 @@ function App() {
     // function to handle Crtl-C
     handleCrtlC: (e) => {
 
+      const currentClipboard = navigator.clipboard.readText().then(
+        (text) => text
+      );
+
       // if ctrl-v and the user has highlighted text
-      if (e.ctrlKey && e.key === "c" && window.getSelection().toString()) {
-        // display toast
-        toast({
-          render: () => (
-            <Toast text="Text copied" app={app} />
-          ),
-          duration: 1500,
-        });
+      // and the currently selected text is not the same as the text in the clipboard
+      if (e.ctrlKey && e.key === "c" && window.getSelection().toString()
+        && window.getSelection().toString() !== currentClipboard
+      ) {
+
+        // shorten selected text
+        var title = app.shortenText("Text copied: ", window.getSelection().toString(), 20);
+
+        // show toast
+        app.showToast(title, 1500);
       }
     },
+
+    // is chat overflowing?
+    chatOverflow: (chatref, chatparentref) => detectElementOverflow(chatref, chatparentref),
 
     // show themed toast
     showToast: (text, duration) => {

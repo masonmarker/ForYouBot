@@ -42,9 +42,9 @@ import { colors } from "../common/common";
 // should exist in the center of the screen
 // vertically and horizontally
 // include all props
-const ChatPanelStyled = styled.div`
+const ChatPanelStyled = styled(Box)`
   width: 100vw;
-  height: 72vh;
+  height: 70vh;
   background-color: ${(props) => props.backgroundColor};
 
   .chat {
@@ -75,7 +75,7 @@ const ChatPanelStyled = styled.div`
   @media (max-width: 887px) {
     .grid {
       grid-template-columns: 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr; 
     }
     .init-title {
       margin-top: 0;
@@ -102,9 +102,16 @@ const ChatPanel = ({ app }) => {
     bottomRef.current.scrollIntoView();
   }, [app.userMessages, app.botMessages, app.waiting]);
 
+
+  // logging chat overflow
+  // useEffect(() => {
+  //   app.chatOverflow = overflow;
+  // }, [overflow]);
+
   // return,
   return (
     <ChatPanelStyled
+      ref={app.refs.chatParentRef}
       backgroundColor={
         colorMode === "light" ? colors.lightGray : colors.darkGray
       }
@@ -113,7 +120,15 @@ const ChatPanel = ({ app }) => {
       {/* Chat History */}
 
       {app.userMessages.length > 0 ? (
-        <Box className="chat">
+        <Box className="chat"
+          ref={app.refs.chatRef}
+          // ref={ref}
+          onClick={() => console.log(app.chatOverflow(app.refs.chatRef, app.refs.chatParentRef).overflowTop[0])}
+          style={{
+            WebkitMaskImage: app.chatOverflow(app.refs.chatRef, app.refs.chatParentRef) && "linear-gradient(to top, black 0%, black 90%, transparent 100%)"
+          }}
+
+        >
           <div id="chat">
             {app.userMessages.map((message, index) => {
               return (
