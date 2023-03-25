@@ -77,7 +77,7 @@ const CodingModal = ({ isOpen, onClose, thisMessage }) => {
         <ModalBody>
           <VStack align="left">
             <Text>
-                Make quicker requests regarding a program.
+                Make quicker and more concise requests regarding a program.
             </Text>
           </VStack>
         </ModalBody>
