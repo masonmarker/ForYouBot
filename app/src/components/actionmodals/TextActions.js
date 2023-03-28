@@ -21,6 +21,8 @@ import { colors } from "../../common/common";
 
 // Chakra components
 import {
+  Divider,
+  Input,
   Box,
   ScaleFade,
   Button,
@@ -37,6 +39,11 @@ import {
   VStack,
   HStack,
   Text,
+
+  // Radio groups
+  RadioGroup,
+  Radio,
+  Stack,
 
   // Table
   Table,
@@ -83,9 +90,9 @@ const TextActions = ({ thisMessage }) => {
       />
 
       {/* modal for text information and actions */}
-      <TextModal 
-        isOpen={isOpen} 
-        onClose={onClose} 
+      <TextModal
+        isOpen={isOpen}
+        onClose={onClose}
         thisMessage={thisMessage} />
     </VStack>
   );
@@ -135,8 +142,14 @@ const Statistics = ({ message, app }) => {
     <Box>
       <VStack>
         {/* Recreate the above texts but using Chakra's table */}
-        <TableContainer ref={ref}>
-          <Table colorScheme={app.settings.accent} variant="simple">
+        <TableContainer
+          ref={ref}
+          border={`1px solid ${colorMode === "light" ? "black" : "white"}`}
+          borderRadius="md"
+          p={3}
+          mt={3}
+        >
+          <Table variant="simple">
             <Thead>
               <Tr>
                 <Th>characters</Th>
@@ -200,6 +213,93 @@ const MessagePreview = ({ thisMessage }) => {
 
 // Summarization and Expansion Menus
 const SummarizationExpansion = ({ thisMessage }) => {
-  return <HStack></HStack>;
+
+  // expansion or summarization refs
+
+  // expansion or summarization states
+  
+
+  return (
+    // center self and all elements inside
+    <HStack
+      align="center"
+      justify="center"
+      mt={4}
+      gap={4}
+    >
+      <SumOrExpand
+        thisMessage={thisMessage}
+        title="Summarize"
+
+        // Summarizes this text, method depends on whether the message is remembered or not
+        does={() => {
+
+        }}
+      />
+      <Divider orientation="vertical" />
+      <SumOrExpand
+        thisMessage={thisMessage}
+        title="Expand"
+        // Expands the text, also depending on whether its remembered
+        does={() => {
+
+        }}
+      />
+    </HStack>
+  );
 };
+
+// Summarizing or expansion component generalization
+const SumOrExpand = ({ thisMessage, title, does }) => {
+
+  // Chakra useColorMode
+  const { colorMode } = useColorMode();
+
+  return (
+    <VStack>
+      <Text>{title} in</Text>
+
+      {/* sumExpandValue */}
+      <Input
+        w="4rem"
+        placeholder="10"
+      />
+      <Divider />
+      {/* Group for 'or more' or 'or less' */}
+      <RadioGroup
+        defaultValue="more"
+      >
+        <Stack direction="row">
+          <Radio value="more" colorScheme={thisMessage.app.settings.accent}>or more</Radio>
+          <Radio value="less" colorScheme={thisMessage.app.settings.accent}>or less</Radio>
+        </Stack>
+      </RadioGroup>
+      <Divider />
+      {/* Group for characters, words, sentences, and paragraphs */}
+      <RadioGroup defaultValue="characters">
+        <Stack direction="column">
+          <Radio value="characters" colorScheme={thisMessage.app.settings.accent}>characters</Radio>
+          <Radio value="words" colorScheme={thisMessage.app.settings.accent}>words</Radio>
+          <Radio value="sentences" colorScheme={thisMessage.app.settings.accent}>sentences</Radio>
+          <Radio value="paragraphs" colorScheme={thisMessage.app.settings.accent}>paragraphs</Radio>
+        </Stack>
+      </RadioGroup>
+
+      {/* Submission button */}
+      <Button
+        colorScheme={thisMessage.app.settings.accent}
+        variant="solid"
+        w="100%"
+        mt={3}
+        onClick={does}
+      >
+        {title}
+      </Button>
+
+
+    </VStack>
+  );
+};
+
+
 export default TextActions;

@@ -461,6 +461,7 @@ const MessageBox = ({ thisMessage }) => {
                 thisMessage={thisMessage}
                 name={`${thisMessage.isImportant() ? "Unmark" : "Mark"} as important`}
                 icon={<StarIcon />}
+                imp
                 does={() => {
                   // if the message is already important, remove it
                   if (thisMessage.isImportant()) {
@@ -507,11 +508,12 @@ const MessageBox = ({ thisMessage }) => {
 };
 
 // Basic Actions button
-const BasicButton = ({ thisMessage, does, name, icon }) => {
+const BasicButton = ({ thisMessage, does, name, icon, imp }) => {
   return (
     <Button
       size="xs"
       variant="ghost"
+      colorScheme={thisMessage.isImportant() && imp && thisMessage.app.settings.accent}
       m={0}
       onClick={does}
     >
