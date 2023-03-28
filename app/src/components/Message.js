@@ -12,7 +12,7 @@ import { useState, useRef, useEffect } from "react";
 // actionmodal components
 import TextActions from "./actionmodals/TextActions";
 import CodingActions from "./actionmodals/CodingActions";
-
+import ErrorActions from "./actionmodals/ErrorActions";
 
 // Toast
 import Toast from "./Toast";
@@ -456,8 +456,6 @@ const MessageBox = ({ thisMessage }) => {
               {/* Marking a message as important basic button
               this can be done by marking if props.app.messageIndex === app.conversations[0].importantIndices
               icon is StarIcon, name is {thisMessage.isImportant() ? "Unmark" : "Mark"} as important
-
-              
               */}
               <BasicButton
                 thisMessage={thisMessage}
@@ -498,7 +496,8 @@ const MessageBox = ({ thisMessage }) => {
               <TextActions thisMessage={thisMessage} />
               {/* coding actionss */}
               <CodingActions thisMessage={thisMessage} />
-              {/* Submenu for ___ */}
+              {/* Error Actions */}
+              <ErrorActions thisMessage={thisMessage} />
             </VStack>
           </MenuList>
         </Menu>
