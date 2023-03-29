@@ -203,13 +203,11 @@ const EditPanel = ({ app }) => {
                 body={
                   <VStack>
                     <Text>
-                      When checked, the bot will provide the reasoning / work<br />
+                      When checked, the bot will provide the reasoning / work
+                      <br />
                       behind its answer.
                     </Text>
-                    <CheckDisables
-                      app={app}
-                      disables={["Answer Only"]}
-                    />
+                    <CheckDisables app={app} disables={["Answer Only"]} />
                   </VStack>
                 }
               />
@@ -221,16 +219,13 @@ const EditPanel = ({ app }) => {
                 body={
                   <VStack>
                     <Text>
-                      When checked, the bot will only answer the question<br />
+                      When checked, the bot will only answer the question
+                      <br />
                       and not provide any additional information.
                     </Text>
-                    <CheckDisables
-                      app={app}
-                      disables={["Show Work"]}
-                    />
+                    <CheckDisables app={app} disables={["Show Work"]} />
                   </VStack>
                 }
-
               />
             </VStack>
 
@@ -256,13 +251,17 @@ const EditPanel = ({ app }) => {
                       wrapLines={true}
                       wrapLongLines={true}
                       lineProps={{
-                        style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
+                        style: {
+                          wordBreak: "break-all",
+                          whiteSpace: "pre-wrap",
+                        },
                       }}
                     >
                       System.out.println("Hello, World!");
                     </SyntaxHighlighter>
                     <Text>
-                      Java was the detected programming language, therefore, <br />
+                      Java was the detected programming language, therefore,{" "}
+                      <br />
                       the snippet was provided syntax highlighting.
                     </Text>
                   </VStack>
@@ -272,14 +271,17 @@ const EditPanel = ({ app }) => {
             <Divider marginBottom="1rem" marginTop="4rem" />
           </ModalBody>
           <ModalFooter>
-            <Button
-              colorScheme={app.settings.accent}
-              mr={3}
-              onClick={onClose}
-              fontFamily={app.settings.font}
-            >
-              Close
-            </Button>
+            <VStack>
+              <Text fontSize="xs">Changes save automatically</Text>
+              <Button
+                colorScheme={app.settings.accent}
+                mr={3}
+                onClick={onClose}
+                fontFamily={app.settings.font}
+              >
+                Close
+              </Button>
+            </VStack>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -290,7 +292,6 @@ const EditPanel = ({ app }) => {
 // list of other checkboxes that a checkbox would disable
 // upon its selection
 const CheckDisables = ({ disables, app }) => {
-
   // use color mode
   const { colorMode } = useColorMode();
 
@@ -299,11 +300,9 @@ const CheckDisables = ({ disables, app }) => {
       p={4}
       margin={4}
       borderRadius="lg"
-      bg={colorMode === 'light' ? 'white' : 'black'}
+      bg={colorMode === "light" ? "white" : "black"}
     >
-      <Text>
-        This checkbox disables the following options:
-      </Text>
+      <Text>This checkbox disables the following options:</Text>
       {disables.map((disabling, i) => {
         return (
           <Checkbox key={`disabling-${disabling + i}`} isDisabled>
@@ -336,9 +335,7 @@ const CheckOption = ({ title, app, state, setState, body }) => {
           <InfoIcon />
         </MenuButton>
         <MenuList>
-          <MenuItem>
-            {body}
-          </MenuItem>
+          <MenuItem>{body}</MenuItem>
         </MenuList>
       </Menu>
     </HStack>

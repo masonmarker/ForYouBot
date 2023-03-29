@@ -179,7 +179,6 @@ const SettingsPanel = ({ app }) => {
               <Button onClick={onOpenComputePricing}>Compute Pricing</Button>
             </VStack>
             <Divider mt={3} mb={3} />
-
             <VStack fontFamily={app.settings.font}>
               <Menu>
                 <Text>Change the interface to your preferences</Text>
@@ -197,15 +196,40 @@ const SettingsPanel = ({ app }) => {
                 </MenuList>
               </Menu>
             </VStack>
+            <Divider mt={3} mb={3} />
+            {/* Changing preferred paragraph size */}
+            <VStack fontFamily={app.settings.font}>
+              <Text>Preferred paragraph size</Text>
+              <HStack>
+                <Input
+                  defaultValue={app.settings.paragraphSize?.toString()}
+                  w={20}
+                  onChange={(e) => {
+                    // setParagraphSize to the integer value of the input
+                    app.settings.setParagraphSize(parseInt(e.target.value));
+                  }}
+                />
+                <Text>sentences</Text>
+              </HStack>
+            </VStack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme={app.settings.accent} mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost" onClick={onOpenHelp}>
-              Help
-            </Button>
+            <VStack>
+              <Text fontSize="xs">Changes save automatically</Text>
+              <HStack>
+                <Button
+                  colorScheme={app.settings.accent}
+                  mr={3}
+                  onClick={onClose}
+                >
+                  Close
+                </Button>
+                <Button variant="ghost" onClick={onOpenHelp}>
+                  Help
+                </Button>
+              </HStack>
+            </VStack>
 
             {/* Help drawer */}
             <Drawer

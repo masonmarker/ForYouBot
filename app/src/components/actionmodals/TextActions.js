@@ -83,21 +83,13 @@ const TextActions = ({ thisMessage }) => {
 
   return (
     <VStack align="left">
-      <ModalOpenButton
-        name="Text"
-        icon={<ImFileText2 />}
-        onOpen={onOpen}
-      />
+      <ModalOpenButton name="Text" icon={<ImFileText2 />} onOpen={onOpen} />
 
       {/* modal for text information and actions */}
-      <TextModal
-        isOpen={isOpen}
-        onClose={onClose}
-        thisMessage={thisMessage} />
+      <TextModal isOpen={isOpen} onClose={onClose} thisMessage={thisMessage} />
     </VStack>
   );
 };
-
 
 // modal for text information and actions
 const TextModal = ({ isOpen, onClose, thisMessage }) => {
@@ -108,7 +100,6 @@ const TextModal = ({ isOpen, onClose, thisMessage }) => {
       thisMessage={thisMessage}
       header="Text"
       desc="Perform various text-based actions and bot request resubmissions."
-
     >
       <MessagePreview thisMessage={thisMessage} />
       <Statistics message={thisMessage.message} app={thisMessage.app} />
@@ -138,32 +129,42 @@ const Statistics = ({ message, app }) => {
     }).length;
   }
 
+  // determines the amount of sentences in the message
+  function countSentences(s) {
+    return s.split(/[.!?]/).filter((sentence) => sentence).length;
+  }
+
+  // count sentences in this message
+  const sentences = countSentences(message);
+
   return (
     <Box>
       <VStack>
         {/* Recreate the above texts but using Chakra's table */}
         <TableContainer
           ref={ref}
-          border={`1px solid ${colorMode === "light" ? "black" : "white"}`}
+          borderWidth="1px"
+          // border should be solid
+          borderColor={colorMode === "light" ? "gray.200" : "gray.700"}
           borderRadius="md"
           p={3}
           mt={3}
         >
-          <Table variant="simple">
+          <Table variant="unstyled">
             <Thead>
               <Tr>
                 <Th>characters</Th>
                 <Th>words</Th>
                 <Th>sentences</Th>
+                <Th>paragraphs</Th>
               </Tr>
             </Thead>
             <Tbody>
               <Tr>
                 <Td>{message.length}</Td>
                 <Td>{countWords(message)}</Td>
-                <Td>
-                  {message.split(/[.!?]/).filter((sentence) => sentence).length}
-                </Td>
+                <Td>{sentences}</Td>
+                <Td>{Math.floor(sentences / 5)}</Td>
               </Tr>
             </Tbody>
           </Table>
@@ -213,37 +214,25 @@ const MessagePreview = ({ thisMessage }) => {
 
 // Summarization and Expansion Menus
 const SummarizationExpansion = ({ thisMessage }) => {
-
   // expansion or summarization refs
 
   // expansion or summarization states
-  
 
   return (
     // center self and all elements inside
-    <HStack
-      align="center"
-      justify="center"
-      mt={4}
-      gap={4}
-    >
+    <HStack align="center" justify="center" mt={4} gap={4}>
       <SumOrExpand
         thisMessage={thisMessage}
         title="Summarize"
-
         // Summarizes this text, method depends on whether the message is remembered or not
-        does={() => {
-
-        }}
+        does={() => {}}
       />
       <Divider orientation="vertical" />
       <SumOrExpand
         thisMessage={thisMessage}
         title="Expand"
         // Expands the text, also depending on whether its remembered
-        does={() => {
-
-        }}
+        does={() => {}}
       />
     </HStack>
   );
@@ -251,7 +240,6 @@ const SummarizationExpansion = ({ thisMessage }) => {
 
 // Summarizing or expansion component generalization
 const SumOrExpand = ({ thisMessage, title, does }) => {
-
   // Chakra useColorMode
   const { colorMode } = useColorMode();
 
@@ -260,28 +248,44 @@ const SumOrExpand = ({ thisMessage, title, does }) => {
       <Text>{title} in</Text>
 
       {/* sumExpandValue */}
-      <Input
-        w="4rem"
-        placeholder="10"
-      />
+      <Input w="4rem" placeholder="10" />
       <Divider />
       {/* Group for 'or more' or 'or less' */}
-      <RadioGroup
-        defaultValue="more"
-      >
+      <RadioGroup defaultValue="more">
         <Stack direction="row">
-          <Radio value="more" colorScheme={thisMessage.app.settings.accent}>or more</Radio>
-          <Radio value="less" colorScheme={thisMessage.app.settings.accent}>or less</Radio>
+          <Radio value="more" colorScheme={thisMessage.app.settings.accent}>
+            or more
+          </Radio>
+          <Radio value="less" colorScheme={thisMessage.app.settings.accent}>
+            or less
+          </Radio>
         </Stack>
       </RadioGroup>
       <Divider />
       {/* Group for characters, words, sentences, and paragraphs */}
       <RadioGroup defaultValue="characters">
         <Stack direction="column">
-          <Radio value="characters" colorScheme={thisMessage.app.settings.accent}>characters</Radio>
-          <Radio value="words" colorScheme={thisMessage.app.settings.accent}>words</Radio>
-          <Radio value="sentences" colorScheme={thisMessage.app.settings.accent}>sentences</Radio>
-          <Radio value="paragraphs" colorScheme={thisMessage.app.settings.accent}>paragraphs</Radio>
+          <Radio
+            value="characters"
+            colorScheme={thisMessage.app.settings.accent}
+          >
+            characters
+          </Radio>
+          <Radio value="words" colorScheme={thisMessage.app.settings.accent}>
+            words
+          </Radio>
+          <Radio
+            value="sentences"
+            colorScheme={thisMessage.app.settings.accent}
+          >
+            sentences
+          </Radio>
+          <Radio
+            value="paragraphs"
+            colorScheme={thisMessage.app.settings.accent}
+          >
+            paragraphs
+          </Radio>
         </Stack>
       </RadioGroup>
 
@@ -295,11 +299,8 @@ const SumOrExpand = ({ thisMessage, title, does }) => {
       >
         {title}
       </Button>
-
-
     </VStack>
   );
 };
-
 
 export default TextActions;

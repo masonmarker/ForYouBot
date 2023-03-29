@@ -45,7 +45,6 @@ import Title from "../components/Title";
 
 // styled App
 const AppStyled = styled(Box)`
-
   overflow: hidden;
 
   /* put input on the bottom center of the screen */
@@ -70,8 +69,7 @@ function App() {
     threshold: 0,
   });
 
-  document.body.style.overflow = "hidden"
-
+  document.body.style.overflow = "hidden";
 
   // messages state
   const {
@@ -141,6 +139,9 @@ function App() {
   // state for number of previous messages to remember for context
   const [prevMessageCount, setPrevMessageCount] = useState(1);
 
+  // state for defining sentence size of paragraph
+  const [paragraphSize, setParagraphSize] = useState(5);
+
   // areaRef
   const areaRef = useRef(null);
 
@@ -207,6 +208,10 @@ function App() {
         botIcon: botIcon,
         setBotIcon: setBotIcon,
       },
+
+      // preferred paragraph size (in sentences)
+      paragraphSize: paragraphSize,
+      setParagraphSize: setParagraphSize,
     },
 
     // component references
@@ -237,9 +242,8 @@ function App() {
     topP: topP,
     setTopP: setTopP,
 
-    // functions 
+    // functions
     shortenText: (prefix, editingText, limit) => {
-
       // editing text
       var title = prefix;
 
@@ -254,19 +258,24 @@ function App() {
 
     // function to handle Crtl-C
     handleCrtlC: (e) => {
-
-      const currentClipboard = navigator.clipboard.readText().then(
-        (text) => text
-      );
+      const currentClipboard = navigator.clipboard
+        .readText()
+        .then((text) => text);
 
       // if ctrl-v and the user has highlighted text
       // and the currently selected text is not the same as the text in the clipboard
-      if (e.ctrlKey && e.key === "c" && window.getSelection().toString()
-        && window.getSelection().toString() !== currentClipboard
+      if (
+        e.ctrlKey &&
+        e.key === "c" &&
+        window.getSelection().toString() &&
+        window.getSelection().toString() !== currentClipboard
       ) {
-
         // shorten selected text
-        var title = app.shortenText("Text copied: ", window.getSelection().toString(), 20);
+        var title = app.shortenText(
+          "Text copied: ",
+          window.getSelection().toString(),
+          20
+        );
 
         // show toast
         app.showToast(title, 1500);
@@ -276,15 +285,11 @@ function App() {
     // show themed toast
     showToast: (text, duration) => {
       toast({
-        render: () => (
-          <Toast text={text} app={app} />
-        ),
+        render: () => <Toast text={text} app={app} />,
         duration: duration,
       });
-    }
-
-  }
-
+    },
+  };
 
   return (
     <ChakraProvider>
