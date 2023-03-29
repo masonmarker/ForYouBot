@@ -92,6 +92,13 @@ const EditPanel = ({ app }) => {
   // modal reference
   const finalRef = useRef(null);
 
+  // disclosure for displaying the ResetAreYouSure modal
+  const {
+    isOpen: isOpenReset,
+    onOpen: onOpenReset,
+    onClose: onCloseReset,
+  } = useDisclosure();
+
   return (
     <SidePanelStyled>
       <Button
@@ -273,19 +280,70 @@ const EditPanel = ({ app }) => {
           <ModalFooter>
             <VStack>
               <Text fontSize="xs">Changes save automatically</Text>
-              <Button
-                colorScheme={app.settings.accent}
-                mr={3}
-                onClick={onClose}
-                fontFamily={app.settings.font}
-              >
-                Close
-              </Button>
+              <HStack>
+                <Button
+                  colorScheme={app.settings.accent}
+                  mr={3}
+                  onClick={onClose}
+                  fontFamily={app.settings.font}
+                >
+                  Close
+                </Button>
+                <Button variant="ghost" onClick={onOpenReset}>
+                  Reset Changes
+                </Button>
+                <ResetAreYouSure
+                  app={app}
+                  isOpen={isOpenReset}
+                  onClose={onCloseReset}
+                />
+              </HStack>
             </VStack>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </SidePanelStyled>
+  );
+};
+
+// Reset AreYouSure Modal
+const ResetAreYouSure = ({ app, isOpen, onClose }) => {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Reset Settings</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Text>
+            Are you sure you want to reset your changes? <br /><br />
+            This will reset all of your changes under the 'Edit Bot' panel to
+            their default values.
+          </Text>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button
+            colorScheme={app.settings.accent}
+            mr={3}
+            onClick={onClose}
+            fontFamily={app.settings.font}
+          >
+            Close
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              app.resetChanges();
+              onClose();
+              app.showToast("Bot changes have been reset", 1500);
+            }}
+          >
+            Reset Changes
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 

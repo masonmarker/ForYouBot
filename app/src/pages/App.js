@@ -289,6 +289,15 @@ function App() {
         duration: duration,
       });
     },
+
+    // reset all changes under the 'Edit Bot' panel to their default values
+    resetChanges: () => {
+      setModel("davinci");
+      setConstraints([]);
+      setTemperature(50);
+      setTopP(50);
+    },
+    resetSettings: () => {},
   };
 
   return (
