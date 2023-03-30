@@ -373,13 +373,13 @@ const CheckDisables = ({ disables, app }) => {
 };
 
 // Menu displaying information about the current option
-const CheckOption = ({ title, app, state, setState, body }) => {
+const CheckOption = ({ title, app, state, setState, body, noCheck }) => {
   // color mode Chakra
   const { colorMode } = useColorMode();
 
   return (
     <HStack fontFamily={app.settings.font}>
-      <Checkbox
+      {!noCheck && <Checkbox
         colorScheme={app.settings.accent}
         isChecked={state}
         onChange={(e) => {
@@ -387,9 +387,9 @@ const CheckOption = ({ title, app, state, setState, body }) => {
         }}
       >
         {title}
-      </Checkbox>
+      </Checkbox>}
       <Menu>
-        <MenuButton as={Button} h={6} minW={6} p={0}>
+        <MenuButton as={Button} h={6} minW={6} p={0} variant="ghost">
           <InfoIcon />
         </MenuButton>
         <MenuList>
