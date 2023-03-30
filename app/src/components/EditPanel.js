@@ -6,6 +6,9 @@
  *  Mason Marker
  */
 
+// components
+import Tooltip from "./Tooltip";
+
 // React
 import { useRef } from "react";
 
@@ -48,7 +51,6 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderMark,
-  Tooltip,
 } from "@chakra-ui/react";
 
 // Chakra Chevron icon
@@ -466,4 +468,5 @@ const ModelAttribute = ({ title, color, font }) => {
   );
 };
 
+export { CheckOption };
 export default EditPanel;

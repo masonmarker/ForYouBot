@@ -9,6 +9,7 @@
 import MessagePre from "./../Message";
 import ActionModal from "./ActionModal";
 import ModalOpenButton from "./ModalOpenButton";
+import Tooltip from "./../Tooltip";
 
 // react useEffect
 import { useEffect } from "react";
@@ -156,7 +157,20 @@ const Statistics = ({ message, app }) => {
                 <Th>characters</Th>
                 <Th>words</Th>
                 <Th>sentences</Th>
-                <Th>paragraphs</Th>
+                <Th>
+                  <HStack>
+                    <Text>paragraphs</Text>
+                    <Tooltip
+                      app={app}
+                      body={
+                        <Text>
+                          Change your preferred paragraph size in the settings
+                          panel
+                        </Text>
+                      }
+                    />
+                  </HStack>
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
