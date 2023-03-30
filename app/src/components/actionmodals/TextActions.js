@@ -10,6 +10,7 @@ import MessagePre from "./../Message";
 import ActionModal from "./ActionModal";
 import ModalOpenButton from "./ModalOpenButton";
 import Tooltip from "./../Tooltip";
+import SettingsPanel from "./../SettingsPanel";
 
 // react useEffect
 import { useEffect } from "react";
@@ -164,8 +165,8 @@ const Statistics = ({ message, app }) => {
                       app={app}
                       body={
                         <Text>
-                          Change your preferred paragraph size in the settings
-                          panel
+                          Change your preferred paragraph size in the
+                          <strong> settings</strong> panel
                         </Text>
                       }
                     />
@@ -178,7 +179,7 @@ const Statistics = ({ message, app }) => {
                 <Td>{message.length}</Td>
                 <Td>{countWords(message)}</Td>
                 <Td>{sentences}</Td>
-                <Td>{Math.floor(sentences / 5)}</Td>
+                <Td>{Math.floor(sentences / app.settings.paragraphSize)}</Td>
               </Tr>
             </Tbody>
           </Table>
