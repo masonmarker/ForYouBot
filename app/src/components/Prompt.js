@@ -166,7 +166,7 @@ function getUserChatLog(userMessages, botMessages, constraints, prompt, app) {
     chatLog += "user:\n" + prompt + "\n";
     chatLog += "you:\n???\n\n";
   } else {
-    chatLog = prompt;
+    chatLog = prompt + "\n--";
   }
 
   // add constraints, if any
