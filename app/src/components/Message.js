@@ -311,8 +311,8 @@ const Message = (props) => {
               ? colors.gray
               : "gray.700"
             : "transparent"
-        }>
-
+        }
+      >
         {/* message box */}
         <MessageBox thisMessage={thisMessage} />
 
@@ -327,184 +327,194 @@ const Message = (props) => {
 
 // message box
 const MessageBox = ({ thisMessage }) => {
-
-
   // Chakra color mode
   const { colorMode } = useColorMode();
 
-  return (<HStack w="100%" minHeight="2rem">
-    {/* avatar */}
-    {thisMessage.from === "user" ? (
-      <Box ml={10} mr={5}>
-        {thisMessage.app.settings.icons.userIcon}
-      </Box>
-    ) : (
-      <Box ml={10} mr={5}>
-        {thisMessage.app.settings.icons.botIcon}
-      </Box>
-    )}
+  return (
+    <HStack w="100%" minHeight="2rem">
+      {/* avatar */}
+      {thisMessage.from === "user" ? (
+        <Box ml={10} mr={5}>
+          {thisMessage.app.settings.icons.userIcon}
+        </Box>
+      ) : (
+        <Box ml={10} mr={5}>
+          {thisMessage.app.settings.icons.botIcon}
+        </Box>
+      )}
 
-    {thisMessage.language !== "unknown" && thisMessage.app.settings.codeDetection ? (
-      <MessagePre app={thisMessage.app} message={thisMessage.message}>
-        <SyntaxHighlighter
-          style={colorMode === "light" ? oneLight : atomDark}
-          language={thisMessage.language}
-          wrapLines={true}
-          wrapLongLines={true}
-          lineProps={{
-            style: { wordBreak: "break-word", whiteSpace: "pre-wrap" },
-          }}
-        >
-          {thisMessage.message}
-        </SyntaxHighlighter>
-      </MessagePre>
-    ) : (
-      <MessagePre app={thisMessage.app} message={thisMessage.message} />
-    )}
-
-    {thisMessage.showCopy && !thisMessage.app.waiting && (
-      <Box>
-        <Menu
-          colorScheme={thisMessage.app.settings.accent}
-          placement="bottom-end"
-          computePositionOnMount
-          isLazy
-          preventOverflow
-          closeOnBlur={false}
-
-        // should be able to reach the menu no matter
-        // the placement without it disappearing
-        >
-          <MenuButton
-            ref={thisMessage.menuButtonRef}
-            as={Button}
-            size="sm"
-            variant="ghost"
+      {thisMessage.language !== "unknown" &&
+      thisMessage.app.settings.codeDetection ? (
+        <MessagePre app={thisMessage.app} message={thisMessage.message}>
+          <SyntaxHighlighter
+            style={colorMode === "light" ? oneLight : atomDark}
+            language={thisMessage.language}
+            wrapLines={true}
+            wrapLongLines={true}
+            lineProps={{
+              style: { wordBreak: "break-word", whiteSpace: "pre-wrap" },
+            }}
           >
-            <BsLightningCharge />
-          </MenuButton>
-          <MenuList>
-            <VStack align="left" gap={0} m={0}>
-              <Text fontWeight="bold" align="center">
-                Basic Actions
-              </Text>
+            {thisMessage.message}
+          </SyntaxHighlighter>
+        </MessagePre>
+      ) : (
+        <MessagePre app={thisMessage.app} message={thisMessage.message} />
+      )}
 
-              {/* Basic Action Button for editing */}
-              <BasicButton
-                thisMessage={thisMessage}
-                name="Edit"
-                icon={<EditIcon />}
-                does={() => {
-                  // set the input's value to the message
-                  thisMessage.app.refs.areaRef.current.value = thisMessage.message;
+      {thisMessage.showCopy && !thisMessage.app.waiting && (
+        <Box>
+          <Menu
+            colorScheme={thisMessage.app.settings.accent}
+            placement="bottom-end"
+            computePositionOnMount
+            isLazy
+            preventOverflow
+            closeOnBlur={false}
 
-                  // shorten the text
-                  const title = thisMessage.app.shortenText(
-                    "Editing message: ",
-                    thisMessage.message,
-                    20
-                  );
+            // should be able to reach the menu no matter
+            // the placement without it disappearing
+          >
+            <MenuButton
+              ref={thisMessage.menuButtonRef}
+              as={Button}
+              size="sm"
+              variant="ghost"
+            >
+              <BsLightningCharge />
+            </MenuButton>
+            <MenuList>
+              <VStack align="left" gap={0} m={0}>
+                <Text fontWeight="bold" align="center">
+                  Basic Actions
+                </Text>
 
-                  // show toast
-                  thisMessage.app.showToast(title, 1500);
-                }} />
+                {/* Basic Action Button for editing */}
+                <BasicButton
+                  thisMessage={thisMessage}
+                  name="Edit"
+                  icon={<EditIcon />}
+                  does={() => {
+                    // set the input's value to the message
+                    thisMessage.app.refs.areaRef.current.value =
+                      thisMessage.message;
 
-              {/* Basic Action Button for copying */}
-              <BasicButton
-                thisMessage={thisMessage}
-                name="Copy"
-                icon={<CopyIcon />}
-                does={() => {
-                  // copy props.message to clipbooard
-                  navigator.clipboard.writeText(thisMessage.message);
+                    // shorten the text
+                    const title = thisMessage.app.shortenText(
+                      "Editing message: ",
+                      thisMessage.message,
+                      20
+                    );
 
-                  // shortened text
-                  const title = thisMessage.app.shortenText(
-                    "Copied message: ",
-                    thisMessage.message,
-                    20
-                  );
+                    // show toast
+                    thisMessage.app.showToast(title, 1500);
+                  }}
+                />
 
-                  // show toast
-                  thisMessage.app.showToast(title, 2000);
-                }} />
+                {/* Basic Action Button for copying */}
+                <BasicButton
+                  thisMessage={thisMessage}
+                  name="Copy"
+                  icon={<CopyIcon />}
+                  does={() => {
+                    // copy props.message to clipbooard
+                    navigator.clipboard.writeText(thisMessage.message);
 
+                    // shortened text
+                    const title = thisMessage.app.shortenText(
+                      "Copied message: ",
+                      thisMessage.message,
+                      20
+                    );
 
-              {/* Basic Action Button for resubmitting */}
-              <BasicButton
-                thisMessage={thisMessage}
-                name="Resubmit"
-                icon={<RepeatIcon />}
-                does={() => {
-                  // set the input's value to the message
-                  thisMessage.app.refs.areaRef.current.value = thisMessage.message;
+                    // show toast
+                    thisMessage.app.showToast(title, 2000);
+                  }}
+                />
 
-                  // press the submit button
-                  thisMessage.app.refs.submitRef.current.click();
+                {/* Basic Action Button for resubmitting */}
+                <BasicButton
+                  thisMessage={thisMessage}
+                  name="Resubmit"
+                  icon={<RepeatIcon />}
+                  does={() => {
+                    // set the input's value to the message
+                    thisMessage.app.refs.areaRef.current.value =
+                      thisMessage.message;
 
-                  // shortened text
-                  const title = thisMessage.app.shortenText(
-                    "Resubmitted message: ",
-                    thisMessage.message,
-                    20
-                  );
+                    // press the submit button
+                    thisMessage.app.refs.submitRef.current.click();
 
-                  // show toast
-                  thisMessage.app.showToast(title, 1500);
-                }} />
+                    // shortened text
+                    const title = thisMessage.app.shortenText(
+                      "Resubmitted message: ",
+                      thisMessage.message,
+                      20
+                    );
 
-              {/* Marking a message as important basic button
+                    // show toast
+                    thisMessage.app.showToast(title, 1500);
+                  }}
+                />
+
+                {/* Marking a message as important basic button
               this can be done by marking if props.app.messageIndex === app.conversations[0].importantIndices
               icon is StarIcon, name is {thisMessage.isImportant() ? "Unmark" : "Mark"} as important
               */}
-              <BasicButton
-                thisMessage={thisMessage}
-                name={`${thisMessage.isImportant() ? "Unmark" : "Mark"} as important`}
-                icon={<StarIcon />}
-                imp
-                does={() => {
-                  // if the message is already important, remove it
-                  if (thisMessage.isImportant()) {
-                    thisMessage.app.conversations[0].importantIndices.delete(
-                      thisMessage.messageIndex
+                <BasicButton
+                  thisMessage={thisMessage}
+                  name={`${
+                    thisMessage.isImportant() ? "Unmark" : "Mark"
+                  } as important`}
+                  icon={<StarIcon />}
+                  imp
+                  does={() => {
+                    // if the message is already important, remove it
+                    if (thisMessage.isImportant()) {
+                      thisMessage.app.conversations[0].importantIndices.delete(
+                        thisMessage.messageIndex
+                      );
+                    } else {
+                      // else add it
+                      thisMessage.app.conversations[0].importantIndices.add(
+                        thisMessage.messageIndex
+                      );
+                    }
+
+                    // re-render message / conversation components
+                    thisMessage.app.reRender();
+
+                    // close the menu
+                    thisMessage.menuButtonRef.current.click();
+
+                    // show toast
+                    thisMessage.app.showToast(
+                      thisMessage.isImportant()
+                        ? "Message marked as important"
+                        : "Message unmarked as important",
+                      1500
                     );
-                  } else {
-                    // else add it
-                    thisMessage.app.conversations[0].importantIndices.add(
-                      thisMessage.messageIndex
-                    );
-                  }
+                  }}
+                />
 
-                  // re-render message / conversation components
-                  thisMessage.app.reRender();
-
-                  // close the menu
-                  thisMessage.menuButtonRef.current.click();
-
-                  // show toast
-                  thisMessage.app.showToast(thisMessage.isImportant()
-                    ? "Message marked as important"
-                    : "Message unmarked as important", 1500);
-                }} />
-
-
-              {/* Divider for submenus */}
-              <Divider />
-              <Text fontWeight="bold" align="center">
-                Other Actions
-              </Text>
-              {/* text actions */}
-              <TextActions thisMessage={thisMessage} />
-              {/* coding actionss */}
-              <CodingActions thisMessage={thisMessage} />
-              {/* Error Actions */}
-              <ErrorActions thisMessage={thisMessage} />
-            </VStack>
-          </MenuList>
-        </Menu>
-      </Box>
-    )}
-  </HStack>);
+                {/* Divider for submenus */}
+                <Divider />
+                <Text fontWeight="bold" align="center">
+                  Other Actions
+                </Text>
+                {/* text actions */}
+                <TextActions thisMessage={thisMessage} />
+                {/* coding actionss */}
+                <CodingActions thisMessage={thisMessage} />
+                {/* Error Actions */}
+                <ErrorActions thisMessage={thisMessage} />
+              </VStack>
+            </MenuList>
+          </Menu>
+        </Box>
+      )}
+    </HStack>
+  );
 };
 
 // Basic Actions button
@@ -513,7 +523,11 @@ const BasicButton = ({ thisMessage, does, name, icon, imp }) => {
     <Button
       size="xs"
       variant="ghost"
-      colorScheme={thisMessage.isImportant() && imp && thisMessage.app.settings.accent}
+      colorScheme={
+        thisMessage.isImportant() && imp
+          ? thisMessage.app.settings.accent
+          : "gray"
+      }
       m={0}
       onClick={does}
     >
@@ -564,7 +578,6 @@ const AdditionalInfo = ({ isImportant, from }) => {
     </HStack>
   );
 };
-
 
 export default Message;
 export { MessagePre };

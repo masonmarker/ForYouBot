@@ -151,6 +151,7 @@ const Statistics = ({ message, app }) => {
           borderRadius="md"
           p={3}
           mt={3}
+          fontFamily="inherit"
         >
           <Table variant="unstyled">
             <Thead>

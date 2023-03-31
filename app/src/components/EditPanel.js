@@ -174,7 +174,7 @@ const EditPanel = ({ app }) => {
               <Divider marginBottom="1rem" marginTop="1rem" />
 
               {/* Setting model specifics */}
-              <Text size="lg" fontWeight="bold">
+              <Text size="lg" fontWeight="bold" fontFamily={app.settings.font}>
                 Adjust Model
               </Text>
 
@@ -280,18 +280,21 @@ const EditPanel = ({ app }) => {
             <Divider marginBottom="1rem" marginTop="4rem" />
           </ModalBody>
           <ModalFooter>
-            <VStack>
+            <VStack fontFamily={app.settings.font}>
               <Text fontSize="xs">Changes save automatically</Text>
               <HStack>
                 <Button
                   colorScheme={app.settings.accent}
                   mr={3}
                   onClick={onClose}
-                  fontFamily={app.settings.font}
                 >
                   Close
                 </Button>
-                <Button variant="ghost" onClick={onOpenReset}>
+                <Button
+                  variant="ghost"
+                  onClick={onOpenReset}
+                  fontFamily={app.settings.font}
+                >
                   Reset Changes
                 </Button>
                 <ResetAreYouSure
@@ -314,11 +317,12 @@ const ResetAreYouSure = ({ app, isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Reset Settings</ModalHeader>
+        <ModalHeader fontFamily={app.settings.font}>Reset Changes</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text>
-            Are you sure you want to reset your changes? <br /><br />
+          <Text fontFamily={app.settings.font}>
+            Are you sure you want to reset your changes? <br />
+            <br />
             This will reset all of your changes under the 'Edit Bot' panel to
             their default values.
           </Text>
@@ -335,6 +339,7 @@ const ResetAreYouSure = ({ app, isOpen, onClose }) => {
           </Button>
           <Button
             variant="ghost"
+            fontFamily={app.settings.font}
             onClick={() => {
               app.resetChanges();
               onClose();
@@ -381,15 +386,17 @@ const CheckOption = ({ title, app, state, setState, body, noCheck }) => {
 
   return (
     <HStack fontFamily={app.settings.font}>
-      {!noCheck && <Checkbox
-        colorScheme={app.settings.accent}
-        isChecked={state}
-        onChange={(e) => {
-          setState(e.target.checked);
-        }}
-      >
-        {title}
-      </Checkbox>}
+      {!noCheck && (
+        <Checkbox
+          colorScheme={app.settings.accent}
+          isChecked={state}
+          onChange={(e) => {
+            setState(e.target.checked);
+          }}
+        >
+          {title}
+        </Checkbox>
+      )}
       <Menu>
         <MenuButton as={Button} h={6} minW={6} p={0} variant="ghost">
           <InfoIcon />
@@ -409,7 +416,7 @@ const AdjustSlider = ({ app, title, sub1, sub2, state, setState }) => {
 
   return (
     <HStack>
-      <Box w="100%">
+      <Box w="100%" fontFamily={app.settings.font}>
         <Text>{title}</Text>
         <Slider
           w={300}

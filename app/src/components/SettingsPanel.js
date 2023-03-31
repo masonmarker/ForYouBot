@@ -215,7 +215,7 @@ const SettingsPanel = ({ app }) => {
           </ModalBody>
 
           <ModalFooter>
-            <VStack>
+            <VStack fontFamily={app.settings.font}>
               <Text fontSize="xs">Changes save automatically</Text>
               <HStack>
                 <Button
@@ -255,7 +255,7 @@ const SettingsPanel = ({ app }) => {
               onClose={onCloseComputePricing}
             >
               <DrawerOverlay />
-              <DrawerContent>
+              <DrawerContent fontFamily={app.settings.font}>
                 <DrawerCloseButton />
                 <DrawerHeader>Compute Pricing</DrawerHeader>
                 <DrawerBody>
