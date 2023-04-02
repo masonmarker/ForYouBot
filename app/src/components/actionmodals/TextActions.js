@@ -23,6 +23,7 @@ import { colors } from "../../common/common";
 
 // Chakra components
 import {
+  Checkbox,
   Divider,
   Input,
   Box,
@@ -45,6 +46,7 @@ import {
   // Radio groups
   RadioGroup,
   Radio,
+  useRadio,
   Stack,
 
   // Table
@@ -230,7 +232,6 @@ const MessagePreview = ({ thisMessage }) => {
 
 // Summarization and Expansion Menus
 const SummarizationExpansion = ({ thisMessage }) => {
-  
   // thisEdit object for keeping track of references and states
   // ----------
 
@@ -239,11 +240,12 @@ const SummarizationExpansion = ({ thisMessage }) => {
   const [expandValue, setExpandValue] = useState(10);
 
   // state for whether 'or less' or 'or more' radios are displayed
-  const [showOr, setShowOr] = useState(false);
+  const [showSumOr, setShowSumOr] = useState(false);
+  const [showExpandOr, setShowExpandOr] = useState(false);
 
   // states for sumOr and expandOr
-  const [sumOr, setSumOr] = useState("less");
-  const [expandOr, setExpandOr] = useState("less");
+  const [sumOr, setSumOr] = useState("or less");
+  const [expandOr, setExpandOr] = useState("or less");
 
   // states for text type
   const [sumTextType, setSumTextType] = useState("sentences");
@@ -255,8 +257,10 @@ const SummarizationExpansion = ({ thisMessage }) => {
     setSumValue: setSumValue,
     expandValue: expandValue,
     setExpandValue: setExpandValue,
-    showOr: showOr,
-    setShowOr: setShowOr,
+    showSumOr: showSumOr,
+    setShowSumOr: setShowSumOr,
+    showExpandOr: showExpandOr,
+    setShowExpandOr: setShowExpandOr,
     sumOr: sumOr,
     setSumOr: setSumOr,
     expandOr: expandOr,
@@ -267,25 +271,23 @@ const SummarizationExpansion = ({ thisMessage }) => {
     setExpandTextType: setExpandTextType,
 
     // refs
-    refs: {
-      
-    },
-
+    refs: {},
   };
-
-
 
   return (
     // center self and all elements inside
     <HStack align="center" justify="center" mt={4} gap={4}>
       <SumOrExpand
+        thisEdit={thisEdit}
         thisMessage={thisMessage}
         title="Summarize"
         // Summarizes this text, method depends on whether the message is remembered or not
         does={() => {}}
+        isSum
       />
       <Divider orientation="vertical" />
       <SumOrExpand
+        thisEdit={thisEdit}
         thisMessage={thisMessage}
         title="Expand"
         // Expands the text, also depending on whether its remembered
@@ -296,7 +298,7 @@ const SummarizationExpansion = ({ thisMessage }) => {
 };
 
 // Summarizing or expansion component generalization
-const SumOrExpand = ({ thisMessage, title, does, isSum }) => {
+const SumOrExpand = ({ thisEdit, thisMessage, title, does, isSum }) => {
   // Chakra useColorMode
   const { colorMode } = useColorMode();
 
@@ -307,20 +309,54 @@ const SumOrExpand = ({ thisMessage, title, does, isSum }) => {
       {/* sumExpandValue */}
       <Input w="4rem" placeholder="10" />
       <Divider />
+      {/* Checkbox for showing more or less*/}
+      <Checkbox
+        colorScheme={thisMessage.app.settings.accent}
+        onChange={(e) => {
+          if (isSum) {
+            thisEdit.setShowSumOr(e.target.checked);
+          } else {
+            thisEdit.setShowExpandOr(e.target.checked);
+          }
+        }}
+      >
+        variety?
+      </Checkbox>
+
       {/* Group for 'or more' or 'or less' */}
-      <RadioGroup defaultValue="more">
+      <RadioGroup
+        isDisabled={isSum ? !thisEdit.showSumOr : !thisEdit.showExpandOr}
+        defaultValue="more"
+        onChange={(value) => {
+          if (isSum) {
+            thisEdit.setSumOr(value);
+          } else {
+            thisEdit.setExpandOr(value);
+          }
+        }}
+      >
         <Stack direction="row">
-          <Radio value="more" colorScheme={thisMessage.app.settings.accent}>
+          <Radio value="or more" colorScheme={thisMessage.app.settings.accent}>
             or more
           </Radio>
-          <Radio value="less" colorScheme={thisMessage.app.settings.accent}>
+          <Radio value="or less" colorScheme={thisMessage.app.settings.accent}>
             or less
           </Radio>
         </Stack>
       </RadioGroup>
+
       <Divider />
       {/* Group for characters, words, sentences, and paragraphs */}
-      <RadioGroup defaultValue="characters">
+      <RadioGroup
+        defaultValue="characters"
+        onChange={(value) => {
+          if (isSum) {
+            thisEdit.setSumTextType(value);
+          } else {
+            thisEdit.setExpandTextType(value);
+          }
+        }}
+      >
         <Stack direction="column">
           <Radio
             value="characters"
