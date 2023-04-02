@@ -296,6 +296,11 @@ const Message = (props) => {
     showCopy: showCopy,
     // close the action menu
     onClose: onClose,
+
+    // references
+    refs: {
+      
+    },
   };
 
   return (
