@@ -13,7 +13,7 @@ import Tooltip from "./../Tooltip";
 import SettingsPanel from "./../SettingsPanel";
 
 // react useEffect
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // import Toast
 import Toast from "../Toast";
@@ -230,9 +230,50 @@ const MessagePreview = ({ thisMessage }) => {
 
 // Summarization and Expansion Menus
 const SummarizationExpansion = ({ thisMessage }) => {
-  // expansion or summarization refs
+  
+  // thisEdit object for keeping track of references and states
+  // ----------
 
-  // expansion or summarization states
+  // states for sumValue and expandValue
+  const [sumValue, setSumValue] = useState(10);
+  const [expandValue, setExpandValue] = useState(10);
+
+  // state for whether 'or less' or 'or more' radios are displayed
+  const [showOr, setShowOr] = useState(false);
+
+  // states for sumOr and expandOr
+  const [sumOr, setSumOr] = useState("less");
+  const [expandOr, setExpandOr] = useState("less");
+
+  // states for text type
+  const [sumTextType, setSumTextType] = useState("sentences");
+  const [expandTextType, setExpandTextType] = useState("sentences");
+
+  // for prop drilling
+  var thisEdit = {
+    sumValue: sumValue,
+    setSumValue: setSumValue,
+    expandValue: expandValue,
+    setExpandValue: setExpandValue,
+    showOr: showOr,
+    setShowOr: setShowOr,
+    sumOr: sumOr,
+    setSumOr: setSumOr,
+    expandOr: expandOr,
+    setExpandOr: setExpandOr,
+    sumTextType: sumTextType,
+    setSumTextType: setSumTextType,
+    expandTextType: expandTextType,
+    setExpandTextType: setExpandTextType,
+
+    // refs
+    refs: {
+      
+    },
+
+  };
+
+
 
   return (
     // center self and all elements inside
@@ -255,7 +296,7 @@ const SummarizationExpansion = ({ thisMessage }) => {
 };
 
 // Summarizing or expansion component generalization
-const SumOrExpand = ({ thisMessage, title, does }) => {
+const SumOrExpand = ({ thisMessage, title, does, isSum }) => {
   // Chakra useColorMode
   const { colorMode } = useColorMode();
 
