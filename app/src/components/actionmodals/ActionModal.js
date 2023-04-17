@@ -35,7 +35,7 @@ const ActionModal = ({
   children,
 }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontFamily={thisMessage.app.settings.font}>

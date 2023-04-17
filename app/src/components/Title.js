@@ -10,6 +10,7 @@
 
 // components
 import Convos from "./Convos";
+import Login from "./Login";
 
 // toast
 import Toast from "./Toast";
@@ -194,7 +195,7 @@ const Title = ({ app }) => {
       )}
 
       {/* clearAreYouSure modal */}
-      <Modal isOpen={clearAreYouSure} onClose={clearAreYouSureClose}>
+      <Modal isOpen={clearAreYouSure} onClose={clearAreYouSureClose} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontFamily={app.settings.font}>
@@ -259,7 +260,7 @@ const Title = ({ app }) => {
         )}
       </HStack>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -349,6 +350,7 @@ const Title = ({ app }) => {
 
       <Box className="buttons">
         <EditPanel app={app} />
+        <Login app={app} />
         <SettingsPanel app={app} />
       </Box>
     </TitleStyled>

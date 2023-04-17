@@ -153,7 +153,7 @@ const SettingsPanel = ({ app }) => {
   return (
     <SettingsPanelStyled>
       <Button
-        className="button"
+        
         colorScheme={app.settings.accent}
         onClick={(e) => {
           onOpen();
@@ -162,7 +162,7 @@ const SettingsPanel = ({ app }) => {
       >
         Settings
       </Button>
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} isLazy>
+      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose} isLazy isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontFamily={app.settings.font}>Settings</ModalHeader>
@@ -268,6 +268,7 @@ const SettingsPanel = ({ app }) => {
             <Modal
               isOpen={isOpenCustomizeInterface}
               onClose={onCloseCustomizeInterface}
+              isCentered
             >
               <ModalOverlay />
               <ModalContent mt={150}>
@@ -318,6 +319,7 @@ const SettingsPanel = ({ app }) => {
             <Modal
               isOpen={isOpenCustomizeInterfaceFont}
               onClose={onCloseCustomizeInterfaceFont}
+              isCentered
             >
               <ModalOverlay />
               <ModalContent mt={200}>
@@ -356,6 +358,7 @@ const SettingsPanel = ({ app }) => {
             <Modal
               isOpen={isOpenCustomizeInterfaceChatIcons}
               onClose={onCloseCustomizeInterfaceChatIcons}
+              isCentered
             >
               <ModalOverlay />
               <ModalContent mt={200}>
