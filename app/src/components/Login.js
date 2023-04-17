@@ -57,11 +57,19 @@ const Login = ({ app }) => {
           <ModalHeader>Login or create account</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack spacing={4}>
-              <Input placeholder="Email" />
-              <Input placeholder="Password" />
-              <CreateAccount closeLoginModal={onClose} app={app} />
-              <Link fontSize="sm">Forgot password?</Link>
+            <VStack spacing={4} align="left">
+              <VStack align="left">
+                <Text>Username</Text>
+                <Input placeholder="Email" />
+              </VStack>
+              <VStack align="left">
+                <Text>Password</Text>
+                <Input placeholder="Password" />
+              </VStack>
+              <VStack>
+                <CreateAccount closeLoginModal={onClose} app={app} />
+                <Link fontSize="sm">Forgot password?</Link>
+              </VStack>
             </VStack>
           </ModalBody>
           <ModalFooter>
