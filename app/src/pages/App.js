@@ -243,6 +243,18 @@ function App() {
     setTopP: setTopP,
 
     // functions
+
+    // sends a message to the UI and ai, an all in one function
+    // does not retrieve the ai's response
+    send: (message) => {
+      // set inputArea ref to the message
+      app.refs.areaRef.current.value = message;
+
+      // press the submit button
+      app.refs.submitRef.current.click();
+    },
+
+    // shortens text until a certain length, afterwards continues as '...'
     shortenText: (prefix, editingText, limit) => {
       // editing text
       var title = prefix;

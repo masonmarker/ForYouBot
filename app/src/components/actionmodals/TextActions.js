@@ -244,12 +244,12 @@ const SummarizationExpansion = ({ thisMessage }) => {
   const [showExpandOr, setShowExpandOr] = useState(false);
 
   // states for sumOr and expandOr
-  const [sumOr, setSumOr] = useState("or less");
-  const [expandOr, setExpandOr] = useState("or less");
+  const [sumOr, setSumOr] = useState("");
+  const [expandOr, setExpandOr] = useState("");
 
   // states for text type
-  const [sumTextType, setSumTextType] = useState("sentences");
-  const [expandTextType, setExpandTextType] = useState("sentences");
+  const [sumTextType, setSumTextType] = useState("characters");
+  const [expandTextType, setExpandTextType] = useState("characters");
 
   // for prop drilling
   var thisEdit = {
@@ -282,7 +282,60 @@ const SummarizationExpansion = ({ thisMessage }) => {
         thisMessage={thisMessage}
         title="Summarize"
         // Summarizes this text, method depends on whether the message is remembered or not
-        does={() => {}}
+        // uses states in thisEdit to complete this task
+        //
+        // submits the summarization request to the ai
+        does={() => {
+          // message to send to the ui
+          var message = "";
+
+          // if message index is the most recent message
+          // then message is "Summarize in "
+          if (
+            thisMessage.messageIndex ===
+            thisMessage.app.userMessages.length - 1
+          ) {
+            message = "Summarize in ";
+          } else if (thisMessage.messageIndex === 0) {
+            if (thisMessage.from === "user") {
+              message = "Summarize the first message I sent in ";
+            } else {
+              message = "Summarize the first message you sent in ";
+            }
+          } else if (thisMessage.isRemembered()) {
+            if (thisMessage.from === "user") {
+              message =
+                "Summarize the message I sent " +
+                (thisMessage.app.userMessages.length -
+                  thisMessage.messageIndex) +
+                " messages ago in ";
+            } else {
+              message =
+                "Summarize the message you sent " +
+                (thisMessage.messageIndex - thisMessage.app.prevMessageCount + 1) +
+                " messages ago in ";
+            }
+
+            // if the message is not remembered, we must resend the entire message
+          } else {
+            message = thisMessage.message + "\nSummarize this in ";
+          }
+
+          // add the value
+          message += thisEdit.sumValue + " ";
+
+          // if or is showing
+          if (thisEdit.showSumOr) {
+            // add the or value
+            message += thisEdit.sumOr + " ";
+          }
+
+          // add the text type (characters, words, etc.)
+          message += thisEdit.sumTextType + " ";
+
+          // send the message to the ai, panel closes automatically
+          thisMessage.app.send(message);
+        }}
         isSum
       />
       <Divider orientation="vertical" />
@@ -307,16 +360,37 @@ const SumOrExpand = ({ thisEdit, thisMessage, title, does, isSum }) => {
       <Text>{title} in</Text>
 
       {/* sumExpandValue */}
-      <Input w="4rem" placeholder="10" />
+      <Input
+        w="4rem"
+        defaultValue={10}
+        // when the value changes, update thisEdit value state
+        onChange={(e) => {
+          if (isSum) {
+            thisEdit.setSumValue(e.target.value);
+          } else {
+            thisEdit.setExpandValue(e.target.value);
+          }
+        }}
+      />
       <Divider />
       {/* Checkbox for showing more or less*/}
       <Checkbox
         colorScheme={thisMessage.app.settings.accent}
         onChange={(e) => {
+          // user wants text amount to vary?
+          const variety = e.target.checked;
+
           if (isSum) {
-            thisEdit.setShowSumOr(e.target.checked);
+            thisEdit.setShowSumOr(variety);
           } else {
-            thisEdit.setShowExpandOr(e.target.checked);
+            thisEdit.setShowExpandOr(variety);
+          }
+          if (!variety) {
+            if (isSum) {
+              thisEdit.setSumOr("");
+            } else {
+              thisEdit.setExpandOr("");
+            }
           }
         }}
       >
@@ -374,10 +448,10 @@ const SumOrExpand = ({ thisEdit, thisMessage, title, does, isSum }) => {
             sentences
           </Radio>
           <Radio
-            value="paragraphs"
+            value="paragraph(s)"
             colorScheme={thisMessage.app.settings.accent}
           >
-            paragraphs
+            paragraph(s)
           </Radio>
         </Stack>
       </RadioGroup>

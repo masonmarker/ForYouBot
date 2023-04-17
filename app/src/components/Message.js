@@ -229,15 +229,6 @@ const Message = (props) => {
     });
   }, []);
 
-  // state for message expansion or summarization
-  const [actionLimit, setActionLimit] = useState("characters");
-
-  // state for action limit value
-  const [actionLimitValue, setActionLimitValue] = useState(100);
-
-  // state for action or more or or less value
-  const [orActionLimit, setOrActionLimit] = useState("less");
-
   // ref for important label
   const importantRef = useRef();
 
@@ -253,7 +244,8 @@ const Message = (props) => {
     return (
       index === 0 ||
       (index >= props.app.userMessages.length - props.app.prevMessageCount &&
-        index < props.app.userMessages.length)
+        index < props.app.userMessages.length) ||
+      isImportant()
     );
   }
 
@@ -281,15 +273,9 @@ const Message = (props) => {
   const thisMessage = {
     message: props.message,
     messageIndex: props.messageIndex,
-    actionLimit: actionLimit,
-    setActionLimit: setActionLimit,
-    orActionLimit: orActionLimit,
-    setOrActionLimit: setOrActionLimit,
     from: props.from,
     isRemembered: isRemembered,
     isImportant: isImportant,
-    actionLimitValue: actionLimitValue,
-    setActionLimitValue: setActionLimitValue,
     app: props.app,
     language: language,
     menuButtonRef: menuButtonRef,
@@ -298,9 +284,7 @@ const Message = (props) => {
     onClose: onClose,
 
     // references
-    refs: {
-      
-    },
+    refs: {},
   };
 
   return (
